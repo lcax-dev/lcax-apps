@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --port 5000",
     "build": "vite build",
-    "tsc": "tsc -b",
+    "tsc": "tsc --noEmit",
     "lint": "eslint src/**/*.{tsx,ts}",
     "lint:fix": "eslint --fix src/**/*.{tsx,ts}",
     "format:fix": "prettier --write src/",
