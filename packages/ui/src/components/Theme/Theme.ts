@@ -9,7 +9,6 @@ import {
   primaryColor,
   primaryShade,
 } from './themeElements'
-import '@fontsource/rubik'
 
 export const uiTheme = createTheme({
   fontFamily,

@@ -11,7 +11,6 @@
   ],
   "peerDependencies": {
     "@apollo/client": "^3.12.7",
-    "@fontsource/rubik": "^5.0.14",
     "@mantine/core": "^7.9.1",
     "@mantine/hooks": "^7.9.1",
     "@tabler/icons-react": "^3.3.0",
@@ -48,5 +47,8 @@
     "fix": "npm run lint:fix && npm run format:fix"
   },
   "author": "Christian Kongsgaard <christian@kongsgaard.eu>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@fontsource/inter-tight": "^5.1.1"
+  }
 }

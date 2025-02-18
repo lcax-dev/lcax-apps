@@ -1,8 +1,13 @@
 import { MantineColorsTuple, rem } from '@mantine/core'
+import '@fontsource/inter-tight/400.css'
+import '@fontsource/inter-tight/500.css'
+import '@fontsource/inter-tight/600.css'
+import '@fontsource/inter-tight/700.css'
 
-export const fontFamily = 'Rubik, sans-serif'
+export const fontFamily = 'Inter Tight, sans-serif'
+
 export const headings = {
-  fontFamily: 'Rubik, sans-serif',
+  fontFamily,
   fontWeight: '700',
 }
 export const fontSizes = {
