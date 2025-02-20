@@ -1,7 +1,19 @@
-import { Button, Container, FileInput, Image, rem, SimpleGrid, Stack, Text, Title, useMatches } from '@mantine/core'
+import {
+  ActionIcon,
+  Button,
+  Container,
+  FileInput,
+  Image,
+  rem,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+  useMatches,
+} from '@mantine/core'
 import { IconArrowUp, IconTransform } from '@tabler/icons-react'
 import sbstLogo from '@/assets/sbst-logo.png'
-import { NavLink } from 'react-router'
+import { Link } from 'react-router'
 import { BarChart } from '@mantine/charts'
 import { ReactNode } from 'react'
 
@@ -39,15 +51,15 @@ const SponsorSection = () => {
   return (
     <Stack justify='center' align='center' h={'100vh'}>
       <Title order={3}>Supported by</Title>
-      <NavLink to='https://www.sbst.dk/'>
+      <Link to='https://www.sbst.dk/'>
         <Image src={sbstLogo} h={200} w='auto' fit='contain' />
-      </NavLink>
+      </Link>
     </Stack>
   )
 }
 
 const GetStartedButton = () => (
-  <Button c='black' component={NavLink} to='/projects' w={'fit-content'}>
+  <Button c='black' component={Link} to='/projects' w={'fit-content'}>
     Get started
   </Button>
 )
@@ -90,9 +102,14 @@ const UploadSection = () => {
       <Right>
         <FileInput
           w={'50%'}
-          rightSection={<IconArrowUp color={'black'} />}
+          rightSection={
+            <ActionIcon variant='filled' radius='xl' size={useMatches({ base: 'md', xl: 'xl' })} color='gray.4'>
+              <IconArrowUp color='black' />
+            </ActionIcon>
+          }
           placeholder='Upload a LCA file'
           size={useMatches({ base: 'md', xl: 'xl' })}
+          onClick={(e) => e.preventDefault()}
         />
       </Right>
     </Section>

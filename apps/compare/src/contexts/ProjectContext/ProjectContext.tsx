@@ -1,7 +1,9 @@
-import { createContext } from 'react'
+import { createContext, Dispatch, SetStateAction } from 'react'
+import { Project } from 'lcax'
 
 interface ProjectContextProps {
-  id: string | null
+  projects: Project[]
+  setProjects: Dispatch<SetStateAction<Project[]>>
 }
 
-export const ProjectContext = createContext({ id: null } as ProjectContextProps)
+export const ProjectContext = createContext({} as ProjectContextProps)

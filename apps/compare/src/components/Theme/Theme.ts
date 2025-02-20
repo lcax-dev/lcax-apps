@@ -1,4 +1,4 @@
-import { createTheme, mergeMantineTheme } from '@mantine/core'
+import { createTheme, Divider, mergeMantineTheme } from '@mantine/core'
 import { fontFamily, uiTheme } from '@lcax/ui'
 
 const themeOverride = createTheme({
@@ -36,6 +36,11 @@ const themeOverride = createTheme({
   headings: {
     fontFamily,
     fontWeight: '500',
+  },
+  components: {
+    Divider: Divider.extend({
+      defaultProps: { color: 'black' },
+    }),
   },
 })
 
