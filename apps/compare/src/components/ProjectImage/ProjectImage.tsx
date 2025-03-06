@@ -1,6 +1,6 @@
 import apartmentImage from '@/assets/apartments-brandon-griggs-unsplash.jpg'
 import { ActionIcon, Container, Group, Image, Overlay, rem, Stack, Title, useMatches } from '@mantine/core'
-import { IconArrowBack, IconArrowNarrowLeft, IconPhotoUp, IconPrinter } from '@tabler/icons-react'
+import { IconArrowBack, IconArrowNarrowLeft, IconFileCode2, IconPhotoUp, IconPrinter } from '@tabler/icons-react'
 import { Project } from 'lcax'
 import { Link } from 'react-router'
 import { ChangeEvent } from 'react'
@@ -57,16 +57,29 @@ export const ProjectImage = ({ project }: ProjectImageProps) => {
               >
                 <IconArrowNarrowLeft size={64} />
               </ActionIcon>
-              <ActionIcon
-                variant='transparent'
-                color='white'
-                autoContrast={true}
-                size='xl'
-                radius={0}
-                onClick={handlePrintClick}
-              >
-                <IconPrinter size={64} />
-              </ActionIcon>
+              <Group>
+                <ActionIcon
+                  variant='transparent'
+                  color='white'
+                  autoContrast={true}
+                  size='xl'
+                  radius={0}
+                  onClick={handlePrintClick}
+                >
+                  <IconPrinter size={64} />
+                </ActionIcon>
+                <ActionIcon
+                  variant='transparent'
+                  color='white'
+                  autoContrast={true}
+                  size='xl'
+                  radius={0}
+                  component={Link}
+                  to={`/projects/${project.id.slice(0, 8)}/view`}
+                >
+                  <IconFileCode2 size={64} />
+                </ActionIcon>
+              </Group>
             </Group>
             <Group justify='space-between' p='md'>
               <Title c='white' size={titleSize}>

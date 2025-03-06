@@ -1,3 +1,4 @@
+export * from './DataViewerPage'
 export * from './DetailsPage'
 export * from './ProjectsPage'
 export * from './LandingPage'

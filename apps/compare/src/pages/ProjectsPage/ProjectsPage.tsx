@@ -1,5 +1,5 @@
 import { Container } from '@mantine/core'
-import { CompareSection, ProjectSection, UploadSection, FAQSection } from '@/components'
+import { CompareSection, FAQSection, ProjectSection, UploadSection } from '@/components'
 import { useProjects } from '@/contexts'
 import { ErrorBoundary } from '@lcax/ui'
 
@@ -11,13 +11,17 @@ export const ProjectsPage = () => {
       <ErrorBoundary>
         <UploadSection />
       </ErrorBoundary>
-      {projects.map((project, index) => (
-        <ErrorBoundary key={index}>
-          <ProjectSection project={project} index={index} />
-        </ErrorBoundary>
-      ))}
+      <Container fluid bg={'gray.2'} p={0}>
+        {projects.map((project, index) => (
+          <ErrorBoundary key={index}>
+            <ProjectSection project={project} index={index} />
+          </ErrorBoundary>
+        ))}
+      </Container>
       <ErrorBoundary>
-        <CompareSection />
+        <Container fluid bg={'gray.2'} p={0}>
+          <CompareSection />
+        </Container>
       </ErrorBoundary>
       <ErrorBoundary>
         <FAQSection />

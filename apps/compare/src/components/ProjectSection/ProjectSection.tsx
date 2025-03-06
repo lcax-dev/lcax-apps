@@ -30,7 +30,7 @@ export const ProjectSection = ({ project, index }: ProjectSectionProps) => {
   const containerSize = useMatches({ md: 'md', xl: 'xl' })
 
   return (
-    <Container h={{ base: '100vh', md: '50vh' }} size={containerSize}>
+    <Container h={{ base: '100vh', md: '65vh', xl: '50vh' }} size={containerSize}>
       <Stack h='100%' justify='center'>
         <Divider />
         <SimpleGrid cols={{ base: 1, md: 2 }}>

@@ -2,6 +2,7 @@ import { ActionIcon, FileInput, rem, Stack, Title, UnstyledButton, useMatches } 
 import { IconArrowUp } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useProjects } from '@/contexts'
+import { convertFiles } from '@/lib'
 
 export const UploadSection = () => {
   const [files, setFiles] = useState<File[]>([])
@@ -11,9 +12,25 @@ export const UploadSection = () => {
 
   const handleFileConversion = async () => {
     setConverting(true)
+    if (!files.length) {
+      setConverting(false)
+      return
+    }
 
-    const projects = await Promise.all(files.map(async (file) => JSON.parse(await file.text())))
-    setProjects((prev) => [...prev, ...projects])
+    const { projects, errors } = await convertFiles(files)
+    if (errors.length) {
+      setError(errors)
+      setConverting(false)
+      return
+    }
+    const colors = ['yellow', 'grey', 'indigo']
+    setProjects((prev) => [
+      ...prev,
+      ...projects.map((project, index) => ({
+        ...project,
+        metaData: { ...(project.metaData || {}), color: colors[(prev.length + index) % 3] },
+      })),
+    ])
 
     setFiles([])
     setTimeout(() => {
@@ -36,7 +53,7 @@ export const UploadSection = () => {
   }
 
   return (
-    <Stack bg={'gray.2'} justify='center' align='center' h='100vh'>
+    <Stack justify='center' align='center' h='100vh'>
       <Title size={useMatches({ md: rem(46), xl: rem(64) })}>Upload</Title>
       <FileInput
         w={useMatches({ base: '75%', md: '50%' })}
@@ -56,6 +73,7 @@ export const UploadSection = () => {
         mt='md'
         multiple
         value={files}
+        disabled={useMatches({ base: true, sm: false })}
         error={error.join(', ')}
         onChange={handleFileUpload}
         placeholder='Upload a LCA file'

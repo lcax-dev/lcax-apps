@@ -1,6 +1,6 @@
-import { Container, SimpleGrid, useMatches } from '@mantine/core'
+import { Container, SimpleGrid, Space, useMatches } from '@mantine/core'
 import { Project } from 'lcax'
-import { getCountryName, snakeCaseToHumanCase, transformUnit } from '@/lib'
+import { getCountryName, snakeCaseToHumanCase, sumResultsProject, transformUnit } from '@/lib'
 import { InfoBlock } from '@/components'
 
 interface ProjectInformationProps {
@@ -12,7 +12,7 @@ export const ProjectInformation = ({ project }: ProjectInformationProps) => {
   if (!project) return null
 
   return (
-    <Container mt='xl' size={containerSize}>
+    <Container my='xl' size={containerSize}>
       <SimpleGrid cols={{ base: 1, md: 2 }} pb='xl' spacing='xl'>
         <InfoBlock title='Project Address' info={project.location.address} />
         <SimpleGrid cols={2} verticalSpacing='lg'>
@@ -30,8 +30,9 @@ export const ProjectInformation = ({ project }: ProjectInformationProps) => {
           <InfoBlock title='LCA Software' info={project.softwareInfo.lcaSoftware} />
         </SimpleGrid>
       </SimpleGrid>
+      <Space h='md' />
       <SimpleGrid cols={{ base: 1, md: 2 }} pt='xl' spacing='xl'>
-        <InfoBlock title='Total Impact' info={project.results?.gwp.a1a3} unit={'kg CO₂-eq/m²*year'} />
+        <InfoBlock title='Total Impact' info={sumResultsProject(project).toFixed(2)} unit={'kg CO₂-eq/m²·year'} />
         <SimpleGrid cols={2} verticalSpacing='lg'>
           <InfoBlock
             title='Gross Floor Area'

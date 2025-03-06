@@ -11,7 +11,7 @@ import {
   Title,
   useMatches,
 } from '@mantine/core'
-import { IconArrowUp, IconTransform } from '@tabler/icons-react'
+import { IconArrowUp } from '@tabler/icons-react'
 import sbstLogo from '@/assets/sbst-logo.png'
 import { Link } from 'react-router'
 import { BarChart } from '@mantine/charts'
@@ -69,10 +69,12 @@ interface SectionProps {
 }
 
 const Section = ({ children }: SectionProps) => (
-  <Container h={{ base: '100vh', md: '50vh' }} fluid p={0}>
-    <SimpleGrid cols={useMatches({ base: 1, md: 2 })} h={'100%'}>
-      {children}
-    </SimpleGrid>
+  <Container h={{ base: '100vh', md: '50vh' }} my='xl' fluid p={0}>
+    <Container h='100%' size={useMatches({ md: 'md', xl: 'xl' })}>
+      <SimpleGrid cols={useMatches({ base: 1, md: 2 })} h={'100%'}>
+        {children}
+      </SimpleGrid>
+    </Container>
   </Container>
 )
 
@@ -94,7 +96,7 @@ const UploadSection = () => {
       <Left>
         <Text mt='md'>Step 1</Text>
         <Title size={useMatches({ md: rem(46), xl: rem(64) })}>Upload</Title>
-        <Title order={3} w={{ base: '100%', md: '75%' }}>
+        <Title order={3} w={{ base: '100%', xl: '75%' }}>
           Start by uploading up to 3 LCAbyg or Realtime LCA projects
         </Title>
         <GetStartedButton />
@@ -122,13 +124,29 @@ const ConvertSection = () => {
       <Left>
         <Text mt='md'>Step 2</Text>
         <Title size={useMatches({ md: rem(46), xl: rem(64) })}>Convert</Title>
-        <Title order={3} w={{ base: '100%', md: '75%' }}>
+        <Title order={3} w={{ base: '100%', xl: '75%' }}>
           When you upload a conversion into the LCAx file format will happen.
         </Title>
         <GetStartedButton />
       </Left>
       <Right>
-        <IconTransform size={useMatches({ base: 136, xl: 250 })} />
+        <FileInput
+          w={'50%'}
+          rightSection={
+            <ActionIcon
+              variant='filled'
+              radius='xl'
+              size={useMatches({ base: 'md', xl: 'xl' })}
+              color='gray.4'
+              loading={true}
+            >
+              <IconArrowUp color='black' />
+            </ActionIcon>
+          }
+          placeholder={<Text c='black'>lca.file</Text>}
+          size={useMatches({ base: 'md', xl: 'xl' })}
+          onClick={(e) => e.preventDefault()}
+        />
       </Right>
     </Section>
   )
@@ -140,7 +158,7 @@ const CompareSection = () => {
       <Left>
         <Text mt='md'>Step 3</Text>
         <Title size={useMatches({ md: rem(46), xl: rem(64) })}>Compare</Title>
-        <Title order={3} w={{ base: '100%', md: '75%' }}>
+        <Title order={3} w={{ base: '100%', xl: '75%' }}>
           Compare the environmental impact of your projects.
         </Title>
         <GetStartedButton />
@@ -153,7 +171,7 @@ const CompareSection = () => {
           series={[
             { name: 'Smartphones', color: 'yellow.4' },
             { name: 'Laptops', color: 'black' },
-            { name: 'Tablets', color: 'white' },
+            { name: 'Tablets', color: 'indigo.9' },
           ]}
           tickLine='none'
           gridAxis='none'
@@ -173,7 +191,7 @@ const AnalyseSection = () => {
       <Left>
         <Text mt='md'>Step 4</Text>
         <Title size={useMatches({ md: rem(46), xl: rem(64) })}>Analyse</Title>
-        <Title order={3} w={{ base: '100%', md: '75%' }}>
+        <Title order={3} w={{ base: '100%', xl: '75%' }}>
           Click on each project to see detailed data.
         </Title>
         <GetStartedButton />
@@ -186,8 +204,8 @@ const AnalyseSection = () => {
           series={[
             { name: 'project1', color: 'yellow.4' },
             { name: 'project2', color: 'gray.8' },
-            { name: 'project3', color: 'gray.3' },
-            { name: 'project4', color: 'white' },
+            { name: 'project3', color: 'gray.1' },
+            { name: 'project4', color: 'indigo.9' },
           ]}
           orientation='vertical'
           tickLine='none'
