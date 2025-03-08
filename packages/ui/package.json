@@ -11,7 +11,7 @@
   ],
   "peerDependencies": {
     "@apollo/client": "^3.12.7",
-    "@fontsource/rubik": "^5.0.14",
+    "@fontsource/inter-tight": "^5.1.1",
     "@mantine/core": "^7.9.1",
     "@mantine/hooks": "^7.9.1",
     "@tabler/icons-react": "^3.3.0",
@@ -20,18 +20,7 @@
     "react-router-dom": "^6.23.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
-    "copyfiles": "^2.4.1",
-    "eslint": "^9.17.0",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.16",
-    "postcss": "^8.5.1",
-    "postcss-preset-mantine": "^1.17.0",
-    "postcss-simple-vars": "^7.0.1",
-    "prettier": "^3.4.2",
-    "typescript": "~5.6.2",
-    "vitest": "^1.6.0"
+    "copyfiles": "^2.4.1"
   },
   "scripts": {
     "test": "vitest run",

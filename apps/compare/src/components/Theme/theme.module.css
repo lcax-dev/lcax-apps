@@ -1,0 +1,11 @@
+.heading {
+  &:is(h1) {
+    @media screen and (min-width: $mantine-breakpoint-md) {
+      font-size: 3rem;
+    }
+    @media screen and (min-width: $mantine-breakpoint-xl) {
+      font-size: 6rem;
+    }
+  }
+}
+

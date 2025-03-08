@@ -1,0 +1,31 @@
+import { Container } from '@mantine/core'
+import { CompareSection, FAQSection, ProjectSection, UploadSection } from '@/components'
+import { useProjects } from '@/contexts'
+import { ErrorBoundary } from '@lcax/ui'
+
+export const ProjectsPage = () => {
+  const { projects } = useProjects()
+
+  return (
+    <Container fluid bg={'gray.0'} p={0}>
+      <ErrorBoundary>
+        <UploadSection />
+      </ErrorBoundary>
+      <Container fluid bg={'gray.2'} p={0}>
+        {projects.map((project, index) => (
+          <ErrorBoundary key={index}>
+            <ProjectSection project={project} index={index} />
+          </ErrorBoundary>
+        ))}
+      </Container>
+      <ErrorBoundary>
+        <Container fluid bg={'gray.2'} p={0}>
+          <CompareSection />
+        </Container>
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <FAQSection />
+      </ErrorBoundary>
+    </Container>
+  )
+}

@@ -27,10 +27,13 @@
     "baseUrl": "src",
     "paths": {
       "@assets": [
-        "assets"
+        "assets/*"
       ],
       "@components": [
         "components"
+      ],
+      "@sections": [
+        "sections"
       ]
     }
   },
