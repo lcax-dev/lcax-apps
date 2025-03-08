@@ -1,5 +1,15 @@
-import { createTheme, Divider, mergeMantineTheme } from '@mantine/core'
+import { Container, createTheme, Divider, mergeMantineTheme, rem, Title } from '@mantine/core'
 import { fontFamily, uiTheme } from '@lcax/ui'
+import classes from './theme.module.css'
+
+const CONTAINER_SIZES: Record<string, number> = {
+  xs: 540,
+  sm: 720,
+  md: 960,
+  lg: 1140,
+  xl: 1320,
+  xxl: 1560,
+}
 
 const themeOverride = createTheme({
   defaultRadius: 'xl',
@@ -52,6 +62,22 @@ const themeOverride = createTheme({
   components: {
     Divider: Divider.extend({
       defaultProps: { color: 'black' },
+    }),
+    Title: Title.extend({
+      classNames: {
+        root: classes.heading,
+      },
+    }),
+    Container: Container.extend({
+      vars: (_, { size, fluid }) => ({
+        root: {
+          '--container-size': fluid
+            ? '100%'
+            : size !== undefined && size in CONTAINER_SIZES
+              ? rem(CONTAINER_SIZES[size])
+              : rem(size),
+        },
+      }),
     }),
   },
 })

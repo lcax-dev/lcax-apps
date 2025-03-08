@@ -8,7 +8,7 @@ interface ProjectInformationProps {
 }
 
 export const ProjectInformation = ({ project }: ProjectInformationProps) => {
-  const containerSize = useMatches({ md: 'md', xl: 'xl' })
+  const containerSize = useMatches({ md: 'md', xl: 'xxl' })
   if (!project) return null
 
   return (
@@ -32,7 +32,7 @@ export const ProjectInformation = ({ project }: ProjectInformationProps) => {
       </SimpleGrid>
       <Space h='md' />
       <SimpleGrid cols={{ base: 1, md: 2 }} pt='xl' spacing='xl'>
-        <InfoBlock title='Total Impact' info={sumResultsProject(project).toFixed(2)} unit={'kg CO₂-eq/m²·year'} />
+        <InfoBlock title='Total Impact' info={project.results?.gwp? sumResultsProject(project).toFixed(2) : null} unit={'kg CO₂-eq/m²·year'} />
         <SimpleGrid cols={2} verticalSpacing='lg'>
           <InfoBlock
             title='Gross Floor Area'

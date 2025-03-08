@@ -1,14 +1,11 @@
 .heading {
-  /*@media (min-width: $mantine-breakpoint-md) {*/
-  /*    .h1 {*/
-  /*        font-size: 46rem;*/
-  /*    }*/
-  /*}*/
-  /*@media (min-width: $mantine-breakpoint-xl) {*/
-  /*    .h1 {*/
-  /*        font-size: 64rem;*/
-  /*    }*/
-  /*}*/
-  font-size: 64rem;
-  font-weight: 700;
+  &:is(h1) {
+    @media screen and (min-width: $mantine-breakpoint-md) {
+      font-size: 3rem;
+    }
+    @media screen and (min-width: $mantine-breakpoint-xl) {
+      font-size: 6rem;
+    }
+  }
 }
+

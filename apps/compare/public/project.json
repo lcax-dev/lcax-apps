@@ -11,7 +11,7 @@
   "owner": "Test",
   "formatVersion": "2.6.3",
   "lciaMethod": null,
-  "classificationSystem": "LCAByg",
+  "classificationSystems": ["LCAByg"],
   "referenceStudyPeriod": 50,
   "lifeCycleStages": [
     "a1a3",

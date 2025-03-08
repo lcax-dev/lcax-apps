@@ -1,4 +1,4 @@
-import { Accordion, Container, Divider, rem, Stack, Title, useMatches } from '@mantine/core'
+import { Accordion, Container, Divider, Stack, Title, useMatches } from '@mantine/core'
 import { IconInfoCircle } from '@tabler/icons-react'
 
 const faqs = [
@@ -38,14 +38,14 @@ const faqs = [
       'Nutrient-packed green vegetable. Broccoli is packed with vitamins, minerals, and fiber. It has a distinct flavor and can be enjoyed steamed, roasted, or added to stir-fries.',
   },
   {
-    value: "I can't upload projects on mobile",
+    value: 'I can\'t upload projects on mobile',
     description:
       'Nutrient-packed green vegetable. Broccoli is packed with vitamins, minerals, and fiber. It has a distinct flavor and can be enjoyed steamed, roasted, or added to stir-fries.',
   },
 ]
 
 export const FAQSection = () => {
-  const containerSize = useMatches({ md: 'md', xl: 'xl' })
+  const containerSize = useMatches({ md: 'md', xl: 'xxl' })
 
   const items = faqs.map((faq) => (
     <Accordion.Item key={faq.value} value={faq.value}>
@@ -55,12 +55,12 @@ export const FAQSection = () => {
   ))
 
   return (
-    <Container h='100vh' size={containerSize}>
-      <Stack h='100%' justify='center'>
-        <Title size={useMatches({ md: rem(46), xl: rem(64) })} id='faq'>
+    <Container h="100vh" size={containerSize}>
+      <Stack h="100%" justify="center">
+        <Title id="faq">
           Frequently Asked Questions
         </Title>
-        <Divider mt='sm' mb='xl' />
+        <Divider mt="sm" mb="xl" />
         <Accordion defaultValue={null}>{items}</Accordion>
       </Stack>
     </Container>

@@ -9,13 +9,13 @@ import { breakdownOptions, BreakdownOptions, TooltipPayload } from './types'
 
 export const CompareSection = () => {
   const [breakdown, setBreakdown] = useState<BreakdownOptions>('Total')
-  const containerSize = useMatches({ md: 'md', xl: 'xl' })
+  const containerSize = useMatches({ md: 'md', xl: 'xxl' })
   const { projects } = useProjects()
 
   const resultData = useMemo(() => {
     if (breakdown === 'Total') {
       const data = projects
-        .map((project) => ({ [project.name]: sumResultsProject(project) }))
+        .map((project) => ({ [project.name]: project.results?.gwp? sumResultsProject(project) : null }))
         .reduce((acc, curr) => {
           return { ...acc, ...curr }
         }, {})
@@ -24,7 +24,7 @@ export const CompareSection = () => {
       return projects.map((project) => {
         return {
           id: project.id,
-          ...Object.entries(resultsByComponents({ project, classificationSystem: 'LCAByg' }))
+          ...Object.entries(project.results?.gwp? resultsByComponents({ project, classificationSystem: 'LCAByg' }): {})
             .filter(([key]) => key !== 'classificationSystem')
             .toSorted((prev, next) => (prev[0] > next[0] ? -1 : 1))
             .map(([key, value]) => ({ [`${project.id}_${key}`]: value }))
@@ -35,7 +35,7 @@ export const CompareSection = () => {
       return projects.map((project) => {
         return {
           id: project.id,
-          ...Object.entries(resultsByLifeCycle({ project }))
+          ...Object.entries(project.results?.gwp? resultsByLifeCycle({ project }): {})
             .filter(([key]) => key !== 'impact')
             .toSorted((prev, next) => (prev[0] > next[0] ? -1 : 1))
             .map(([key, value]) => ({ [`${project.id}_${key}`]: value }))

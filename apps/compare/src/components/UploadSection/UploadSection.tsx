@@ -1,4 +1,4 @@
-import { ActionIcon, FileInput, rem, Stack, Title, UnstyledButton, useMatches } from '@mantine/core'
+import { ActionIcon, Container, FileInput, Stack, Title, UnstyledButton, useMatches } from '@mantine/core'
 import { IconArrowUp } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useProjects } from '@/contexts'
@@ -53,37 +53,39 @@ export const UploadSection = () => {
   }
 
   return (
-    <Stack justify='center' align='center' h='100vh'>
-      <Title size={useMatches({ md: rem(46), xl: rem(64) })}>Upload</Title>
-      <FileInput
-        w={useMatches({ base: '75%', md: '50%' })}
-        rightSection={
-          <ActionIcon
-            variant='filled'
-            radius='xl'
-            size={useMatches({ base: 'md', md: 'xl' })}
-            color='gray.4'
-            disabled={converting}
-            loading={converting}
-            onClick={() => handleFileConversion()}
-          >
-            <IconArrowUp color={'black'} />
-          </ActionIcon>
-        }
-        mt='md'
-        multiple
-        value={files}
-        disabled={useMatches({ base: true, sm: false })}
-        error={error.join(', ')}
-        onChange={handleFileUpload}
-        placeholder='Upload a LCA file'
-        size={useMatches({ base: 'md', md: 'xl' })}
-      />
-      <UnstyledButton
-        onClick={() => document.getElementById(`faq`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-      >
-        What files can I upload?
-      </UnstyledButton>
-    </Stack>
+    <Container size={useMatches({ base: 'md', xl: 'xxl' })} h="100vh">
+      <Stack justify="center" align="center" h="100%">
+        <Title>Upload</Title>
+        <FileInput
+          w="100%"
+          rightSection={
+            <ActionIcon
+              variant="filled"
+              radius="xl"
+              size={useMatches({ base: 'md', md: 'xl' })}
+              color="gray.4"
+              disabled={converting}
+              loading={converting}
+              onClick={() => handleFileConversion()}
+            >
+              <IconArrowUp color={'black'} />
+            </ActionIcon>
+          }
+          mt="md"
+          multiple
+          value={files}
+          disabled={useMatches({ base: true, sm: false })}
+          error={error.join(', ')}
+          onChange={handleFileUpload}
+          placeholder="Upload a LCA file"
+          size={useMatches({ base: 'md', md: 'xl' })}
+        />
+        <UnstyledButton
+          onClick={() => document.getElementById(`faq`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+        >
+          What files can I upload?
+        </UnstyledButton>
+      </Stack>
+    </Container>
   )
 }

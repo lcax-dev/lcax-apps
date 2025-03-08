@@ -1,5 +1,5 @@
 import { Project } from 'lcax'
-import { Container, Divider, rem, Title, useMatches } from '@mantine/core'
+import { Container, Divider, Title, useMatches } from '@mantine/core'
 import { ImpactByComponentChart, ImpactByLifeCycleChart } from '@/components/ImpactCharts'
 import { ErrorBoundary } from '@lcax/ui'
 
@@ -8,14 +8,13 @@ interface ProjectImpactsProps {
 }
 
 export const ProjectImpacts = ({ project }: ProjectImpactsProps) => {
-  const titleSize = useMatches({ md: rem(46), xl: rem(64) })
-  const containerSize = useMatches({ md: 'md', xl: 'xl' })
+  const containerSize = useMatches({ md: 'md', xl: 'xxl' })
 
   if (!project) return null
 
   return (
     <Container size={containerSize}>
-      <Title size={titleSize}>Detailed Information</Title>
+      <Title>Detailed Information</Title>
       <Divider />
       <ErrorBoundary>
         <ImpactByComponentChart project={project} />

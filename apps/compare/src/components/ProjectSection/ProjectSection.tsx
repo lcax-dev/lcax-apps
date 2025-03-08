@@ -27,7 +27,7 @@ interface ProjectSectionProps {
 }
 
 export const ProjectSection = ({ project, index }: ProjectSectionProps) => {
-  const containerSize = useMatches({ md: 'md', xl: 'xl' })
+  const containerSize = useMatches({ md: 'md', xl: 'xxl' })
 
   return (
     <Container h={{ base: '100vh', md: '65vh', xl: '50vh' }} size={containerSize}>

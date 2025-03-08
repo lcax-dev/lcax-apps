@@ -2,7 +2,7 @@ import { Assembly, Classification, Product, Project } from 'lcax'
 
 export const sumResultsProject = (project: Project) => {
   // @ts-expect-error acc and next are numbers
-  const total = Object.values(project.results.gwp).reduce((acc: number, next: number) => acc + next, 0) as number
+  const total = Object.values(project.results?.gwp).reduce((acc: number, next: number) => acc + next, 0) as number
   // @ts-expect-error value exists
   return makeResultRelative(total, project.referenceStudyPeriod || 1, project.projectInfo?.grossFloorArea?.value || 1)
 }
@@ -15,7 +15,7 @@ interface SumResultsProps {
 
 export const sumResults = ({ element, referenceStudyPeriod, grossFloorArea }: SumResultsProps) => {
   // @ts-expect-error acc and next are numbers
-  const total = Object.values(element.results.gwp).reduce((acc: number, next: number) => acc + next, 0) as number
+  const total = Object.values(element.results?.gwp || {}).reduce((acc: number, next: number) => acc + next, 0) as number
 
   return makeResultRelative(total, referenceStudyPeriod, grossFloorArea)
 }
