@@ -105,7 +105,9 @@ const DownloadButton = ({ project }: DownloadButtonProps) => {
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item onClick={() => setFileType('LCAx')}>LCAx</Menu.Item>
-            <Menu.Item onClick={() => setFileType('LCAbyg')}>LCAbyg</Menu.Item>
+            <Menu.Item disabled onClick={() => setFileType('LCAbyg')}>
+              LCAbyg
+            </Menu.Item>
           </Menu.Dropdown>
         </Menu>
       </Button.Group>

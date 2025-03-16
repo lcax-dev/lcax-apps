@@ -20,8 +20,8 @@ export const CompareSectionTooltip = ({ payload, breakdown }: ChartTooltipProps)
       </Text>
       {payload
         .sort((prev, next) => (prev.name > next.name ? 1 : prev.name > next.name ? -1 : 0))
-        .map((item) => (
-          <Group>
+        .map((item, index) => (
+          <Group key={index}>
             <IconPointFilled color={item.color} />
             <Text key={item.name} fz='sm'>
               {breakdown === 'Total' ? item.name : item.name.split('_')[1]}: {item.value.toFixed(2)}
