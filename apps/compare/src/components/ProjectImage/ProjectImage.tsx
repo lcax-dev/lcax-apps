@@ -102,7 +102,7 @@ export const ProjectImage = ({ project }: ProjectImageProps) => {
           <Stack justify='center' align='center' h='100%'>
             <Title c='white'>No Project Found</Title>
             <ActionIcon variant='transparent' color='white' component={Link} to={'/projects'} size='xl'>
-              <IconArrowBack size={120}/>
+              <IconArrowBack size={120} />
             </ActionIcon>
           </Stack>
         )}

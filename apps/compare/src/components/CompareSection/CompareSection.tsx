@@ -15,27 +15,42 @@ export const CompareSection = () => {
   const resultData = useMemo(() => {
     if (breakdown === 'Total') {
       const data = projects
-        .map((project) => ({ [project.name]: project.results?.gwp? sumResultsProject(project) : null }))
+        .map((project) => ({ [project.name]: project.results?.gwp ? sumResultsProject({ project }) : null }))
         .reduce((acc, curr) => {
           return { ...acc, ...curr }
         }, {})
       return [data]
     } else if (breakdown === 'Building Components') {
       return projects.map((project) => {
+        const results = Object.entries(
+          project.results?.gwp
+            ? resultsByComponents({
+                project,
+                classificationSystem: 'LCAByg',
+              })
+            : {},
+        )
+          .filter(([key]) => key !== 'classificationSystem')
+          .toSorted((prev, next) => (prev[1] > next[1] ? -1 : 1))
+          .map(([key, value]) => ({ [`${project.id}_${key}`]: value }))
+          .reduce((acc, next, index) => {
+            if (index < 5) {
+              return { ...acc, ...next }
+            } else {
+              return { ...acc, [`${project.id}_Others`]: (acc[`${project.id}_Others`] || 0) + Object.values(next)[0] }
+            }
+          }, {})
+
         return {
           id: project.id,
-          ...Object.entries(project.results?.gwp? resultsByComponents({ project, classificationSystem: 'LCAByg' }): {})
-            .filter(([key]) => key !== 'classificationSystem')
-            .toSorted((prev, next) => (prev[0] > next[0] ? -1 : 1))
-            .map(([key, value]) => ({ [`${project.id}_${key}`]: value }))
-            .reduce((acc, next) => ({ ...acc, ...next }), {}),
+          ...results,
         }
       })
     } else if (breakdown === 'Life Cycle') {
       return projects.map((project) => {
         return {
           id: project.id,
-          ...Object.entries(project.results?.gwp? resultsByLifeCycle({ project }): {})
+          ...Object.entries(project.results?.gwp ? resultsByLifeCycle({ project }) : {})
             .filter(([key]) => key !== 'impact')
             .toSorted((prev, next) => (prev[0] > next[0] ? -1 : 1))
             .map(([key, value]) => ({ [`${project.id}_${key}`]: value }))
@@ -81,7 +96,7 @@ export const CompareSection = () => {
       </Group>
       <Stack justify='center' align='center' h='100%' px='xl'>
         <BarChart
-          h={'50vh'}
+          h={'75vh'}
           data={resultData}
           dataKey={'name'}
           series={series}

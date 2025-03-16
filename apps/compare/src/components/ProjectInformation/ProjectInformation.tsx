@@ -1,4 +1,4 @@
-import { Container, SimpleGrid, Space, useMatches } from '@mantine/core'
+import { Container, SimpleGrid, Space, Stack, useMatches } from '@mantine/core'
 import { Project } from 'lcax'
 import { getCountryName, snakeCaseToHumanCase, sumResultsProject, transformUnit } from '@/lib'
 import { InfoBlock } from '@/components'
@@ -32,7 +32,25 @@ export const ProjectInformation = ({ project }: ProjectInformationProps) => {
       </SimpleGrid>
       <Space h='md' />
       <SimpleGrid cols={{ base: 1, md: 2 }} pt='xl' spacing='xl'>
-        <InfoBlock title='Total Impact' info={project.results?.gwp? sumResultsProject(project).toFixed(2) : null} unit={'kg CO₂-eq/m²·year'} />
+        <Stack gap='xl'>
+          <InfoBlock
+            title='Total Impact (All)'
+            info={project.results?.gwp ? sumResultsProject({ project }).toFixed(2) : null}
+            unit={'kg CO₂-eq/m²·year'}
+          />
+          <InfoBlock
+            title='Total Impact (Excluding D)'
+            info={
+              project.results?.gwp
+                ? sumResultsProject({
+                    project,
+                    excludeStages: ['d'],
+                  }).toFixed(2)
+                : null
+            }
+            unit={'kg CO₂-eq/m²·year'}
+          />
+        </Stack>
         <SimpleGrid cols={2} verticalSpacing='lg'>
           <InfoBlock
             title='Gross Floor Area'
@@ -44,11 +62,17 @@ export const ProjectInformation = ({ project }: ProjectInformationProps) => {
           <InfoBlock title='Floors Above Ground' info={project.projectInfo?.floorsAboveGround} />
           <InfoBlock
             title='Life Cycle Stages'
-            info={project.lifeCycleStages.map((stage: string) => stage.toUpperCase()).join(', ')}
+            info={project.lifeCycleStages
+              .toSorted()
+              .map((stage: string) => stage.toUpperCase())
+              .join(', ')}
           />
           <InfoBlock
             title='Impact Categoires'
-            info={project.impactCategories.map((category: string) => category.toUpperCase()).join(', ')}
+            info={project.impactCategories
+              .toSorted()
+              .map((category: string) => category.toUpperCase())
+              .join(', ')}
           />
         </SimpleGrid>
       </SimpleGrid>

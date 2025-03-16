@@ -1,68 +1,96 @@
-import { Accordion, Container, Divider, Stack, Title, useMatches } from '@mantine/core'
+import { Accordion, Container, Divider, Stack, Title, useMatches, Text, AspectRatio } from '@mantine/core'
 import { IconInfoCircle } from '@tabler/icons-react'
+import lcabygExportVideo from '@/assets/lcabyg-export.webm'
+import lcabygUploadVideo from '@/assets/lcabyg-upload.webm'
+import realtimelcaExportVideo from '@/assets/realtimelca-export.webm'
+import ReactPlayer from 'react-player'
 
 const faqs = [
   {
     value: 'What files can I upload?',
     description:
-      'Crisp and refreshing fruit. Apples are known for their versatility and nutritional benefits. They come in a variety of flavors and are great for snacking, baking, or adding to salads.',
+      'LCAx Compare works for files exported from LCAbyg and Real-Time LCA. The LCAbyg files should be in .json and Real-Time LCA in .xlsx.',
+    video: lcabygUploadVideo,
   },
   {
     value: 'How do I export a LCAbyg file?',
     description:
-      'Naturally sweet and potassium-rich fruit. Bananas are a popular choice for their energy-boosting properties and can be enjoyed as a quick snack, added to smoothies, or used in baking.',
+      'Follow the instructions in the video to export a json project file and a json results from LCAbyg. ' +
+      'It is important that the results file is called the same as the project file, but ends with "_results". ' +
+      'Otherwise we will not be able to match the two files together.',
+    video: lcabygExportVideo,
   },
   {
     value: 'How do I export a Real-Time LCA file?',
-    description:
-      'Nutrient-packed green vegetable. Broccoli is packed with vitamins, minerals, and fiber. It has a distinct flavor and can be enjoyed steamed, roasted, or added to stir-fries.',
+    description: 'Follow the instructions in the video to export a .xlsx file from Real-Time LCA.',
+    video: realtimelcaExportVideo,
   },
   {
-    value: 'Do you steal my data?',
+    value: 'Is my data sent somewhere?',
     description:
-      'Crisp and refreshing fruit. Apples are known for their versatility and nutritional benefits. They come in a variety of flavors and are great for snacking, baking, or adding to salads.',
+      'Even though you are in the browser, we never send your projects anywhere. ' +
+      'All conversion and data processing are done YOUR browser and not on a server. In that way we can make sure that your data stays on your computer.',
   },
   {
     value: 'What is LCAx?',
     description:
-      'Naturally sweet and potassium-rich fruit. Bananas are a popular choice for their energy-boosting properties and can be enjoyed as a quick snack, added to smoothies, or used in baking.',
+      'LCAx is an open, machine and human-readable data format for exchanging LCA projects including their results, assemblies and impact data.' +
+      'Besides the data format, LCAx also includes functionality for converting and validating LCA projects. You can read more about LCAx at: https://lcax.org',
   },
   {
     value: 'Who is behind this website?',
     description:
-      'Nutrient-packed green vegetable. Broccoli is packed with vitamins, minerals, and fiber. It has a distinct flavor and can be enjoyed steamed, roasted, or added to stir-fries.',
+      'LCAx and LCAx Compare are developed by Christian Kongsgaard. ' +
+      'The development have been supported by Social- og Boligstyrelsen in 2025.',
   },
   {
-    value: 'My project(s) disappeared what happened?',
+    value: 'My project(s) disappeared, what happened?',
     description:
-      'Nutrient-packed green vegetable. Broccoli is packed with vitamins, minerals, and fiber. It has a distinct flavor and can be enjoyed steamed, roasted, or added to stir-fries.',
+      "As part of our data policy, then we don't store your project data, just as we don't send it anywhere." +
+      "That means that if you refresh your browser or send the link to someone else, there won't be any projects.",
   },
   {
-    value: 'I can\'t upload projects on mobile',
+    value: "I can't upload projects on mobile",
     description:
-      'Nutrient-packed green vegetable. Broccoli is packed with vitamins, minerals, and fiber. It has a distinct flavor and can be enjoyed steamed, roasted, or added to stir-fries.',
+      'To keep charts and graphs readable we have decided not to enable upload of projects on a small screen. ' +
+      'Instead open the webpage on a device with a larger screen and you will be able to upload projects.',
   },
 ]
 
 export const FAQSection = () => {
   const containerSize = useMatches({ md: 'md', xl: 'xxl' })
 
-  const items = faqs.map((faq) => (
-    <Accordion.Item key={faq.value} value={faq.value}>
-      <Accordion.Control icon={<IconInfoCircle />}>{faq.value}</Accordion.Control>
-      <Accordion.Panel>{faq.description}</Accordion.Panel>
-    </Accordion.Item>
-  ))
-
   return (
-    <Container h="100vh" size={containerSize}>
-      <Stack h="100%" justify="center">
-        <Title id="faq">
-          Frequently Asked Questions
-        </Title>
-        <Divider mt="sm" mb="xl" />
-        <Accordion defaultValue={null}>{items}</Accordion>
+    <Container mih='100vh' size={containerSize}>
+      <Stack h='100%' justify='center' mt='xl'>
+        <Title id='faq'>Frequently Asked Questions</Title>
+        <Divider mt='sm' mb='xl' />
+        <Accordion defaultValue={null}>
+          {faqs.map((faq) => (
+            <FAQPanel {...faq} key={faq.value} />
+          ))}
+        </Accordion>
       </Stack>
     </Container>
   )
 }
+
+interface FAQPanelProps {
+  value: string
+  description: string
+  video?: string
+}
+
+const FAQPanel = ({ value, description, video }: FAQPanelProps) => (
+  <Accordion.Item key={value} value={value}>
+    <Accordion.Control icon={<IconInfoCircle />}>{value}</Accordion.Control>
+    <Accordion.Panel>
+      <Text>{description}</Text>
+      {video ? (
+        <AspectRatio ratio={16 / 10} w={'100%'} my='lg'>
+          <ReactPlayer url={video} controls={true} width='100%' height='100%' />
+        </AspectRatio>
+      ) : null}
+    </Accordion.Panel>
+  </Accordion.Item>
+)
