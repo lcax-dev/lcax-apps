@@ -13,12 +13,20 @@ const faqs = [
     video: lcabygUploadVideo,
   },
   {
-    value: 'How do I export a LCAbyg file?',
+    value: 'How do I export LCAbyg files?',
     description:
-      'Follow the instructions in the video to export a json project file and a json results from LCAbyg. ' +
+      'Follow the instructions in the video to export a JSON project file and a JSON results from LCAbyg. ' +
       'It is important that the results file is called the same as the project file, but ends with "_results". ' +
       'Otherwise we will not be able to match the two files together.',
     video: lcabygExportVideo,
+  },
+  {
+    value: 'My LCAbyg project does not include any results!',
+    description:
+      'LCAbyg exports project information and result information in two separate JSON files. ' +
+      'It is important that select and upload both the project and results file at the same time. ' +
+      'Otherwise we will not be able to match the two files together. ' +
+      'See the "How do I export LCAbyg files?" question for more information on exporting LCAbyg files.',
   },
   {
     value: 'How do I export a Real-Time LCA file?',

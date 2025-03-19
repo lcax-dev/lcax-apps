@@ -15,7 +15,7 @@ export const DataViewerPage = () => {
   )
 
   return (
-    <Container fluid bg={'gray.0'} p={0} pb='xl' h='100vh'>
+    <Container fluid bg={'gray.0'} p={0} pb='xl' mih='100vh'>
       <ErrorBoundary>
         <DataViewer project={project} />
       </ErrorBoundary>
