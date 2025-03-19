@@ -6,7 +6,7 @@ export const convertFiles = async (files: File[]) => {
   const errors = []
 
   for (const file of files) {
-    if (!file.name.endsWith('_results.json')) {
+    if (file.type == 'application/json' && !file.name.endsWith('_results.json')) {
       try {
         const project_data = await file.text()
         const results = files.find((_file) => _file.name === file.name.replace('.json', '_results.json'))
@@ -29,6 +29,16 @@ export const convertFiles = async (files: File[]) => {
         console.error(e)
         errors.push(`${file.name}: Problem converting file`)
       }
+    }
+    else if (file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+
+      // try {
+      //   const project = convertBRStandard(file.name.replace('.xlsx', ''), new Uint8Array(await file.arrayBuffer()))
+      //   projects.push(project)
+      // } catch (e) {
+      //   console.error(e)
+      //   errors.push(`${file.name}: Problem converting file`)
+      // }
     }
   }
 

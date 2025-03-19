@@ -4,12 +4,13 @@ import {
   Container,
   Divider,
   Flex,
+  Group,
   Image,
   Menu,
   SimpleGrid,
   Stack,
   Text,
-  Title,
+  Title, Tooltip,
   UnstyledButton,
   useMatches,
 } from '@mantine/core'
@@ -17,7 +18,7 @@ import { Project } from 'lcax'
 import apartmentImage from '@/assets/apartments-brandon-griggs-unsplash.jpg'
 import { Link } from 'react-router'
 import { useState } from 'react'
-import { IconChevronDown } from '@tabler/icons-react'
+import { IconAlertCircle, IconChevronDown } from '@tabler/icons-react'
 import { InfoBlock } from '@/components'
 import { snakeCaseToHumanCase } from '@/lib'
 
@@ -30,21 +31,21 @@ export const ProjectSection = ({ project, index }: ProjectSectionProps) => {
   const containerSize = useMatches({ md: 'md', xl: 'xxl' })
 
   return (
-    <Container h={{ base: '100vh', md: '65vh', xl: '50vh' }} size={containerSize}>
-      <Stack h='100%' justify='center'>
+    <Container mih={{ base: '100vh', md: '65vh', xl: '50vh' }} size={containerSize}>
+      <Stack h="100%" justify="center">
         <Divider />
         <SimpleGrid cols={{ base: 1, md: 2 }}>
           <ImageSection project={project} index={index} />
-          <Stack w='100%' justify='space-between'>
-            <SimpleGrid cols={2} mt='xl'>
+          <Stack w="100%" justify="space-between">
+            <SimpleGrid cols={2} mt="xl">
               <InfoBlock
-                title='Building Typology'
+                title="Building Typology"
                 info={project.projectInfo?.buildingTypology
                   // @ts-expect-error buildingTypology is a string[]
                   .map((typology: string) => snakeCaseToHumanCase(typology))
                   .join(', ')}
               />
-              <InfoBlock title='LCA Software' info={project.softwareInfo.lcaSoftware} />
+              <InfoBlock title="LCA Software" info={project.softwareInfo.lcaSoftware} />
             </SimpleGrid>
             <InfoBlock title={'Description'} info={project.description} />
             <DownloadButton project={project} />
@@ -64,15 +65,19 @@ const ImageSection = ({ project, index }: ImageSectionProps) => {
   const imageSize = useMatches({ md: 250, xl: 500 })
 
   return (
-    <Stack justify='center'>
+    <Stack justify="center">
       <Link to={`/projects/${project.id.slice(0, 8)}/details`}>
-        <Image src={project.metaData?.image} fallbackSrc={apartmentImage} h={imageSize} w={imageSize} fit='cover' />
+        <Image src={project.metaData?.image} fallbackSrc={apartmentImage} h={imageSize} w={imageSize} fit="cover" />
       </Link>
       <Text id={`project${index}`}>Project 0{index + 1}</Text>
-      {/* @ts-expect-error does not know Link props */}
-      <Title component={Link} to={`/projects/${project.id.slice(0, 8)}/details`} c={'black'}>
-        {project.name}
-      </Title>
+
+      <Group>
+        {/* @ts-expect-error does not know Link props */}
+        <Title component={Link} to={`/projects/${project.id.slice(0, 8)}/details`} c={'black'}>
+          {project.name}
+        </Title>
+        {!project.results?.gwp? <Tooltip label='This project does not have any results. See the FAQ for how to upload a project with results.'><IconAlertCircle color='red' /></Tooltip>: null}
+      </Group>
     </Stack>
   )
 }
@@ -94,12 +99,12 @@ const DownloadButton = ({ project }: DownloadButtonProps) => {
   }
 
   return (
-    <Flex justify='flex-end' w='100%'>
+    <Flex justify="flex-end" w="100%">
       <Button.Group>
         <UnstyledButton onClick={handleDownload}>{`Download ${fileType} File`}</UnstyledButton>
         <Menu radius={0}>
           <Menu.Target>
-            <ActionIcon variant='transparent' color='black'>
+            <ActionIcon variant="transparent" color="black">
               <IconChevronDown />
             </ActionIcon>
           </Menu.Target>

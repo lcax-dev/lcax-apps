@@ -1,4 +1,14 @@
-import { ActionIcon, Container, FileInput, Stack, Title, UnstyledButton, useMatches, Text } from '@mantine/core'
+import {
+  ActionIcon,
+  Container,
+  FileInput,
+  Stack,
+  Title,
+  UnstyledButton,
+  useMatches,
+  Text,
+  Tooltip,
+} from '@mantine/core'
 import { IconArrowUp } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useProjects } from '@/contexts'
@@ -61,8 +71,8 @@ export const UploadSection = () => {
     setError([])
     const _files = []
     for (const file of files) {
-      if (file.type !== 'application/json') {
-        setError((prev) => [...prev, `${file.name}: Only JSON files are allowed`])
+      if (!['application/json', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'].includes(file.type)) {
+        setError((prev) => [...prev, `${file.name}: Only JSON and XLSX files are allowed`])
       } else {
         _files.push(file)
       }
@@ -74,6 +84,7 @@ export const UploadSection = () => {
     <Container size={useMatches({ base: 'md', xl: 'xxl' })} h='100vh'>
       <Stack justify='center' align='center' h='100%'>
         <Title>Upload</Title>
+        <Tooltip label='Select and upload either a .xlsx export from Real-Time LCA or the project and result .json files from a LCAbyg project.' >
         <FileInput
           w='100%'
           rightSection={
@@ -95,9 +106,10 @@ export const UploadSection = () => {
           disabled={useMatches({ base: true, sm: false })}
           error={error.join(', ')}
           onChange={handleFileUpload}
-          placeholder='Upload a LCA file'
+          placeholder='Upload LCA file(s)'
           size={useMatches({ base: 'md', md: 'xl' })}
         />
+        </Tooltip>
         {error.length ? <ErrorMessage /> : null}
         <UnstyledButton
           onClick={() => document.getElementById(`faq`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
