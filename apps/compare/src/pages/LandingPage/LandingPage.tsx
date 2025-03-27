@@ -114,7 +114,7 @@ const ConvertSection = () => {
         <Text mt='md'>Step 2</Text>
         <Title order={2}>Convert</Title>
         <Title order={3} w={{ base: '100%', xl: '75%' }}>
-          When you upload a conversion into the LCAx file format will happen.
+          When you upload the files are converted into LCAx's file format.
         </Title>
       </Left>
       <Right>
