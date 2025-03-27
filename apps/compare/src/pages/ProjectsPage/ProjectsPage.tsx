@@ -7,11 +7,11 @@ export const ProjectsPage = () => {
   const { projects } = useProjects()
 
   return (
-    <Container fluid bg={'gray.0'} p={0}>
+    <Container fluid bg={'grey.0'} p={0}>
       <ErrorBoundary>
         <UploadSection />
       </ErrorBoundary>
-      <Container fluid bg={'gray.2'} p={0}>
+      <Container fluid bg={'grey.1'} p={0} mt='xl'>
         {projects.map((project, index) => (
           <ErrorBoundary key={index}>
             <ProjectSection project={project} index={index} />
@@ -19,7 +19,7 @@ export const ProjectsPage = () => {
         ))}
       </Container>
       <ErrorBoundary>
-        <Container fluid bg={'gray.2'} p={0}>
+        <Container fluid bg={'grey.1'} p={0}>
           <CompareSection />
         </Container>
       </ErrorBoundary>

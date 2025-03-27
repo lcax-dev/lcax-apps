@@ -1,22 +1,10 @@
-import {
-  ActionIcon,
-  Container,
-  Divider,
-  Group,
-  rem,
-  Stack,
-  Text,
-  Title,
-  Tree,
-  TreeNodeData,
-  useMatches,
-} from '@mantine/core'
+import { ActionIcon, Container, Divider, Group, rem, Stack, Text, Title, Tree, TreeNodeData } from '@mantine/core'
 import { Project } from 'lcax'
 import { Link } from 'react-router'
 import { IconArrowBack, IconChevronDown } from '@tabler/icons-react'
 import { useMemo } from 'react'
 import { camelCaseToHumanCase } from '@/lib'
-import { ErrorBoundary } from '@lcax/ui'
+import { ErrorBoundary, useMatches } from '@lcax/ui'
 
 interface DataViewerProps {
   project: Project | undefined

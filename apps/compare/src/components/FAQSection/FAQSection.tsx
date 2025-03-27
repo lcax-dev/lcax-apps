@@ -9,7 +9,7 @@ const faqs = [
   {
     value: 'What files can I upload?',
     description:
-      'LCAx Compare works for files exported from LCAbyg and Real-Time LCA. The LCAbyg files should be in .json and Real-Time LCA in .xlsx.',
+      'LCAx Compare works for files exported from LCAbyg and Real-Time LCA. The LCAbyg files should be in .json and Real-Time LCA in .xlsx. Currently only LCAbyg files from LCAbyg 5.4.0.5 is supported.',
     video: lcabygUploadVideo,
   },
   {
@@ -63,17 +63,23 @@ const faqs = [
       'To keep charts and graphs readable we have decided not to enable upload of projects on a small screen. ' +
       'Instead open the webpage on a device with a larger screen and you will be able to upload projects.',
   },
+  {
+    value: 'I would like to delete a project',
+    description:
+      'If you want to delete all your projects, then you can simply refresh the page.' +
+      'If you have already uploaded 3 projects and upload one more, then the first project will disappear.',
+  },
 ]
 
 export const FAQSection = () => {
-  const containerSize = useMatches({ md: 'md', xl: 'xxl' })
+  const containerSize = useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })
 
   return (
     <Container mih='100vh' size={containerSize}>
       <Stack h='100%' justify='center' mt='xl'>
         <Title id='faq'>Frequently Asked Questions</Title>
         <Divider mt='sm' mb='xl' />
-        <Accordion defaultValue={null}>
+        <Accordion multiple>
           {faqs.map((faq) => (
             <FAQPanel {...faq} key={faq.value} />
           ))}
@@ -95,9 +101,15 @@ const FAQPanel = ({ value, description, video }: FAQPanelProps) => (
     <Accordion.Panel>
       <Text>{description}</Text>
       {video ? (
-        <AspectRatio ratio={16 / 10} w={'100%'} my='lg'>
-          <ReactPlayer url={video} controls={true} width='100%' height='100%' />
-        </AspectRatio>
+        <>
+          <Title order={3} mt='xl'>
+            Video
+          </Title>
+          <Divider />
+          <AspectRatio ratio={16 / 10} w={'100%'} my='lg'>
+            <ReactPlayer url={video} controls={true} width='100%' height='100%' />
+          </AspectRatio>
+        </>
       ) : null}
     </Accordion.Panel>
   </Accordion.Item>

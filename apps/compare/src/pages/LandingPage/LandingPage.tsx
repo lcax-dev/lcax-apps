@@ -1,15 +1,5 @@
-import {
-  ActionIcon,
-  Button,
-  Container,
-  FileInput,
-  Image,
-  SimpleGrid,
-  Stack,
-  Text,
-  Title,
-  useMatches,
-} from '@mantine/core'
+import { ActionIcon, Button, Container, FileInput, Image, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { useMatches } from '@lcax/ui'
 import { IconArrowUp } from '@tabler/icons-react'
 import sbstLogo from '@/assets/sbst-logo.png'
 import { Link } from 'react-router'
@@ -18,12 +8,13 @@ import { ReactNode } from 'react'
 
 export const LandingPage = () => {
   return (
-    <Container fluid bg={'gray.0'} p={0}>
+    <Container fluid bg={'grey.0'} p={0}>
       <TitleSection />
       <UploadSection />
       <ConvertSection />
       <CompareSection />
       <AnalyseSection />
+      <GetStartedSection />
       <SponsorSection />
     </Container>
   )
@@ -31,7 +22,7 @@ export const LandingPage = () => {
 
 const TitleSection = () => {
   return (
-    <Container h={'100vh'} size={useMatches({ base: 'md', xl: 'xxl' })} mx={{ base: 'md', md: 'auto' }}>
+    <Container h='100vh' size={useMatches({ base: 'md', xl: 'xl', xxl: 'xxl' })} mx={{ base: 'md', md: 'auto' }}>
       <Stack h='100%' justify='center'>
         <Text>What is LCAx Compare?</Text>
         <Title>
@@ -51,14 +42,14 @@ const SponsorSection = () => {
     <Stack justify='center' align='center' h={'100vh'}>
       <Title order={3}>Supported by</Title>
       <Link to='https://www.sbst.dk/'>
-        <Image src={sbstLogo} h={200} w='auto' fit='contain' />
+        <Image src={sbstLogo} h={useMatches({ base: 60, md: 100, xl: 150 })} w='auto' fit='contain' />
       </Link>
     </Stack>
   )
 }
 
 const GetStartedButton = () => (
-  <Button c='black' component={Link} to='/projects' w={'fit-content'}>
+  <Button c='black' component={Link} to='/projects' w={'fit-content'} size='xl'>
     Get started
   </Button>
 )
@@ -68,8 +59,8 @@ interface SectionProps {
 }
 
 const Section = ({ children }: SectionProps) => (
-  <Container h={{ base: '100vh', md: '50vh', xl: '30vh' }} my='xl' fluid p={0}>
-    <Container h='100%' size={useMatches({ md: 'md', xl: 'xxl' })}>
+  <Container h={{ base: '100vh', md: '50vh', xxl: '30vh' }} my='xl' fluid p={0}>
+    <Container h='100%' size={useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })}>
       <SimpleGrid cols={useMatches({ base: 1, md: 2 })} h={'100%'}>
         {children}
       </SimpleGrid>
@@ -84,7 +75,7 @@ const Left = ({ children }: SectionProps) => (
 )
 
 const Right = ({ children }: SectionProps) => (
-  <Stack bg={'gray.2'} justify='center' align='center' h='100%' mih={300}>
+  <Stack bg={'grey.2'} justify='center' align='center' h='100%' mih={300}>
     {children}
   </Stack>
 )
@@ -94,17 +85,16 @@ const UploadSection = () => {
     <Section>
       <Left>
         <Text mt='md'>Step 1</Text>
-        <Title>Upload</Title>
+        <Title order={2}>Upload</Title>
         <Title order={3} w={{ base: '100%', xl: '75%' }}>
           Start by uploading up to 3 LCAbyg or Realtime LCA projects
         </Title>
-        <GetStartedButton />
       </Left>
       <Right>
         <FileInput
           w={'50%'}
           rightSection={
-            <ActionIcon variant='filled' radius='xl' size={useMatches({ base: 'md', xl: 'xl' })} color='gray.4'>
+            <ActionIcon variant='filled' radius='xl' size={useMatches({ base: 'md', xl: 'xl' })} color='grey.3'>
               <IconArrowUp color='black' />
             </ActionIcon>
           }
@@ -122,11 +112,10 @@ const ConvertSection = () => {
     <Section>
       <Left>
         <Text mt='md'>Step 2</Text>
-        <Title>Convert</Title>
+        <Title order={2}>Convert</Title>
         <Title order={3} w={{ base: '100%', xl: '75%' }}>
-          When you upload a conversion into the LCAx file format will happen.
+          When you upload the files are converted into LCAx's file format.
         </Title>
-        <GetStartedButton />
       </Left>
       <Right>
         <FileInput
@@ -136,7 +125,7 @@ const ConvertSection = () => {
               variant='filled'
               radius='xl'
               size={useMatches({ base: 'md', xl: 'xl' })}
-              color='gray.4'
+              color='grey.3'
               loading={true}
             >
               <IconArrowUp color='black' />
@@ -156,11 +145,10 @@ const CompareSection = () => {
     <Section>
       <Left>
         <Text mt='md'>Step 3</Text>
-        <Title>Compare</Title>
+        <Title order={2}>Compare</Title>
         <Title order={3} w={{ base: '100%', xl: '75%' }}>
           Compare the environmental impact of your projects.
         </Title>
-        <GetStartedButton />
       </Left>
       <Right>
         <BarChart
@@ -189,11 +177,10 @@ const AnalyseSection = () => {
     <Section>
       <Left>
         <Text mt='md'>Step 4</Text>
-        <Title>Analyse</Title>
+        <Title order={2}>Analyse</Title>
         <Title order={3} w={{ base: '100%', xl: '75%' }}>
           Click on each project to see detailed data.
         </Title>
-        <GetStartedButton />
       </Left>
       <Right>
         <BarChart
@@ -217,5 +204,16 @@ const AnalyseSection = () => {
         />
       </Right>
     </Section>
+  )
+}
+
+const GetStartedSection = () => {
+  return (
+    <Container h={{ base: '100vh', md: '50vh', xl: '30vh' }} my='xl' fluid p={0}>
+      <Stack align='center' h='100%' justify='center'>
+        <Title order={2}>Get Started Now!</Title>
+        <GetStartedButton />
+      </Stack>
+    </Container>
   )
 }

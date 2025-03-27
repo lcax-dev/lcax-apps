@@ -1,14 +1,14 @@
 import { Project } from 'lcax'
-import { Container, Divider, Title, useMatches } from '@mantine/core'
+import { Container, Divider, Title } from '@mantine/core'
 import { ImpactByComponentChart, ImpactByLifeCycleChart } from '@/components/ImpactCharts'
-import { ErrorBoundary } from '@lcax/ui'
+import { ErrorBoundary, useMatches } from '@lcax/ui'
 
 interface ProjectImpactsProps {
   project: Project | undefined
 }
 
 export const ProjectImpacts = ({ project }: ProjectImpactsProps) => {
-  const containerSize = useMatches({ md: 'md', xl: 'xxl' })
+  const containerSize = useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })
 
   if (!project) return null
 

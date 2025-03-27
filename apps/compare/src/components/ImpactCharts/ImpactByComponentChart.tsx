@@ -1,6 +1,7 @@
-import { ActionIcon, Center, Group, Menu, Text, Title, useMatches } from '@mantine/core'
+import { ActionIcon, Center, Group, Menu, Text, Title } from '@mantine/core'
 import { BarChart } from '@mantine/charts'
 import { Project } from 'lcax'
+import { useMatches } from '@lcax/ui'
 import { IconChevronDown } from '@tabler/icons-react'
 import { Dispatch, SetStateAction, useMemo, useState } from 'react'
 import { cutOffSmallestResults, resultsByComponents } from '@/lib'
@@ -35,7 +36,7 @@ export const ImpactByComponentChart = ({ project }: ImpactByComponentChartProps)
         })),
     [data, projectColor],
   )
-  const height = useMatches({ base: '40vh', xl: '20vh' })
+  const height = useMatches({ base: '40vh', xxl: '20vh' })
 
   return (
     <>

@@ -1,7 +1,8 @@
-import { Center, Text, Title, useMatches } from '@mantine/core'
+import { Center, Text, Title } from '@mantine/core'
 import { BarChart } from '@mantine/charts'
 import { useMemo } from 'react'
 import { Project } from 'lcax'
+import { useMatches } from '@lcax/ui'
 import { resultsByLifeCycle } from '@/lib'
 
 interface ImpactByLifeCycleChartProps {
@@ -16,7 +17,7 @@ export const ImpactByLifeCycleChart = ({ project }: ImpactByLifeCycleChartProps)
       .reduce(
         (acc, next) => ({
           ...acc,
-          [next[0]]: next[1],
+          [next[0].toUpperCase()]: next[1],
         }),
         {},
       )
@@ -32,7 +33,7 @@ export const ImpactByLifeCycleChart = ({ project }: ImpactByLifeCycleChartProps)
         })),
     [project, projectColor],
   )
-  const height = useMatches({ base: '40vh', xl: '20vh' })
+  const height = useMatches({ base: '40vh', xxl: '20vh' })
 
   return (
     <>

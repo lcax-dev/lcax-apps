@@ -1,18 +1,24 @@
-import { Assembly, Classification, ImpactCategoryKey, LifeCycleStage, Product, Project } from 'lcax'
+import {
+  Assembly,
+  Classification,
+  ImpactCategoryKey,
+  LifeCycleModule,
+  Product,
+  Project,
+  getImpactTotal,
+  normalizeResult,
+  getImpactsByLifeCycleModule,
+} from 'lcax'
 
 interface SumResultsProjectProps {
   project: Project
-  excludeStages?: LifeCycleStage[]
+  excludeModules?: (keyof typeof LifeCycleModule)[]
   impactCategory?: ImpactCategoryKey
 }
-export const sumResultsProject = ({ project, excludeStages, impactCategory = 'gwp' }: SumResultsProjectProps) => {
-  let total = Object.entries(project.results?.[impactCategory.toLowerCase()]) as [LifeCycleStage, number][]
-  if (excludeStages) {
-    total = total.filter(([key]) => !excludeStages.includes(key))
-  }
-  const result = total.reduce((acc, next) => acc + next[1], 0)
-  // @ts-expect-error value exists
-  return makeResultRelative(result, project.referenceStudyPeriod || 1, project.projectInfo?.grossFloorArea?.value || 1)
+export const sumResultsProject = ({ project, excludeModules, impactCategory = 'gwp' }: SumResultsProjectProps) => {
+  const result = getImpactTotal(project.results!, impactCategory, excludeModules)
+  const factor = (project.referenceStudyPeriod || 1) * (project.projectInfo?.grossFloorArea?.value || 1)
+  return normalizeResult(result, factor)
 }
 
 interface SumResultsProps {
@@ -22,14 +28,8 @@ interface SumResultsProps {
 }
 
 export const sumResults = ({ element, referenceStudyPeriod, grossFloorArea }: SumResultsProps) => {
-  // @ts-expect-error acc and next are numbers
-  const total = Object.values(element.results?.gwp || {}).reduce((acc: number, next: number) => acc + next, 0) as number
-
-  return makeResultRelative(total, referenceStudyPeriod, grossFloorArea)
-}
-
-export const makeResultRelative = (result: number, referenceStudyPeriod: number, grossFloorArea: number) => {
-  return result / referenceStudyPeriod / grossFloorArea
+  const total = getImpactTotal(element.results!, 'gwp', undefined)
+  return normalizeResult(total, referenceStudyPeriod * grossFloorArea)
 }
 
 interface ResultsByComponentsProps {
@@ -46,7 +46,6 @@ export const resultsByComponents = ({ project, classificationSystem }: ResultsBy
       const result = sumResults({
         element: next,
         referenceStudyPeriod: project.referenceStudyPeriod || 1,
-        // @ts-expect-error value exists
         grossFloorArea: project.projectInfo?.grossFloorArea?.value || 1,
       })
       if (_class in acc) {
@@ -71,17 +70,9 @@ interface ResultsByLifeCycleProps {
 }
 
 export const resultsByLifeCycle = ({ project }: ResultsByLifeCycleProps) => {
+  const factor = (project.referenceStudyPeriod || 1) * (project.projectInfo?.grossFloorArea?.value || 1)
   return {
-    ...Object.entries(project?.results.gwp)
-      .map(([key, value]) => ({
-        [key.toUpperCase()]: makeResultRelative(
-          value as number,
-          project.referenceStudyPeriod || 1,
-          // @ts-expect-error value exists
-          project.projectInfo?.grossFloorArea.value || 1,
-        ),
-      }))
-      .reduce((acc, next) => ({ ...acc, ...next }), {}),
+    ...getImpactsByLifeCycleModule(project.results!, 'gwp', undefined, factor),
     impact: 'GWP',
   }
 }

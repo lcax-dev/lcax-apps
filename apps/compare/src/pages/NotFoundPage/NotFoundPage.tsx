@@ -1,9 +1,10 @@
-import { ActionIcon, Container, Stack, Title, useMatches } from '@mantine/core'
+import { ActionIcon, Container, Stack, Title } from '@mantine/core'
 import { Link } from 'react-router'
+import { useMatches } from '@lcax/ui'
 import { IconArrowBack } from '@tabler/icons-react'
 
 export const NotFoundPage = () => {
-  const containerSize = useMatches({ md: 'md', xl: 'xxl' })
+  const containerSize = useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })
 
   return (
     <Container size={containerSize} h='100vh'>
