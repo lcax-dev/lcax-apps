@@ -42,6 +42,16 @@ export const convertFiles = async (files: File[]) => {
         errors.push(`${file.name}: Problem converting file`)
       }
     }
+    else if (file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+
+      // try {
+      //   const project = convertBRStandard(file.name.replace('.xlsx', ''), new Uint8Array(await file.arrayBuffer()))
+      //   projects.push(project)
+      // } catch (e) {
+      //   console.error(e)
+      //   errors.push(`${file.name}: Problem converting file`)
+      // }
+    }
   }
 
   return { projects, errors }

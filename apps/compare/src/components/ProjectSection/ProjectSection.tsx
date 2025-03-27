@@ -37,15 +37,15 @@ export const ProjectSection = ({ project, index }: ProjectSectionProps) => {
         <Divider py='lg' />
         <SimpleGrid cols={{ base: 1, md: 2 }}>
           <ImageSection project={project} index={index} />
-          <Stack w='100%' justify='space-between'>
-            <SimpleGrid cols={2} mt='xl'>
+          <Stack w="100%" justify="space-between">
+            <SimpleGrid cols={2} mt="xl">
               <InfoBlock
-                title='Building Typology'
+                title="Building Typology"
                 info={project.projectInfo?.buildingTypology
                   .map((typology: string) => snakeCaseToHumanCase(typology))
                   .join(', ')}
               />
-              <InfoBlock title='LCA Software' info={project.softwareInfo.lcaSoftware} />
+              <InfoBlock title="LCA Software" info={project.softwareInfo.lcaSoftware} />
             </SimpleGrid>
             <InfoBlock title={'Description'} info={project.description} />
             <DownloadButton project={project} />
@@ -65,9 +65,9 @@ const ImageSection = ({ project, index }: ImageSectionProps) => {
   const imageSize = useMatches({ md: 250, xl: 350, xxl: 500 })
 
   return (
-    <Stack justify='center'>
+    <Stack justify="center">
       <Link to={`/projects/${project.id.slice(0, 8)}/details`}>
-        <Image src={project.metaData?.image} fallbackSrc={apartmentImage} h={imageSize} w={imageSize} fit='cover' />
+        <Image src={project.metaData?.image} fallbackSrc={apartmentImage} h={imageSize} w={imageSize} fit="cover" />
       </Link>
       <Text id={`project${index}`}>Project 0{index + 1}</Text>
 
@@ -103,12 +103,12 @@ const DownloadButton = ({ project }: DownloadButtonProps) => {
   }
 
   return (
-    <Flex justify='flex-end' w='100%'>
+    <Flex justify="flex-end" w="100%">
       <Button.Group>
         <UnstyledButton onClick={handleDownload}>{`Download ${fileType} File`}</UnstyledButton>
         <Menu radius={0}>
           <Menu.Target>
-            <ActionIcon variant='transparent' color='black'>
+            <ActionIcon variant="transparent" color="black">
               <IconChevronDown />
             </ActionIcon>
           </Menu.Target>
