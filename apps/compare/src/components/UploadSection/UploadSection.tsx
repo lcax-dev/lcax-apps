@@ -108,7 +108,7 @@ export const UploadSection = () => {
           onClick={() => document.getElementById(`faq`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
           style={{ textDecoration: 'underline' }}
         >
-          What files can I upload?
+          {useMatches({ base: 'I can\'t upload projects on mobile', sm: 'What files can I upload?' })}
         </UnstyledButton>
       </Stack>
     </Container>
