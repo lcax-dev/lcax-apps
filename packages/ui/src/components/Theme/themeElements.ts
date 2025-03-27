@@ -24,7 +24,7 @@ export const breakpoints = {
   md: '62em',
   lg: '75em',
   xl: '88em',
-  xxl: '120em',
+  xxl: '110em',
 }
 export const black = '#2e2e2e'
 export const primaryColor = 'blue'

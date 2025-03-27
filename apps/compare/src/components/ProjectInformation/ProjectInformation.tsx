@@ -1,5 +1,6 @@
-import { Container, SimpleGrid, Space, Stack, useMatches } from '@mantine/core'
+import { Container, SimpleGrid, Space, Stack } from '@mantine/core'
 import { Project } from 'lcax'
+import { useMatches } from '@lcax/ui'
 import { getCountryName, snakeCaseToHumanCase, sumResultsProject, transformUnit } from '@/lib'
 import { InfoBlock } from '@/components'
 
@@ -8,7 +9,7 @@ interface ProjectInformationProps {
 }
 
 export const ProjectInformation = ({ project }: ProjectInformationProps) => {
-  const containerSize = useMatches({ md: 'md', xl: 'xxl' })
+  const containerSize = useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })
   if (!project) return null
 
   return (
@@ -44,7 +45,7 @@ export const ProjectInformation = ({ project }: ProjectInformationProps) => {
               project.results?.gwp
                 ? sumResultsProject({
                     project,
-                    excludeStages: ['d'],
+                    excludeModules: ['d'],
                   }).toFixed(2)
                 : null
             }
@@ -61,10 +62,10 @@ export const ProjectInformation = ({ project }: ProjectInformationProps) => {
           />
           <InfoBlock title='Floors Above Ground' info={project.projectInfo?.floorsAboveGround} />
           <InfoBlock
-            title='Life Cycle Stages'
-            info={project.lifeCycleStages
+            title='Life Cycle Modules'
+            info={project.lifeCycleModules
               .toSorted()
-              .map((stage: string) => stage.toUpperCase())
+              .map((stage) => (stage as unknown as string).toUpperCase())
               .join(', ')}
           />
           <InfoBlock

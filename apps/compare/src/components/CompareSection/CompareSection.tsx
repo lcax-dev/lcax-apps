@@ -1,5 +1,6 @@
-import { ActionIcon, Container, Group, Menu, Stack, Text, Title, useMatches } from '@mantine/core'
+import { ActionIcon, Container, Group, Menu, Stack, Text, Title } from '@mantine/core'
 import { useProjects } from '@/contexts'
+import { useMatches } from '@lcax/ui'
 import { BarChart } from '@mantine/charts'
 import { Dispatch, SetStateAction, useMemo, useState } from 'react'
 import { resultsByComponents, resultsByLifeCycle, sumResultsProject } from '@/lib'
@@ -9,7 +10,7 @@ import { breakdownOptions, BreakdownOptions, TooltipPayload } from './types'
 
 export const CompareSection = () => {
   const [breakdown, setBreakdown] = useState<BreakdownOptions>('Total')
-  const containerSize = useMatches({ md: 'md', xl: 'xxl' })
+  const containerSize = useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })
   const { projects } = useProjects()
 
   const resultData = useMemo(() => {
@@ -26,7 +27,7 @@ export const CompareSection = () => {
           project.results?.gwp
             ? resultsByComponents({
                 project,
-                classificationSystem: 'LCAByg',
+                classificationSystem: 'BR18',
               })
             : {},
         )
@@ -64,7 +65,7 @@ export const CompareSection = () => {
     if (breakdown === 'Total') {
       return projects.map((project) => ({
         name: project.name,
-        color: `${project.metaData.color}.${project.metaData.color === 'yellow' ? 4 : 9}`,
+        color: `${project.metaData?.color}.${(project.metaData?.color as unknown as string) === 'yellow' ? 4 : 9}`,
       }))
     } else if (breakdown === 'Life Cycle' || breakdown === 'Building Components') {
       return resultData
@@ -75,7 +76,7 @@ export const CompareSection = () => {
               const project = projects.find((project) => project.id === _data.id)!
               return {
                 name: key,
-                color: `${project.metaData.color}.${index % 10}`,
+                color: `${project.metaData?.color}.${index % 10}`,
                 stackId: project.id,
               }
             }),
@@ -89,12 +90,12 @@ export const CompareSection = () => {
   }
 
   return (
-    <Container h='100vh' size={containerSize}>
-      <Group justify='space-between'>
+    <Container mih='100vh' size={containerSize} py='xl'>
+      <Group justify='space-between' py='xl'>
         <Title>Project Comparison</Title>
         <BreakdownDropdown breakdown={breakdown} setBreakdown={setBreakdown} />
       </Group>
-      <Stack justify='center' align='center' h='100%' px='xl'>
+      <Stack justify='center' align='center' h='100%' px='xl' my='xl'>
         <BarChart
           h={'75vh'}
           data={resultData}

@@ -14,7 +14,7 @@ export const DetailsPage = () => {
     [projectId, projects],
   )
   return (
-    <Container fluid bg={'gray.0'} p={0} pb='xl'>
+    <Container fluid bg={'grey.0'} p={0} pb='xl'>
       <ErrorBoundary>
         <ProjectImage project={project} />
       </ErrorBoundary>
