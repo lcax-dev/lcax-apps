@@ -1,7 +1,20 @@
-import { ActionIcon, Button, Container, FileInput, Image, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import {
+  ActionIcon,
+  Button,
+  Container,
+  Divider,
+  FileInput,
+  Group,
+  Image,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core'
 import { useMatches } from '@lcax/ui'
-import { IconArrowUp } from '@tabler/icons-react'
+import { IconArrowRight, IconArrowUp, IconLoader2 } from '@tabler/icons-react'
 import sbstLogo from '@/assets/sbst-logo.png'
+import realDaniaLogo from '@/assets/realdania-logo.svg'
 import { Link } from 'react-router'
 import { BarChart } from '@mantine/charts'
 import { ReactNode } from 'react'
@@ -32,35 +45,20 @@ const TitleSection = () => {
           This app has been developed to showcase some of LCAx's functionality such as conversion from different formats
           to LCAx and the ability to compare projects.
         </Text>
+        <GetStartedButton />
       </Stack>
     </Container>
   )
 }
-
-const SponsorSection = () => {
-  return (
-    <Stack justify='center' align='center' h={'100vh'}>
-      <Title order={3}>Supported by</Title>
-      <Link to='https://www.sbst.dk/'>
-        <Image src={sbstLogo} h={useMatches({ base: 60, md: 100, xl: 150 })} w='auto' fit='contain' />
-      </Link>
-    </Stack>
-  )
-}
-
-const GetStartedButton = () => (
-  <Button c='black' component={Link} to='/projects' w={'fit-content'} size='xl'>
-    Get started
-  </Button>
-)
 
 interface SectionProps {
   children: ReactNode
 }
 
 const Section = ({ children }: SectionProps) => (
-  <Container h={{ base: '100vh', md: '50vh', xxl: '30vh' }} my='xl' fluid p={0}>
+  <Container h={{ base: '100vh', md: '50vh', xxl: '30vh' }} pb='xl' fluid p={0}>
     <Container h='100%' size={useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })}>
+      <Divider my='xl' />
       <SimpleGrid cols={useMatches({ base: 1, md: 2 })} h={'100%'}>
         {children}
       </SimpleGrid>
@@ -84,8 +82,10 @@ const UploadSection = () => {
   return (
     <Section>
       <Left>
-        <Text mt='md'>Step 1</Text>
-        <Title order={2}>Upload</Title>
+        <div>
+          <Text mt='md'>Step 1</Text>
+          <Title order={2}>Upload</Title>
+        </div>
         <Title order={3} w={{ base: '100%', xl: '75%' }}>
           Start by uploading up to 3 LCAbyg or Realtime LCA projects
         </Title>
@@ -94,7 +94,7 @@ const UploadSection = () => {
         <FileInput
           w={'50%'}
           rightSection={
-            <ActionIcon variant='filled' radius='xl' size={useMatches({ base: 'md', xl: 'xl' })} color='grey.3'>
+            <ActionIcon variant='filled' radius='xl' size={useMatches({ base: 'md', xl: 'xl' })} color='yellow.4'>
               <IconArrowUp color='black' />
             </ActionIcon>
           }
@@ -111,8 +111,10 @@ const ConvertSection = () => {
   return (
     <Section>
       <Left>
-        <Text mt='md'>Step 2</Text>
-        <Title order={2}>Convert</Title>
+        <div>
+          <Text mt='md'>Step 2</Text>
+          <Title order={2}>Convert</Title>
+        </div>
         <Title order={3} w={{ base: '100%', xl: '75%' }}>
           When you upload the files are converted into LCAx's file format.
         </Title>
@@ -121,17 +123,11 @@ const ConvertSection = () => {
         <FileInput
           w={'50%'}
           rightSection={
-            <ActionIcon
-              variant='filled'
-              radius='xl'
-              size={useMatches({ base: 'md', xl: 'xl' })}
-              color='grey.3'
-              loading={true}
-            >
-              <IconArrowUp color='black' />
+            <ActionIcon variant='filled' radius='xl' size={useMatches({ base: 'md', xl: 'xl' })} color='yellow.4'>
+              <IconLoader2 color='black' />
             </ActionIcon>
           }
-          placeholder={<Text c='black'>lca.file</Text>}
+          placeholder='lca.file'
           size={useMatches({ base: 'md', xl: 'xl' })}
           onClick={(e) => e.preventDefault()}
         />
@@ -144,8 +140,10 @@ const CompareSection = () => {
   return (
     <Section>
       <Left>
-        <Text mt='md'>Step 3</Text>
-        <Title order={2}>Compare</Title>
+        <div>
+          <Text mt='md'>Step 3</Text>
+          <Title order={2}>Compare</Title>
+        </div>
         <Title order={3} w={{ base: '100%', xl: '75%' }}>
           Compare the environmental impact of your projects.
         </Title>
@@ -153,18 +151,19 @@ const CompareSection = () => {
       <Right>
         <BarChart
           h={300}
-          data={[{ month: 'January', Smartphones: 1200, Laptops: 900, Tablets: 200 }]}
-          dataKey='month'
+          data={[{ name: 'GWP', 'Project 1': 10.8, 'Project 2': 9.2, 'Project 3': 6.8 }]}
+          dataKey='name'
           series={[
-            { name: 'Smartphones', color: 'yellow.4' },
-            { name: 'Laptops', color: 'black' },
-            { name: 'Tablets', color: 'indigo.9' },
+            { name: 'Project 1', color: 'yellow.4' },
+            { name: 'Project 2', color: 'black' },
+            { name: 'Project 3', color: 'indigo.9' },
           ]}
-          tickLine='none'
-          gridAxis='none'
-          barChartProps={{ barGap: 20 }}
+          barChartProps={{ barGap: 20, margin: { left: 30, right: 20 } }}
+          withLegend
+          valueFormatter={(value) => value.toFixed(2)}
+          legendProps={{ verticalAlign: 'bottom' }}
+          yAxisLabel='Impact (kg CO₂-eq/m²·year)'
           withXAxis={false}
-          withYAxis={false}
           withTooltip={false}
         />
       </Right>
@@ -173,33 +172,55 @@ const CompareSection = () => {
 }
 
 const AnalyseSection = () => {
+  const data = {
+    impact: 'GWP',
+    D: -1.5625586564072549,
+    C4: 0.5562141931120812,
+    C3: 1.301161247212097,
+    B6: 3.1552307359999987,
+    B4: 0.9866065004626995,
+    A1A3: 6.694144863128481,
+  }
+
   return (
     <Section>
       <Left>
-        <Text mt='md'>Step 4</Text>
-        <Title order={2}>Analyse</Title>
+        <div>
+          <Text mt='md'>Step 4</Text>
+          <Title order={2}>Analyse</Title>
+        </div>
         <Title order={3} w={{ base: '100%', xl: '75%' }}>
           Click on each project to see detailed data.
         </Title>
       </Left>
       <Right>
         <BarChart
-          h={200}
-          data={[{ month: 'January', project1: 900, project2: 600, project3: 200, project4: 300 }]}
-          dataKey='month'
+          h={300}
+          data={[data]}
+          dataKey='impact'
           series={[
-            { name: 'project1', color: 'yellow.4' },
-            { name: 'project2', color: 'gray.8' },
-            { name: 'project3', color: 'gray.1' },
-            { name: 'project4', color: 'indigo.9' },
+            { name: 'D', color: 'yellow.5' },
+            { name: 'A1A3', color: 'yellow.0' },
+            { name: 'B4', color: 'yellow.1' },
+            { name: 'B6', color: 'yellow.2' },
+            { name: 'C3', color: 'yellow.3' },
+            { name: 'C4', color: 'yellow.4' },
           ]}
           orientation='vertical'
           tickLine='none'
           gridAxis='none'
           type='stacked'
-          barChartProps={{ barGap: 20 }}
-          withXAxis={false}
+          barChartProps={{ barGap: 20, stackOffset: 'sign', margin: { left: 20, right: 20 } }}
+          withXAxis={true}
+          xAxisProps={{ domain: ['dataMin', 'dataMax'] }}
           withYAxis={false}
+          unit='kg CO₂-eq/m²·year'
+          valueFormatter={(value) => value.toFixed(2)}
+          withBarValueLabel
+          valueLabelProps={{ position: 'inside', fill: 'black' }}
+          withLegend
+          legendProps={{ verticalAlign: 'bottom', height: 75 }}
+          xAxisLabel='Impact (kg CO₂-eq/m²·year)'
           withTooltip={false}
         />
       </Right>
@@ -210,10 +231,43 @@ const AnalyseSection = () => {
 const GetStartedSection = () => {
   return (
     <Container h={{ base: '100vh', md: '50vh', xl: '30vh' }} my='xl' fluid p={0}>
-      <Stack align='center' h='100%' justify='center'>
-        <Title order={2}>Get Started Now!</Title>
-        <GetStartedButton />
-      </Stack>
+      <Container h='100%' size={useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })}>
+        <Divider my='xl' />
+        <Stack align='center' h='100%' justify='center'>
+          <Title order={2}>Get Started Now!</Title>
+          <GetStartedButton />
+        </Stack>
+      </Container>
     </Container>
   )
 }
+
+const SponsorSection = () => {
+  return (
+    <Stack justify='center' align='center' h={'50vh'}>
+      <Title order={3}>Supported by</Title>
+      <Group gap='xl' mt='xl'>
+        <Link to='https://www.sbst.dk/'>
+          <Image src={sbstLogo} h={useMatches({ base: 60, md: 100, xl: 150 })} w='auto' fit='contain' />
+        </Link>
+        <Link to='https://www.realdania.org/'>
+          <Image src={realDaniaLogo} h={useMatches({ base: 60, md: 100, xl: 150 })} w='auto' fit='contain' />
+        </Link>
+      </Group>
+    </Stack>
+  )
+}
+
+const GetStartedButton = () => (
+  <Button
+    c='black'
+    component={Link}
+    to='/projects'
+    w={'fit-content'}
+    size='xl'
+    rightSection={<IconArrowRight />}
+    my='xl'
+  >
+    Get started
+  </Button>
+)

@@ -45,6 +45,8 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_UMAMI_ID: ${{ secrets.COMPARE_UMAMI_ID }}
 
       - name: Upload artifact for deployment job
         if: github.event_name != 'pull_request'

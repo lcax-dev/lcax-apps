@@ -85,7 +85,7 @@ export const UploadSection = () => {
                 variant='filled'
                 radius='xl'
                 size={useMatches({ base: 'md', md: 'xl' })}
-                color='grey.3'
+                color='yellow.4'
                 disabled={converting}
                 loading={converting}
                 onClick={() => handleFileConversion()}
@@ -108,7 +108,7 @@ export const UploadSection = () => {
           onClick={() => document.getElementById(`faq`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
           style={{ textDecoration: 'underline' }}
         >
-          {useMatches({ base: 'I can\'t upload projects on mobile', sm: 'What files can I upload?' })}
+          {useMatches({ base: "I can't upload projects on mobile", sm: 'What files can I upload?' })}
         </UnstyledButton>
       </Stack>
     </Container>

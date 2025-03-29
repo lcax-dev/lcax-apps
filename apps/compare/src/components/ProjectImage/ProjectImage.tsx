@@ -1,39 +1,36 @@
 import apartmentImage from '@/assets/apartments-brandon-griggs-unsplash.jpg'
 import { ActionIcon, Container, Group, Image, Overlay, rem, Stack, Title, useMatches } from '@mantine/core'
-import { IconArrowBack, IconArrowNarrowLeft, IconFileCode2, IconPhotoUp, IconPrinter } from '@tabler/icons-react'
+import { IconArrowBack, IconArrowNarrowLeft, IconFileCode2, IconPrinter } from '@tabler/icons-react'
 import { Project } from 'lcax'
 import { Link } from 'react-router'
-import { ChangeEvent } from 'react'
-import { toBase64 } from '@/lib'
-import { useProjects } from '@/contexts'
 
 interface ProjectImageProps {
   project: Project | undefined
 }
 
 export const ProjectImage = ({ project }: ProjectImageProps) => {
-  const { setProjects } = useProjects()
+  // const { setProjects } = useProjects()
   const titleSize = useMatches({ md: rem(46), xl: rem(64) })
 
-  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const file = await toBase64(event.target.files[0])
-      if (!project) return
-      else if (!project.metaData) {
-        project.metaData = { image: file }
-      } else {
-        project.metaData.image = file
-      }
-      setProjects((prev) => prev.map((_project) => (_project.id === project.id ? _project : project)))
-    }
-  }
-
-  const handleFileClick = () => {
-    const fileInput = document.getElementById('fileInput')
-    if (fileInput) {
-      fileInput.click()
-    }
-  }
+  // const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.files) {
+  //     const file = await toBase64(event.target.files[0])
+  //     if (!project) return
+  //     else if (!project.metaData) {
+  //       project.metaData = { image: file }
+  //     } else {
+  //       project.metaData.image = file
+  //     }
+  //     setProjects((prev) => prev.map((_project) => (_project.id === project.id ? _project : project)))
+  //   }
+  // }
+  //
+  // const handleFileClick = () => {
+  //   const fileInput = document.getElementById('fileInput')
+  //   if (fileInput) {
+  //     fileInput.click()
+  //   }
+  // }
 
   const handlePrintClick = () => {
     window.print()
@@ -85,17 +82,17 @@ export const ProjectImage = ({ project }: ProjectImageProps) => {
               <Title c='white' size={titleSize}>
                 {project?.name}
               </Title>
-              <input type='file' name='' id='fileInput' style={{ display: 'none' }} onChange={handleFileChange} />
-              <ActionIcon
-                variant='transparent'
-                color='white'
-                autoContrast={true}
-                size='xl'
-                radius={0}
-                onClick={handleFileClick}
-              >
-                <IconPhotoUp size={64} />
-              </ActionIcon>
+              {/*<input type='file' name='' id='fileInput' style={{ display: 'none' }} onChange={handleFileChange} />*/}
+              {/*<ActionIcon*/}
+              {/*  variant='transparent'*/}
+              {/*  color='white'*/}
+              {/*  autoContrast={true}*/}
+              {/*  size='xl'*/}
+              {/*  radius={0}*/}
+              {/*  onClick={handleFileClick}*/}
+              {/*>*/}
+              {/*  <IconPhotoUp size={64} />*/}
+              {/*</ActionIcon>*/}
             </Group>
           </Stack>
         ) : (

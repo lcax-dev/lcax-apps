@@ -12,7 +12,7 @@ import {
 
 interface SumResultsProjectProps {
   project: Project
-  excludeModules?: (keyof typeof LifeCycleModule)[]
+  excludeModules?: LifeCycleModule[]
   impactCategory?: ImpactCategoryKey
 }
 export const sumResultsProject = ({ project, excludeModules, impactCategory = 'gwp' }: SumResultsProjectProps) => {
