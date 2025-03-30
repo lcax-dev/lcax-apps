@@ -1,4 +1,4 @@
-import apartmentImage from '@/assets/apartments-brandon-griggs-unsplash.jpg'
+import apartmentImage from '@/assets/apartments-brandon-griggs-unsplash.webp'
 import { ActionIcon, Container, Group, Image, Overlay, rem, Stack, Title, useMatches } from '@mantine/core'
 import { IconArrowBack, IconArrowNarrowLeft, IconFileCode2, IconPrinter } from '@tabler/icons-react'
 import { Project } from 'lcax'

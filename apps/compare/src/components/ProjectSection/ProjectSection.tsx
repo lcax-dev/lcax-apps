@@ -16,7 +16,7 @@ import {
 } from '@mantine/core'
 import { useMatches } from '@lcax/ui'
 import { Project } from 'lcax'
-import apartmentImage from '@/assets/apartments-brandon-griggs-unsplash.jpg'
+import apartmentImage from '@/assets/apartments-brandon-griggs-unsplash.webp'
 import { Link } from 'react-router'
 import { useState } from 'react'
 import { IconAlertCircle, IconChevronDown } from '@tabler/icons-react'
@@ -92,10 +92,16 @@ interface DownloadButtonProps {
 
 const DownloadButton = ({ project }: DownloadButtonProps) => {
   const [fileType, setFileType] = useState<'LCAx' | 'LCAbyg'>('LCAx')
+
   const handleDownload = () => {
     const element = document.createElement('a')
-    element.setAttribute('href', 'data:text/plain;charset=utf-8, ' + encodeURIComponent(JSON.stringify(project)))
-    element.setAttribute('download', `${project.id.slice(0, 8)}.lcax.json`)
+    if (fileType === 'LCAx') {
+      element.setAttribute('href', 'data:text/plain;charset=utf-8, ' + encodeURIComponent(JSON.stringify(project)))
+      element.setAttribute('download', `${project.id.slice(0, 8)}.lcax.json`)
+    } else if (fileType === 'LCAbyg') {
+      console.error('Not supported')
+    }
+
     document.body.appendChild(element)
     element.click()
 
@@ -114,9 +120,6 @@ const DownloadButton = ({ project }: DownloadButtonProps) => {
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item onClick={() => setFileType('LCAx')}>LCAx</Menu.Item>
-            <Menu.Item disabled onClick={() => setFileType('LCAbyg')}>
-              LCAbyg
-            </Menu.Item>
           </Menu.Dropdown>
         </Menu>
       </Button.Group>
