@@ -22,7 +22,6 @@ export const ProjectInformation = ({ project }: ProjectInformationProps) => {
           <InfoBlock
             title='Building Typology'
             info={project.projectInfo?.buildingTypology
-              // @ts-expect-error buildingTypology is a string[]
               .map((typology: string) => snakeCaseToHumanCase(typology))
               .join(', ')}
           />
@@ -55,7 +54,6 @@ export const ProjectInformation = ({ project }: ProjectInformationProps) => {
         <SimpleGrid cols={2} verticalSpacing='lg'>
           <InfoBlock
             title='Gross Floor Area'
-            // @ts-expect-error grossFloorArea has value
             info={project.projectInfo?.grossFloorArea?.value}
             // @ts-expect-error grossFloorArea has unit
             unit={transformUnit(project.projectInfo?.grossFloorArea?.unit)}

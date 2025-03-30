@@ -1,5 +1,5 @@
-import { Accordion, Container, Divider, Stack, Title, useMatches, Text, AspectRatio } from '@mantine/core'
-import { IconInfoCircle } from '@tabler/icons-react'
+import { Accordion, AspectRatio, Button, Container, Divider, Stack, Text, Title, useMatches } from '@mantine/core'
+import { IconArrowDown, IconInfoCircle } from '@tabler/icons-react'
 import lcabygExportVideo from '@/assets/lcabyg-export.webm'
 import lcabygUploadVideo from '@/assets/lcabyg-upload.webm'
 import realtimelcaExportVideo from '@/assets/realtimelca-export.webm'
@@ -69,6 +69,13 @@ const faqs = [
       'If you want to delete all your projects, then you can simply refresh the page.' +
       'If you have already uploaded 3 projects and upload one more, then the first project will disappear.',
   },
+  {
+    value: 'Do you have some example files I can upload?',
+    description:
+      "If you don't have any projects at hand, but still want to try out the tool, then you can download a zip with the link below." +
+      "The zip file contains three LCAbyg projects, that you can upload. The files originates from SBST's case library.",
+    link: { name: 'Download ZIP', url: '/projects.zip' },
+  },
 ]
 
 export const FAQSection = () => {
@@ -93,9 +100,10 @@ interface FAQPanelProps {
   value: string
   description: string
   video?: string
+  link?: { name: string; url: string }
 }
 
-const FAQPanel = ({ value, description, video }: FAQPanelProps) => (
+const FAQPanel = ({ value, description, video, link }: FAQPanelProps) => (
   <Accordion.Item key={value} value={value}>
     <Accordion.Control icon={<IconInfoCircle />}>{value}</Accordion.Control>
     <Accordion.Panel>
@@ -110,6 +118,20 @@ const FAQPanel = ({ value, description, video }: FAQPanelProps) => (
             <ReactPlayer url={video} controls={true} width='100%' height='100%' />
           </AspectRatio>
         </>
+      ) : null}
+      {link ? (
+        <Button
+          c='black'
+          component={'a'}
+          href={link.url}
+          download
+          w={'fit-content'}
+          size='md'
+          rightSection={<IconArrowDown />}
+          my='lg'
+        >
+          {link.name}
+        </Button>
       ) : null}
     </Accordion.Panel>
   </Accordion.Item>
