@@ -4,12 +4,6 @@ import { IconArrowUp } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useProjects } from '@/contexts'
 import { convertFiles } from '@/lib'
-// @ts-expect-error modules declaration doesn't work
-import image1 from '@/assets/apartments-brandon-griggs-unsplash.jpg?base64'
-// @ts-expect-error modules declaration doesn't work
-import image2 from '@/assets/office-martin-katler-unsplash.jpg?base64'
-// @ts-expect-error modules declaration doesn't work
-import image3 from '@/assets/single-jamie-whiffen-unsplash.jpg?base64'
 
 export const UploadSection = () => {
   const [files, setFiles] = useState<File[]>([])
@@ -30,14 +24,22 @@ export const UploadSection = () => {
       setConverting(false)
       return
     }
+    const images: string[] = await Promise.all([
+      // @ts-expect-error modules declaration doesn't work
+      (await import('@/assets/apartments-brandon-griggs-unsplash.webp?base64')).default,
+      // @ts-expect-error modules declaration doesn't work
+      (await import('@/assets/office-martin-katler-unsplash.webp?base64')).default,
+      // @ts-expect-error modules declaration doesn't work
+      (await import('@/assets/single-jamie-whiffen-unsplash.webp?base64')).default,
+    ])
     const colors = ['yellow', 'grey', 'indigo']
-    const images = [image1, image2, image3]
+    // const images = [image1, image2, image3]
     const allProjects = [
       ...projects,
       ...newProjects.map((project, index) => ({
         ...project,
         metaData: {
-          image: `data:image/jpeg;base64,${images[(projects.length + index) % 3]}`,
+          image: `data:image/webp;base64,${images[(projects.length + index) % 3]}`,
           ...(project.metaData || {}),
           color: colors[(projects.length + index) % 3],
         },

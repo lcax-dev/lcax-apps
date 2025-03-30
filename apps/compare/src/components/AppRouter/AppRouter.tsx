@@ -4,11 +4,11 @@ import { AppLayout } from '@/components'
 import { Loading } from '@lcax/ui'
 import { Container } from '@mantine/core'
 
-const ProjectsPage = lazy(() => import('@/pages/ProjectsPage'))
-const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 const LandingPage = lazy(() => import('@/pages/LandingPage'))
+const ProjectsPage = lazy(() => import('@/pages/ProjectsPage'))
 const DetailsPage = lazy(() => import('@/pages/DetailsPage'))
 const DataViewerPage = lazy(() => import('@/pages/DataViewerPage'))
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 
 export const AppRouter = () => (
   <Suspense
