@@ -3,7 +3,9 @@
   "tasks": {
     "build": {
       "outputs": ["dist/**"],
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "env": ["VITE_UMAMI_ID"],
+      "inputs": ["$TURBO_DEFAULT$", ".env"]
     },
     "check": {
       "dependsOn": ["^tsc", "^lint", "^format"]
