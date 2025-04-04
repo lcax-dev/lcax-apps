@@ -5,6 +5,8 @@ import { useMatches } from '@lcax/ui'
 import { IconChevronDown } from '@tabler/icons-react'
 import { Dispatch, SetStateAction, useMemo, useState } from 'react'
 import { cutOffSmallestResults, resultsByComponents } from '@/lib'
+import { ImpactTooltip } from '@/components/ImpactCharts/ImpactTooltip.tsx'
+import { TooltipPayload } from '@/components/ImpactCharts/types.ts'
 
 interface ImpactByComponentChartProps {
   project: Project
@@ -74,8 +76,13 @@ export const ImpactByComponentChart = ({ project }: ImpactByComponentChartProps)
           withBarValueLabel
           valueLabelProps={{ position: 'inside', fill: 'black' }}
           withLegend
-          legendProps={{ verticalAlign: 'bottom', align: 'right' }}
+          legendProps={{ verticalAlign: 'bottom', align: 'right', height: 75 }}
           xAxisLabel='Impact (kg CO₂-eq/m²·year)'
+          tooltipProps={{
+            content: ({ payload }) => (
+              <ImpactTooltip payload={payload as TooltipPayload[]} breakdown={'Building Components'} />
+            ),
+          }}
         />
       )}
     </>

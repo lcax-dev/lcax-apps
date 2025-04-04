@@ -3,7 +3,9 @@ import { BarChart } from '@mantine/charts'
 import { useMemo } from 'react'
 import { Project } from 'lcax'
 import { useMatches } from '@lcax/ui'
-import { resultsByLifeCycle } from '@/lib'
+import { formatLifeCycleModules, resultsByLifeCycle } from '@/lib'
+import { ImpactTooltip } from '@/components/ImpactCharts/ImpactTooltip'
+import { TooltipPayload } from '@/components/ImpactCharts/types'
 
 interface ImpactByLifeCycleChartProps {
   project: Project
@@ -17,7 +19,7 @@ export const ImpactByLifeCycleChart = ({ project }: ImpactByLifeCycleChartProps)
       .reduce(
         (acc, next) => ({
           ...acc,
-          [next[0].toUpperCase()]: next[1],
+          [formatLifeCycleModules(next[0])]: next[1],
         }),
         {},
       )
@@ -28,7 +30,7 @@ export const ImpactByLifeCycleChart = ({ project }: ImpactByLifeCycleChartProps)
       Object.keys(project?.results?.gwp || {})
         .toSorted()
         .map((key, index) => ({
-          name: key.toUpperCase(),
+          name: formatLifeCycleModules(key),
           color: `${projectColor}.${index % 10}`,
         })),
     [project, projectColor],
@@ -58,13 +60,15 @@ export const ImpactByLifeCycleChart = ({ project }: ImpactByLifeCycleChartProps)
           withXAxis={true}
           xAxisProps={{ domain: ['dataMin', 'dataMax'] }}
           withYAxis={false}
-          unit='kg CO₂-eq/m²·year'
           valueFormatter={(value) => value.toFixed(2)}
           withBarValueLabel
           valueLabelProps={{ position: 'inside', fill: 'black' }}
           withLegend
-          legendProps={{ verticalAlign: 'bottom' }}
+          legendProps={{ verticalAlign: 'bottom', height: 75 }}
           xAxisLabel='Impact (kg CO₂-eq/m²·year)'
+          tooltipProps={{
+            content: ({ payload }) => <ImpactTooltip payload={payload as TooltipPayload[]} breakdown={'Life Cycle'} />,
+          }}
         />
       )}
     </>

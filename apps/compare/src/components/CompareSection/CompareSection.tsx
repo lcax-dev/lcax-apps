@@ -3,7 +3,7 @@ import { useProjects } from '@/contexts'
 import { useMatches } from '@lcax/ui'
 import { BarChart } from '@mantine/charts'
 import { Dispatch, SetStateAction, useMemo, useState } from 'react'
-import { resultsByComponents, resultsByLifeCycle, sumResultsProject } from '@/lib'
+import { formatLifeCycleModules, resultsByComponents, resultsByLifeCycle, sumResultsProject } from '@/lib'
 import { IconChevronDown } from '@tabler/icons-react'
 import { CompareSectionTooltip } from './CompareSectionTooltip'
 import { breakdownOptions, BreakdownOptions, TooltipPayload } from './types'
@@ -16,7 +16,9 @@ export const CompareSection = () => {
   const resultData = useMemo(() => {
     if (breakdown === 'Total') {
       const data = projects
-        .map((project) => ({ [project.name]: project.results?.gwp ? sumResultsProject({ project }) : null }))
+        .map((project) => ({
+          [project.name]: project.results?.gwp ? sumResultsProject({ project, excludeModules: ['d'] }) : null,
+        }))
         .reduce((acc, curr) => {
           return { ...acc, ...curr }
         }, {})
@@ -54,7 +56,7 @@ export const CompareSection = () => {
           ...Object.entries(project.results?.gwp ? resultsByLifeCycle({ project }) : {})
             .filter(([key]) => key !== 'impact')
             .toSorted((prev, next) => (prev[0] > next[0] ? -1 : 1))
-            .map(([key, value]) => ({ [`${project.id}_${key}`]: value }))
+            .map(([key, value]) => ({ [`${project.id}_${formatLifeCycleModules(key)}`]: value }))
             .reduce((acc, next) => ({ ...acc, ...next }), {}),
         }
       })

@@ -1,7 +1,7 @@
 import { Container, SimpleGrid, Space, Stack } from '@mantine/core'
 import { Project } from 'lcax'
 import { useMatches } from '@lcax/ui'
-import { getCountryName, snakeCaseToHumanCase, sumResultsProject, transformUnit } from '@/lib'
+import { formatLifeCycleModules, getCountryName, snakeCaseToHumanCase, sumResultsProject, transformUnit } from '@/lib'
 import { InfoBlock } from '@/components'
 
 interface ProjectInformationProps {
@@ -63,7 +63,7 @@ export const ProjectInformation = ({ project }: ProjectInformationProps) => {
             title='Life Cycle Modules'
             info={project.lifeCycleModules
               .toSorted()
-              .map((stage) => (stage as unknown as string).toUpperCase())
+              .map((stage) => formatLifeCycleModules(stage))
               .join(', ')}
           />
           <InfoBlock

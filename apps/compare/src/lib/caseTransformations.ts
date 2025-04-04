@@ -11,17 +11,17 @@ export const snakeCaseToHumanCase = (value: string) =>
 
 export const capitalizeFirstLetter = (value: string) => value.charAt(0).toUpperCase() + value.slice(1)
 
-export const formatStages = (stages: string[]) => {
-  if (stages.length === 1) {
-    if (stages[0].toLowerCase() === 'a1a3') {
-      return '(A1-A3)'
+export const formatLifeCycleModules = (modules: string | string[]) => {
+  if (!Array.isArray(modules)) {
+    if (modules.toLowerCase() === 'a1a3') {
+      return 'A1-A3'
     }
-    return `(${stages[0].toUpperCase()})`
+    return `${modules.toUpperCase()}`
+  } else {
+    const first = modules[0].toUpperCase()
+    const last = modules[modules.length - 1].toUpperCase()
+    return `${first}-${last}`
   }
-
-  const first = stages[0].toUpperCase()
-  const last = stages[stages.length - 1].toUpperCase()
-  return `(${first}-${last})`
 }
 
 export const transformUnit = (unit: string) =>

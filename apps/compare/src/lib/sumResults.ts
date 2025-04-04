@@ -25,10 +25,11 @@ interface SumResultsProps {
   element: Project | Assembly | Product
   referenceStudyPeriod: number
   grossFloorArea: number
+  excludeModules?: LifeCycleModule[]
 }
 
-export const sumResults = ({ element, referenceStudyPeriod, grossFloorArea }: SumResultsProps) => {
-  const total = getImpactTotal(element.results!, 'gwp', undefined)
+export const sumResults = ({ element, referenceStudyPeriod, grossFloorArea, excludeModules }: SumResultsProps) => {
+  const total = getImpactTotal(element.results!, 'gwp', excludeModules)
   return normalizeResult(total, referenceStudyPeriod * grossFloorArea)
 }
 
@@ -47,6 +48,7 @@ export const resultsByComponents = ({ project, classificationSystem }: ResultsBy
         element: next,
         referenceStudyPeriod: project.referenceStudyPeriod || 1,
         grossFloorArea: project.projectInfo?.grossFloorArea?.value || 1,
+        excludeModules: ['d'],
       })
       if (_class in acc) {
         return {

@@ -56,7 +56,7 @@ interface SectionProps {
 }
 
 const Section = ({ children }: SectionProps) => (
-  <Container h={{ base: '100vh', md: '50vh', xxl: '30vh' }} pb='xl' fluid p={0}>
+  <Container h={{ base: '100vh', md: '50vh', xxl: '30vh' }} pb='xl' fluid p={0} mih={400}>
     <Container h='100%' size={useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })}>
       <Divider my='xl' />
       <SimpleGrid cols={useMatches({ base: 1, md: 2 })} h={'100%'}>
