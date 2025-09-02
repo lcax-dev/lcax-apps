@@ -56,7 +56,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name != 'pull_request'
+    if: github.event_name == 'push'
 
     steps:
       - name: Download artifact from build job
@@ -64,11 +64,11 @@ jobs:
         with:
           name: app
 
-      - uses: BetaHuhn/do-spaces-action@v2
+      - uses: mc-actions/configure@v1
         with:
-          access_key: ${{ secrets.ACCESS_KEY }}
-          secret_key: ${{ secrets.SECRET_KEY }}
-          space_name: ${{ vars.SPACE_NAME }}
-          space_region: ${{ vars.SPACE_REGION }}
-          source: .
-          out_dir: lcax/${{ github.ref_name }}/landing
+          s3_server: 'https://minio.chrk.site'
+          s3_access_key: '${{ secrets.MINIO_ACCESS_KEY }}'
+          s3_secret_key: '${{ secrets.MINIO_SECRET_KEY }}'
+
+      - name: Upload to Bundle
+        run: mc cp -r ./ default/bundles/lcax/${{ github.ref_name }}/landing
