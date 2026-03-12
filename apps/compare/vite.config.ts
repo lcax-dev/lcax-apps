@@ -1,8 +1,9 @@
+/// <reference types="vitest/config" />
 import { defineConfig, Plugin } from 'vite'
 import react from '@vitejs/plugin-react-swc'
-import tsconfigPaths from 'vite-tsconfig-paths'
 import wasm from 'vite-plugin-wasm'
 import * as fs from 'node:fs'
+import { resolve } from 'node:path'
 
 const base64Loader: Plugin = {
   name: "base64-loader",
@@ -19,10 +20,19 @@ const base64Loader: Plugin = {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), wasm(), base64Loader],
+  plugins: [react(), wasm(), base64Loader],
   esbuild: {
     supported: {
       'top-level-await': true, //browsers can handle top-level-await features
     },
+  },
+  resolve: {
+    alias: [
+      { find: '@', replacement: resolve(__dirname, 'src') },
+    ],
+  },
+  test: {
+    globals: true,
+    passWithNoTests: true,
   },
 })

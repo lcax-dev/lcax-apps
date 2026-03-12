@@ -40,7 +40,7 @@ export const UploadSection = () => {
         ...project,
         metaData: {
           image: `data:image/webp;base64,${images[(projects.length + index) % 3]}`,
-          ...(project.metaData || {}),
+          ...project.metaData,
           color: colors[(projects.length + index) % 3],
         },
       })),

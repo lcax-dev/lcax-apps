@@ -6,7 +6,7 @@ import {
   MembershipSection,
   QuoteSection,
   SupportersSection,
-} from '@sections'
+} from '@/sections'
 
 export const App = () => {
   return (

@@ -2,38 +2,45 @@
   "name": "@lcax/ui",
   "version": "0.0.1",
   "description": "UI Library for LCAx apps",
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
-  "main": "dist/esm/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "type": "module",
   "files": [
     "dist"
   ],
   "peerDependencies": {
-    "@apollo/client": "^3.12.7",
-    "@fontsource/inter-tight": "^5.1.1",
-    "@mantine/core": "^7.9.1",
-    "@mantine/hooks": "^7.9.1",
-    "@tabler/icons-react": "^3.3.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.23.0"
+    "@apollo/client": "^4.1.6",
+    "@fontsource/inter-tight": "^5.2.7",
+    "@mantine/core": "^8.3.16",
+    "@mantine/hooks": "^8.3.16",
+    "@tabler/icons-react": "^3.40.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-router": "^7.13.1"
   },
   "devDependencies": {
-    "copyfiles": "^2.4.1"
+    "vite-plugin-dts": "^4.5.4",
+    "vite-plugin-externalize-deps": "^0.10.0"
   },
   "scripts": {
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "codegen": "graphql-codegen --config codegen.yml",
-    "build": "tsc",
     "tsc": "tsc -b",
-    "build:watch": "npm run postbuild && tsc --watch",
-    "postbuild": "copyfiles --flat ./src/assets/*.{png,svg} ./dist/esm/assets/",
-    "lint": "eslint src/**/*.{tsx,ts}",
-    "lint:fix": "eslint --fix src/**/*.{tsx,ts}",
-    "format:fix": "prettier --write src/",
-    "format": "prettier --check src/",
+    "build": "NODE_ENV=production tsc && vite build",
+    "dev": "vite build --watch",
+    "lint": "oxlint src/",
+    "lint:fix": "oxlint --fix src/",
+    "format:fix": "oxfmt src/",
+    "format": "oxfmt --check src/",
     "fix": "npm run lint:fix && npm run format:fix"
   },
   "author": "Christian Kongsgaard <christian@kongsgaard.eu>",

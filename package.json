@@ -14,33 +14,14 @@
     "apps/compare",
     "packages/ui"
   ],
-  "dependencies": {
-    "@mantine/core": "^7.17.0",
-    "@mantine/hooks": "^7.17.0",
-    "lcax": "^3.0.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-helmet": "^6.1.0",
-    "react-router": "^7.1.5"
-  },
   "devDependencies": {
-    "@eslint/js": "^9.17.0",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
-    "@vitejs/plugin-react-swc": "^3.5.0",
-    "eslint": "^9.17.0",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.16",
-    "globals": "^15.14.0",
-    "postcss": "^8.5.1",
-    "postcss-preset-mantine": "^1.17.0",
-    "postcss-simple-vars": "^7.0.1",
-    "prettier": "^3.4.2",
-    "turbo": "^2.4.4",
-    "typescript": "~5.6.2",
-    "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5",
-    "vite-tsconfig-paths": "^5.1.4"
+    "@types/node": "^25.4.0",
+    "oxfmt": "^0.39.0",
+    "oxlint": "^1.54.0",
+    "turbo": "^2.8.16",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18"
   },
   "packageManager": "npm@8.5.0"
 }
