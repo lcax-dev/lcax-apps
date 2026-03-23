@@ -10,18 +10,21 @@
   "author": "Christian Kongsgaard",
   "license": "Apache-2.0",
   "workspaces": [
-    "apps/lcax-landing",
-    "apps/compare",
-    "packages/ui"
+    "apps/*",
+    "packages/*",
+    "services/*"
   ],
   "devDependencies": {
-    "@types/node": "^25.4.0",
-    "oxfmt": "^0.39.0",
-    "oxlint": "^1.54.0",
-    "turbo": "^2.8.16",
+    "@types/node": "^25.5.0",
+    "oxfmt": "^0.41.0",
+    "oxlint": "^1.56.0",
+    "turbo": "^2.8.20",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1",
-    "vitest": "^4.0.18"
+    "vite": "^8.0.1",
+    "vitest": "^4.1.0"
   },
-  "packageManager": "npm@8.5.0"
+  "packageManager": "npm@8.5.0",
+  "overrides": {
+    "graphql": "^16.13.1"
+  }
 }
