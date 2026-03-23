@@ -44,7 +44,7 @@ jobs:
         run: npm run check
 
       - name: Build
-        run: npm run build
+        run: npx turbo run @lcax/landing#build
 
       - name: Upload artifact for deployment job
         if: github.event_name != 'pull_request'
