@@ -1,6 +1,7 @@
-import { Container, Title, Stack, Text, List, Loader, Center } from '@mantine/core'
+import { Container, Title, Stack, Text, Loader, Center, SimpleGrid } from '@mantine/core'
 import { useSearchParams } from 'react-router'
 import { useSearchEpdsQuery } from '@/queries/generated'
+import { EPDCard } from '@/components'
 
 export const ResultsPage = () => {
   const [searchParams] = useSearchParams()
@@ -20,7 +21,7 @@ export const ResultsPage = () => {
     <Container size='md' py={50}>
       <Stack gap='xl'>
         <Title order={1}>Search Results</Title>
-        <Text color='dimmed'>
+        <Text c='dimmed'>
           Showing results for: <strong>{query}</strong>
         </Text>
 
@@ -31,26 +32,21 @@ export const ResultsPage = () => {
         )}
 
         {error && (
-          <Text color='red' ta='center' py='xl'>
+          <Text c='red' ta='center' py='xl'>
             An error occurred while fetching EPDs: {error.message}
           </Text>
         )}
 
         {data?.epds && (
-          <List spacing='md' size='sm' center>
+          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing='md'>
             {data.epds.map((epd) => (
-              <List.Item key={epd.id}>
-                <Text fw={500}>{epd.name}</Text>
-                <Text size='xs' color='dimmed'>
-                  {epd.subtype} • {epd.location} • {epd.declaredUnit}
-                </Text>
-              </List.Item>
+              <EPDCard key={epd.id} epd={epd} />
             ))}
-          </List>
+          </SimpleGrid>
         )}
 
         {data?.epds && data.epds.length === 0 && !loading && (
-          <Text ta='center' py='xl' color='dimmed'>
+          <Text ta='center' py='xl' c='dimmed'>
             No EPDs found matching your search.
           </Text>
         )}

@@ -5,5 +5,6 @@ query SearchEpds($where: EpdsFilters, $limit: Int, $offset: Int) {
     declaredUnit
     location
     subtype
+    metaData
   }
 }

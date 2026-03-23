@@ -1,6 +1,6 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql'
 import { gql } from '@apollo/client'
-import * as Apollo from '@apollo/client/react'
+import * as Apollo from '@apollo/client'
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
@@ -1358,6 +1358,7 @@ export type SearchEpdsQuery = {
     declaredUnit?: UnitEnum | null
     location?: CountryEnum | null
     subtype?: SubTypeEnum | null
+    metaData?: any | null
   }>
 }
 
@@ -1369,6 +1370,7 @@ export const SearchEpdsDocument = gql`
       declaredUnit
       location
       subtype
+      metaData
     }
   }
 `
