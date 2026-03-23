@@ -1,7 +1,6 @@
 overwrite: true
 schema:
-  - 'https://app.speckle.systems/graphql'
-  - 'http://localhost:4000'
+  - '../../services/lcax/schema.graphql'
 documents: 'src/queries/*.graphql'
 hooks:
   afterAllFileWrite:

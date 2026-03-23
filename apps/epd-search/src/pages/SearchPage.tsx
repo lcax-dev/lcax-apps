@@ -1,10 +1,11 @@
-import { Container, TextInput, Title, Stack, Text } from '@mantine/core'
-import { useSearchParams } from 'react-router'
+import { Container, TextInput, Title, Stack, Text, ActionIcon } from '@mantine/core'
+import { useSearchParams, useNavigate } from 'react-router'
 import { useEffect, useState } from 'react'
 import { IconSearch } from '@tabler/icons-react'
 
 export const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate()
   const query = searchParams.get('q') || ''
   const [value, setValue] = useState(query)
 
@@ -18,6 +19,12 @@ export const SearchPage = () => {
       setSearchParams({ q: val }, { replace: true })
     } else {
       setSearchParams({}, { replace: true })
+    }
+  }
+
+  const handleNavigate = () => {
+    if (value) {
+      navigate(`/results?q=${encodeURIComponent(value)}`)
     }
   }
 
@@ -36,12 +43,22 @@ export const SearchPage = () => {
           radius='xl'
           w='100%'
           leftSection={<IconSearch size={24} />}
+          rightSection={
+            <ActionIcon size={32} radius='xl' variant='filled' onClick={handleNavigate} disabled={!value}>
+              <IconSearch size={18} stroke={1.5} />
+            </ActionIcon>
+          }
           value={value}
           onChange={(event) => handleSearch(event.currentTarget.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              handleNavigate()
+            }
+          }}
         />
         {query && (
           <Text size='sm' color='dimmed'>
-            Showing results for: <strong>{query}</strong>
+            Last search: <strong>{query}</strong>
           </Text>
         )}
       </Stack>
