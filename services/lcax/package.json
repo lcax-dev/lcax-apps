@@ -1,0 +1,39 @@
+{
+  "name": "@services/lcax",
+  "version": "0.0.1",
+  "description": "",
+  "license": "Apache-2.0",
+  "author": "Christian Kongsgaard",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx --watch ./src/index.ts",
+    "test": "vitest --run",
+    "db:start": "docker run -p 5432:5432 --rm -e POSTGRES_PASSWORD=test -e POSTGRES_USER=lcax -e POSTGRES_DB=lcax --name postgres postgres:16-alpine",
+    "db:stop": "docker kill postgres",
+    "db:push": "drizzle-kit push --config drizzle.config.ts",
+    "db:wait": "tsx ./src/scripts/waitForConnection.ts",
+    "db:generate": "drizzle-kit generate --config drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config drizzle.config.ts",
+    "tsc": "tsc --noEmit",
+    "lint": "oxlint src/",
+    "lint:fix": "oxlint --fix src/",
+    "format:fix": "oxfmt src/",
+    "format": "oxfmt --check src/",
+    "fix": "npm run lint:fix && npm run format:fix"
+  },
+  "dependencies": {
+    "@apollo/server": "5.4.0",
+    "dotenv": "^17.3.1",
+    "drizzle-orm": "^1.0.0-beta.17-160831b",
+    "graphql": "^16.13.1",
+    "graphql-type-json": "^0.3.2",
+    "pg": "^8.20.0",
+    "pino-http": "^11.0.0",
+    "tsx": "^4.21.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.3.16",
+    "drizzle-kit": "1.0.0-beta.17-160831b"
+  }
+}
