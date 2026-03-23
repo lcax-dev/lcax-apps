@@ -7,6 +7,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "start": "tsx src/index.ts",
     "dev": "tsx --watch ./src/index.ts",
     "test": "vitest --run",
     "db:start": "docker run -p 5432:5432 --rm -e POSTGRES_PASSWORD=test -e POSTGRES_USER=lcax -e POSTGRES_DB=lcax --name postgres postgres:16-alpine",
@@ -26,11 +27,13 @@
     "@apollo/server": "5.4.0",
     "dotenv": "^17.3.1",
     "drizzle-orm": "^1.0.0-beta.17-160831b",
+    "lcax": "^3.4.3",
     "graphql": "^16.13.1",
     "graphql-type-json": "^0.3.2",
     "pg": "^8.20.0",
     "pino-http": "^11.0.0",
-    "tsx": "^4.21.0"
+    "tsx": "^4.21.0",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.3.16",

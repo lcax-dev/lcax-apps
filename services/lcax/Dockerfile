@@ -1,4 +1,4 @@
-FROM node:22.14.0-slim AS base
+FROM node:24.13.0-slim AS base
 
 FROM base AS builder
 WORKDIR /app
@@ -6,7 +6,7 @@ RUN npm -g i turbo
 
 COPY . .
 
-RUN turbo prune @services/backend --docker
+RUN turbo prune @services/lcax --docker
 
 FROM base AS installer
 
@@ -25,5 +25,5 @@ WORKDIR /app
 
 COPY --from=installer /app .
 
-WORKDIR /app/services/backend
+WORKDIR /app/services/lcax
 CMD ["npm", "run", "start"]
