@@ -1,4 +1,4 @@
-import { Section } from '@components'
+import { Section } from '@/components'
 import { Button, Container, Divider, Group, Stack, Text, TextInput, Title } from '@mantine/core'
 
 export const CustomSolutionSection = () => {

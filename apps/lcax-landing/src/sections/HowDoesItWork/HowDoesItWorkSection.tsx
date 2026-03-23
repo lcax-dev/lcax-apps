@@ -1,4 +1,4 @@
-import { Section } from '@components'
+import { Section } from '@/components'
 import { Container, Divider, Image, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import computerImage from '../../assets/computer.png'
 import lockImage from '../../assets/lock.png'

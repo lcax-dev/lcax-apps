@@ -1,0 +1,63 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`query epds > return all epds 1`] = `
+{
+  "body": {
+    "kind": "single",
+    "singleResult": {
+      "data": {
+        "epds": [
+          {
+            "id": "0a758688-df9d-514a-a123-3a393d25dd08",
+            "location": "dnk",
+            "source": {
+              "name": "BR18 - Tabel 7",
+              "url": "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/b2a5f872-5e24-461c-a6e4-88ef88ad7c8c?version=20.23.050",
+            },
+          },
+          {
+            "id": "0e5cfef7-d391-5890-877a-4f6f421189d4",
+            "location": "dnk",
+            "source": {
+              "name": "BR18 - Tabel 7",
+              "url": "https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/2d42602d-9913-43ed-8703-d953f7854bca?version=20.23.050",
+            },
+          },
+        ],
+      },
+      "errors": undefined,
+    },
+  },
+  "http": {
+    "headers": Map {
+      "cache-control" => "no-store",
+    },
+    "status": undefined,
+  },
+}
+`;
+
+exports[`query epds > return single epd 1`] = `
+{
+  "body": {
+    "kind": "single",
+    "singleResult": {
+      "data": {
+        "epds": [
+          {
+            "id": "0a758688-df9d-514a-a123-3a393d25dd08",
+            "name": "Overflade, Metal maling (opløsningsmiddelbaseret) ",
+          },
+        ],
+      },
+      "errors": undefined,
+    },
+  },
+  "http": {
+    "headers": Map {
+      "cache-control" => "no-store",
+    },
+    "status": undefined,
+  },
+}
+`;

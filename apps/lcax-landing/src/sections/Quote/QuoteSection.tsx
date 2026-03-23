@@ -1,6 +1,6 @@
-import { Section } from '@components'
+import { Section } from '@/components'
 import { Container, Image, SimpleGrid, Stack, Title } from '@mantine/core'
-import quoteImage from '../../assets/DSC_7941.jpg'
+import quoteImage from '@/assets/DSC_7941.jpg'
 
 export const QuoteSection = () => {
   return (

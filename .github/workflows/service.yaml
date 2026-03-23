@@ -1,0 +1,81 @@
+name: Deploy LCAx Service
+
+on:
+  push:
+    branches:
+      - main
+      - stage
+    paths:
+      - services/lcax/**
+      - .github/workflows/service.yaml
+  pull_request:
+    branches:
+      - main
+      - stage
+    paths:
+      - services/lcax/**
+      - .github/workflows/service.yaml
+
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '24.x'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: NPM Install
+        run: npm ci
+
+      - name: Check
+        run: npx turbo run @services/lcax#check
+
+      - name: Test
+        run: npx turbo run @services/lcax#test
+
+      - name: Build Image
+        if: github.ref_name != 'main'
+        run: docker build -t lcax -f services/lcax/Dockerfile .
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref_name == 'main'
+    env:
+      registry: 'lcax-dev'
+      name: 'lcax'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log into registry ${{ env.registry }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io/${{ env.registry }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Image
+        run: docker build -t ghcr.io/${{ env.registry }}/${{ env.name }}:${{ github.run_number }} -f services/lcax/Dockerfile .
+
+      - name: Tag Image
+        run: docker tag ghcr.io/${{ env.registry }}/${{ env.name }}:${{ github.run_number }} ghcr.io/${{ env.registry }}/${{ env.name }}:${{ github.ref_name }}
+
+      - name: Push Image
+        run: docker push --all-tags ghcr.io/${{ env.registry }}/${{ env.name }}

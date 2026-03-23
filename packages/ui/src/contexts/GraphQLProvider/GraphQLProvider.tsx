@@ -1,6 +1,7 @@
 import { ReactNode, useMemo } from 'react'
 
-import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client/react'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 
 type GraphQlProviderProps = {
   url: string
@@ -8,7 +9,7 @@ type GraphQlProviderProps = {
 }
 
 export const GraphQLProvider = ({ children, url }: GraphQlProviderProps) => {
-  const backendLink = createHttpLink({
+  const backendLink = new HttpLink({
     uri: `${url}/graphql`,
     credentials: 'include',
   })

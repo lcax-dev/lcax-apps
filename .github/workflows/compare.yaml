@@ -21,7 +21,7 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '22.x'
+  NODE_VERSION: '24.x'
 
 jobs:
   build:
@@ -44,7 +44,7 @@ jobs:
         run: npm run check
 
       - name: Build
-        run: npm run build
+        run: npx turbo run @lcax/compare#build
         env:
           VITE_UMAMI_ID: ${{ secrets.COMPARE_UMAMI_ID }}
 

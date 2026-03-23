@@ -1,4 +1,4 @@
-import { Section } from '@components'
+import { Section } from '@/components'
 import { Container, Divider, Stack, Text, Title } from '@mantine/core'
 
 export const MembershipSection = () => {

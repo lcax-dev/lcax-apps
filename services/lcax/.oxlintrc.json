@@ -1,0 +1,17 @@
+{
+  "plugins": null,
+  "categories": {},
+  "rules": {
+    "no-unused-vars": "off"
+  },
+  "settings": {
+    "vitest": {
+      "typecheck": false
+    }
+  },
+  "env": {
+    "builtin": true
+  },
+  "globals": {},
+  "ignorePatterns": []
+}
