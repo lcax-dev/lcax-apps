@@ -12,11 +12,12 @@ Review the last few commits to understand what work has been done. See the commi
 Look up the sub-issues in the PRD.
 Decide which sub-issue to work on next.
 This should be the one YOU decide has the highest priority – not necessarily the first in the list.
-Only select sub-issues which have the "Ready" status.
+Only select sub-issues which have the "Ready" status. Use `gh project item-list 1 --owner lcax-dev --query "status:Ready"`
 
 If there are no more sub-issues to complete, output <promise>NO MORE TASKS</promise>.
 
 Once you have decided on a sub-issue, set that status to `In progress` in the GitHub project board.
+Using `gh project item-edit`
 
 # EXPLORATION
 
