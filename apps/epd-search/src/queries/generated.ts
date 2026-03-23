@@ -1343,6 +1343,124 @@ export type Resolvers<ContextType = any> = {
   SoftwareInfo?: SoftwareInfoResolvers<ContextType>
 }
 
+export type GetEpdQueryVariables = Exact<{
+  id: Scalars['String']['input']
+}>
+
+export type GetEpdQuery = {
+  __typename?: 'Query'
+  epds: Array<{
+    __typename?: 'EPD'
+    id?: string | null
+    name?: string | null
+    epdId?: string | null
+    type?: string | null
+    declaredUnit?: UnitEnum | null
+    version?: string | null
+    publishedDate?: string | null
+    validUntil?: string | null
+    referenceServiceLife?: number | null
+    standard?: StandardEnum | null
+    location?: CountryEnum | null
+    subtype?: SubTypeEnum | null
+    metaData?: any | null
+    source?: { __typename?: 'EPDSource'; name?: string | null; url?: string | null } | null
+    conversions?: Array<{
+      __typename?: 'EPDConversion'
+      value?: number | null
+      to?: string | null
+      metaData?: string | null
+    } | null> | null
+    impacts?: {
+      __typename?: 'Impacts'
+      gwp?: {
+        __typename?: 'ImpactCategory'
+        a1a3?: number | null
+        a4?: number | null
+        a5?: number | null
+        b1?: number | null
+        b2?: number | null
+        b3?: number | null
+        b4?: number | null
+        b5?: number | null
+        b6?: number | null
+        b7?: number | null
+        c1?: number | null
+        c2?: number | null
+        c3?: number | null
+        c4?: number | null
+        d?: number | null
+      } | null
+      odp?: {
+        __typename?: 'ImpactCategory'
+        a1a3?: number | null
+        a4?: number | null
+        a5?: number | null
+        c1?: number | null
+        c2?: number | null
+        c3?: number | null
+        c4?: number | null
+        d?: number | null
+      } | null
+      ap?: {
+        __typename?: 'ImpactCategory'
+        a1a3?: number | null
+        a4?: number | null
+        a5?: number | null
+        c1?: number | null
+        c2?: number | null
+        c3?: number | null
+        c4?: number | null
+        d?: number | null
+      } | null
+      ep?: {
+        __typename?: 'ImpactCategory'
+        a1a3?: number | null
+        a4?: number | null
+        a5?: number | null
+        c1?: number | null
+        c2?: number | null
+        c3?: number | null
+        c4?: number | null
+        d?: number | null
+      } | null
+      pocp?: {
+        __typename?: 'ImpactCategory'
+        a1a3?: number | null
+        a4?: number | null
+        a5?: number | null
+        c1?: number | null
+        c2?: number | null
+        c3?: number | null
+        c4?: number | null
+        d?: number | null
+      } | null
+      adpe?: {
+        __typename?: 'ImpactCategory'
+        a1a3?: number | null
+        a4?: number | null
+        a5?: number | null
+        c1?: number | null
+        c2?: number | null
+        c3?: number | null
+        c4?: number | null
+        d?: number | null
+      } | null
+      adpf?: {
+        __typename?: 'ImpactCategory'
+        a1a3?: number | null
+        a4?: number | null
+        a5?: number | null
+        c1?: number | null
+        c2?: number | null
+        c3?: number | null
+        c4?: number | null
+        d?: number | null
+      } | null
+    } | null
+  }>
+}
+
 export type SearchEpdsQueryVariables = Exact<{
   where?: InputMaybe<EpdsFilters>
   limit?: InputMaybe<Scalars['Int']['input']>
@@ -1362,6 +1480,158 @@ export type SearchEpdsQuery = {
   }>
 }
 
+export const GetEpdDocument = gql`
+  query GetEpd($id: String!) {
+    epds(where: { id: { eq: $id } }, limit: 1) {
+      id
+      name
+      epdId
+      type
+      declaredUnit
+      version
+      publishedDate
+      validUntil
+      referenceServiceLife
+      standard
+      location
+      subtype
+      metaData
+      source {
+        name
+        url
+      }
+      conversions {
+        value
+        to
+        metaData
+      }
+      impacts {
+        gwp {
+          a1a3
+          a4
+          a5
+          b1
+          b2
+          b3
+          b4
+          b5
+          b6
+          b7
+          c1
+          c2
+          c3
+          c4
+          d
+        }
+        odp {
+          a1a3
+          a4
+          a5
+          c1
+          c2
+          c3
+          c4
+          d
+        }
+        ap {
+          a1a3
+          a4
+          a5
+          c1
+          c2
+          c3
+          c4
+          d
+        }
+        ep {
+          a1a3
+          a4
+          a5
+          c1
+          c2
+          c3
+          c4
+          d
+        }
+        pocp {
+          a1a3
+          a4
+          a5
+          c1
+          c2
+          c3
+          c4
+          d
+        }
+        adpe {
+          a1a3
+          a4
+          a5
+          c1
+          c2
+          c3
+          c4
+          d
+        }
+        adpf {
+          a1a3
+          a4
+          a5
+          c1
+          c2
+          c3
+          c4
+          d
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useGetEpdQuery__
+ *
+ * To run a query within a React component, call `useGetEpdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEpdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEpdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEpdQuery(
+  baseOptions: Apollo.QueryHookOptions<GetEpdQuery, GetEpdQueryVariables> &
+    ({ variables: GetEpdQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetEpdQuery, GetEpdQueryVariables>(GetEpdDocument, options)
+}
+export function useGetEpdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEpdQuery, GetEpdQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetEpdQuery, GetEpdQueryVariables>(GetEpdDocument, options)
+}
+// @ts-ignore
+export function useGetEpdSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetEpdQuery, GetEpdQueryVariables>,
+): Apollo.UseSuspenseQueryResult<GetEpdQuery, GetEpdQueryVariables>
+export function useGetEpdSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEpdQuery, GetEpdQueryVariables>,
+): Apollo.UseSuspenseQueryResult<GetEpdQuery | undefined, GetEpdQueryVariables>
+export function useGetEpdSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEpdQuery, GetEpdQueryVariables>,
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<GetEpdQuery, GetEpdQueryVariables>(GetEpdDocument, options)
+}
+export type GetEpdQueryHookResult = ReturnType<typeof useGetEpdQuery>
+export type GetEpdLazyQueryHookResult = ReturnType<typeof useGetEpdLazyQuery>
+export type GetEpdSuspenseQueryHookResult = ReturnType<typeof useGetEpdSuspenseQuery>
+export type GetEpdQueryResult = Apollo.QueryResult<GetEpdQuery, GetEpdQueryVariables>
 export const SearchEpdsDocument = gql`
   query SearchEpds($where: EpdsFilters, $limit: Int, $offset: Int) {
     epds(where: $where, limit: $limit, offset: $offset) {
