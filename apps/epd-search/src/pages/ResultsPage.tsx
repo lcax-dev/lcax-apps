@@ -1,56 +1,104 @@
-import { Container, Title, Stack, Text, Loader, Center, SimpleGrid } from '@mantine/core'
+import { Container, Title, Stack, Text, Loader, Center, SimpleGrid, Grid } from '@mantine/core'
 import { useSearchParams } from 'react-router'
-import { useSearchEpdsQuery } from '@/queries/generated'
-import { EPDCard } from '@/components'
+import { useSearchEpdsQuery, UnitEnum } from '@/queries/generated'
+import { EPDCard, FilterSidebar } from '@/components'
 
 export const ResultsPage = () => {
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const query = searchParams.get('q') || ''
+  const unit = searchParams.get('unit') || ''
 
   const { data, loading, error } = useSearchEpdsQuery({
     variables: {
       where: {
         name: { contains: query },
+        declaredUnit: unit ? { eq: unit as UnitEnum } : undefined,
       },
       limit: 50,
     },
-    skip: !query,
+    skip: !query && !unit,
   })
 
+  const handleNameChange = (name: string) => {
+    const params = new URLSearchParams(searchParams)
+    if (name) {
+      params.set('q', name)
+    } else {
+      params.delete('q')
+    }
+    setSearchParams(params)
+  }
+
+  const handleUnitChange = (unit: string | null) => {
+    const params = new URLSearchParams(searchParams)
+    if (unit) {
+      params.set('unit', unit)
+    } else {
+      params.delete('unit')
+    }
+    setSearchParams(params)
+  }
+
   return (
-    <Container size='md' py={50}>
-      <Stack gap='xl'>
-        <Title order={1}>Search Results</Title>
-        <Text c='dimmed'>
-          Showing results for: <strong>{query}</strong>
-        </Text>
+    <Container size='lg' py={50}>
+      <Grid gutter='xl'>
+        <Grid.Col span={{ base: 12, md: 3 }}>
+          <FilterSidebar name={query} unit={unit} onNameChange={handleNameChange} onUnitChange={handleUnitChange} />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 9 }}>
+          <Stack gap='xl'>
+            <Title order={1}>Search Results</Title>
+            {(query || unit) && (
+              <Text c='dimmed'>
+                Showing results for:{' '}
+                {query && (
+                  <>
+                    Name: <strong>{query}</strong>
+                  </>
+                )}
+                {query && unit && ' and '}
+                {unit && (
+                  <>
+                    Unit: <strong>{unit}</strong>
+                  </>
+                )}
+              </Text>
+            )}
 
-        {loading && (
-          <Center py='xl'>
-            <Loader size='xl' />
-          </Center>
-        )}
+            {loading && (
+              <Center py='xl'>
+                <Loader size='xl' />
+              </Center>
+            )}
 
-        {error && (
-          <Text c='red' ta='center' py='xl'>
-            An error occurred while fetching EPDs: {error.message}
-          </Text>
-        )}
+            {error && (
+              <Text c='red' ta='center' py='xl'>
+                An error occurred while fetching EPDs: {error.message}
+              </Text>
+            )}
 
-        {data?.epds && (
-          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing='md'>
-            {data.epds.map((epd) => (
-              <EPDCard key={epd.id} epd={epd} />
-            ))}
-          </SimpleGrid>
-        )}
+            {data?.epds && (
+              <SimpleGrid cols={{ base: 1, sm: 2 }} spacing='md'>
+                {data.epds.map((epd) => (
+                  <EPDCard key={epd.id} epd={epd} />
+                ))}
+              </SimpleGrid>
+            )}
 
-        {data?.epds && data.epds.length === 0 && !loading && (
-          <Text ta='center' py='xl' c='dimmed'>
-            No EPDs found matching your search.
-          </Text>
-        )}
-      </Stack>
+            {data?.epds && data.epds.length === 0 && !loading && (
+              <Text ta='center' py='xl' c='dimmed'>
+                No EPDs found matching your search.
+              </Text>
+            )}
+
+            {!query && !unit && !loading && (
+              <Text ta='center' py='xl' c='dimmed'>
+                Please enter a search term or select a filter.
+              </Text>
+            )}
+          </Stack>
+        </Grid.Col>
+      </Grid>
     </Container>
   )
 }
