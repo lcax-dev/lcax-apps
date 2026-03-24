@@ -1,4 +1,6 @@
 export * from './addEPD'
+export * from './calculateAssembly'
+export * from './calculateProduct'
 export * from './calculateProject'
 export * from './getEPDs'
 export * from './updateEPDs'

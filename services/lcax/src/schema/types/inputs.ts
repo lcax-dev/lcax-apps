@@ -1,4 +1,11 @@
-import { GraphQLFloat, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLString } from 'graphql/type'
+import {
+  GraphQLBoolean,
+  GraphQLFloat,
+  GraphQLInputObjectType,
+  GraphQLInt,
+  GraphQLList,
+  GraphQLString,
+} from 'graphql/type'
 import { JSONObject } from '@/schema/types/objects'
 import { impactCategories, lifeCycleModules } from 'lcax'
 
@@ -210,4 +217,13 @@ export const GraphQLProjectInput = new GraphQLInputObjectType({
     softwareInfo: { type: GraphQLSoftwareInfoInput },
     metaData: { type: GraphQLString },
   }),
+})
+
+export const GraphQLCalculationOptionsInput = new GraphQLInputObjectType({
+  name: 'CalculationOptionsInput',
+  fields: {
+    lifeCycleModules: { type: new GraphQLList(GraphQLString) },
+    impactCategories: { type: new GraphQLList(GraphQLString) },
+    overwriteExistingResults: { type: GraphQLBoolean },
+  },
 })
