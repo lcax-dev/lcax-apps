@@ -1,9 +1,29 @@
 import { dbConnection } from '@/config/database'
 import * as models from '@/models'
 import { whereHelper } from '../utils'
+import type { GraphQLContext } from '@/schema/context'
+import { GraphQLError } from 'graphql'
 
 // biome-ignore lint: ignore unused function parameters
-export const deleteEPDsResolver = async (source, args, context, info) => {
+export const deleteEPDsResolver = async (source, args, context: GraphQLContext, info) => {
+  if (!context.session) {
+    throw new GraphQLError('User is not authenticated', {
+      extensions: {
+        code: 'UNAUTHENTICATED',
+        http: { status: 401 },
+      },
+    })
+  }
+
+  if (context.session.user.role !== 'admin') {
+    throw new GraphQLError('User is not authorized to delete EPDs', {
+      extensions: {
+        code: 'FORBIDDEN',
+        http: { status: 403 },
+      },
+    })
+  }
+
   const { where } = args
   const filters = whereHelper(where, models.epds)
 
