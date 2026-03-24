@@ -1,15 +1,17 @@
-import { Group, Text, rem, Stack, Paper, Button, List, ThemeIcon, ActionIcon } from '@mantine/core'
+import { Group, Text, rem, Stack, Paper, Button, List, ThemeIcon, ActionIcon, Loader } from '@mantine/core'
 import { Dropzone, FileWithPath, MIME_TYPES } from '@mantine/dropzone'
 import { IconUpload, IconX, IconFileCode, IconCheck } from '@tabler/icons-react'
 import { useState } from 'react'
+import { EpdsInsertInput } from '@/queries/generated'
 
 export interface UploadEPDProps {
-  onUpload?: (files: FileWithPath[]) => void
+  onUpload?: (data: EpdsInsertInput[]) => void
   loading?: boolean
 }
 
 export const UploadEPD = ({ onUpload, loading }: UploadEPDProps) => {
   const [files, setFiles] = useState<FileWithPath[]>([])
+  const [parsing, setParsing] = useState(false)
 
   const handleDrop = (acceptedFiles: FileWithPath[]) => {
     setFiles((prev) => [...prev, ...acceptedFiles])
@@ -19,9 +21,22 @@ export const UploadEPD = ({ onUpload, loading }: UploadEPDProps) => {
     setFiles((prev) => prev.filter((_, i) => i !== index))
   }
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (onUpload) {
-      onUpload(files)
+      setParsing(true)
+      try {
+        const epdData: EpdsInsertInput[] = await Promise.all(
+          files.map(async (file) => {
+            const text = await file.text()
+            return JSON.parse(text)
+          }),
+        )
+        onUpload(epdData)
+      } catch (error) {
+        console.error('Failed to parse JSON files:', error)
+      } finally {
+        setParsing(false)
+      }
     }
   }
 
@@ -32,7 +47,7 @@ export const UploadEPD = ({ onUpload, loading }: UploadEPDProps) => {
         onReject={(files) => console.log('rejected files', files)}
         maxSize={5 * 1024 ** 2}
         accept={[MIME_TYPES.json]}
-        loading={loading}
+        loading={loading || parsing}
       >
         <Group justify='center' gap='xl' mih={220} style={{ pointerEvents: 'none' }}>
           <Dropzone.Accept>
@@ -94,7 +109,7 @@ export const UploadEPD = ({ onUpload, loading }: UploadEPDProps) => {
                 </List.Item>
               ))}
             </List>
-            <Button onClick={handleUpload} loading={loading}>
+            <Button onClick={handleUpload} loading={loading || parsing} leftSection={parsing && <Loader size='xs' />}>
               Upload Files
             </Button>
           </Stack>

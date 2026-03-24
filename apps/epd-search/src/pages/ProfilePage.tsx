@@ -3,10 +3,13 @@ import { UploadEPD } from '@/components'
 import { useSession } from '@/lib/auth'
 import { useNavigate } from 'react-router'
 import { useEffect } from 'react'
+import { useAddEpdsMutation, EpdsInsertInput } from '@/queries/generated'
+import { notifications } from '@mantine/notifications'
 
 export const ProfilePage = () => {
   const { data: session, isPending } = useSession()
   const navigate = useNavigate()
+  const [addEpds, { loading: uploading }] = useAddEpdsMutation()
 
   useEffect(() => {
     if (!isPending && !session) {
@@ -22,9 +25,22 @@ export const ProfilePage = () => {
     return null
   }
 
-  const handleUpload = (files: any[]) => {
-    console.log('Files to upload:', files)
-    // Mutation integration will be handled in the next sub-issue
+  const handleUpload = async (values: EpdsInsertInput[]) => {
+    try {
+      await addEpds({ variables: { values } })
+      notifications.show({
+        title: 'Success',
+        message: `${values.length} EPD(s) uploaded successfully`,
+        color: 'green',
+      })
+    } catch (error) {
+      console.error('Upload failed:', error)
+      notifications.show({
+        title: 'Upload Failed',
+        message: error instanceof Error ? error.message : 'An unknown error occurred during upload',
+        color: 'red',
+      })
+    }
   }
 
   return (
@@ -52,7 +68,7 @@ export const ProfilePage = () => {
             Upload your EPDs in LCAx JSON format to make them available in the search engine.
           </Text>
 
-          <UploadEPD onUpload={handleUpload} />
+          <UploadEPD onUpload={handleUpload} loading={uploading} />
         </Paper>
       </Stack>
     </Container>
