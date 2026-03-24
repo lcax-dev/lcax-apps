@@ -9,6 +9,7 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "dev": "tsx --watch ./src/index.ts",
+    "schema": "tsx ./src/scripts/generateSchema.ts",
     "test": "vitest --run",
     "db:start": "docker run -p 5432:5432 --rm -e POSTGRES_PASSWORD=test -e POSTGRES_USER=lcax -e POSTGRES_DB=lcax --name postgres postgres:16-alpine",
     "db:stop": "docker kill postgres",

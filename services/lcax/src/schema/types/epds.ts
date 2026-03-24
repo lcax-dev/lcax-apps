@@ -39,6 +39,7 @@ export const GraphQLSortOrder = new GraphQLEnumType({
 export const StringFilter = new GraphQLInputObjectType({
   name: 'StringFilter',
   fields: {
+    contains: { type: GraphQLString },
     eq: { type: GraphQLString },
     isNull: { type: GraphQLBoolean },
   },

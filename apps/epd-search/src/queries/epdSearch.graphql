@@ -1,0 +1,10 @@
+query SearchEpds($where: EpdsFilters, $limit: Int, $offset: Int) {
+  epds(where: $where, limit: $limit, offset: $offset) {
+    id
+    name
+    declaredUnit
+    location
+    subtype
+    metaData
+  }
+}

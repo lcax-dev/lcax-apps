@@ -1,11 +1,10 @@
 overwrite: true
 schema:
-  - 'https://app.speckle.systems/graphql'
-  - 'http://localhost:4000'
+  - '../../services/lcax/schema.graphql'
 documents: 'src/queries/*.graphql'
 hooks:
   afterAllFileWrite:
-    - 'prettier --write'
+    - 'oxfmt src/queries'
 generates:
   src/queries/introspection.json:
     plugins:
@@ -24,3 +23,4 @@ generates:
       withComponent: false
       withHOC: false
       federation: true
+      apolloReactHooksImportFrom: '@apollo/client/react'

@@ -1,9 +1,10 @@
-import { and, eq, isNotNull, isNull, or, type SQL } from 'drizzle-orm'
+import { and, eq, ilike, isNotNull, isNull, or, type SQL } from 'drizzle-orm'
 import type { PgColumn, PgTable } from 'drizzle-orm/pg-core'
 
 export type WhereFilter = {
   eq?: unknown
   isNull?: boolean
+  contains?: string
 }
 
 export type WhereInput = {
@@ -34,6 +35,10 @@ export const whereHelper = (
 
       if (filterValue.eq !== undefined && column) {
         filters.push(eq(column, filterValue.eq))
+      }
+
+      if (filterValue.contains !== undefined && column) {
+        filters.push(ilike(column, `%${filterValue.contains}%`))
       }
 
       if (filterValue.isNull !== undefined && column) {
