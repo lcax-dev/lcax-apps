@@ -1,8 +1,9 @@
 import { dbConnection } from '@/config/database'
 import * as models from '@/models'
 import { orderByHelper, whereHelper } from '../utils'
+import type { GraphQLContext } from '@/schema/context'
 
-export const getEPDsResolver = async (source, args, context, info) => {
+export const getEPDsResolver = async (source, args, context: GraphQLContext, info) => {
   const { where, offset, limit, orderBy } = args
   const filters = whereHelper(where, models.epds)
 

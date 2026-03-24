@@ -1,6 +1,7 @@
 import { calculateProduct, impactCategories, lifeCycleModules } from 'lcax'
+import type { GraphQLContext } from '@/schema/context'
 
-export const calculateProductResolver = async (source, args, context, info) => {
+export const calculateProductResolver = async (source, args, context: GraphQLContext, info) => {
   const options = {
     lifeCycleModules: lifeCycleModules(),
     impactCategories: impactCategories(),
