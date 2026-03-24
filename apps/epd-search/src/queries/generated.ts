@@ -1,6 +1,7 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql'
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
+import * as ApolloReactHooks from '@apollo/client/react'
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
@@ -835,6 +836,7 @@ export type StandardFilter = {
 }
 
 export type StringFilter = {
+  contains?: InputMaybe<Scalars['String']['input']>
   eq?: InputMaybe<Scalars['String']['input']>
   isNull?: InputMaybe<Scalars['Boolean']['input']>
 }
@@ -1605,28 +1607,34 @@ export const GetEpdDocument = gql`
  * });
  */
 export function useGetEpdQuery(
-  baseOptions: Apollo.QueryHookOptions<GetEpdQuery, GetEpdQueryVariables> &
+  baseOptions: ApolloReactHooks.QueryHookOptions<GetEpdQuery, GetEpdQueryVariables> &
     ({ variables: GetEpdQueryVariables; skip?: boolean } | { skip: boolean }),
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetEpdQuery, GetEpdQueryVariables>(GetEpdDocument, options)
+  return ApolloReactHooks.useQuery<GetEpdQuery, GetEpdQueryVariables>(GetEpdDocument, options)
 }
-export function useGetEpdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEpdQuery, GetEpdQueryVariables>) {
+export function useGetEpdLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetEpdQuery, GetEpdQueryVariables>,
+) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetEpdQuery, GetEpdQueryVariables>(GetEpdDocument, options)
+  return ApolloReactHooks.useLazyQuery<GetEpdQuery, GetEpdQueryVariables>(GetEpdDocument, options)
 }
 // @ts-ignore
 export function useGetEpdSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<GetEpdQuery, GetEpdQueryVariables>,
-): Apollo.UseSuspenseQueryResult<GetEpdQuery, GetEpdQueryVariables>
+  baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<GetEpdQuery, GetEpdQueryVariables>,
+): ApolloReactHooks.UseSuspenseQueryResult<GetEpdQuery, GetEpdQueryVariables>
 export function useGetEpdSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEpdQuery, GetEpdQueryVariables>,
-): Apollo.UseSuspenseQueryResult<GetEpdQuery | undefined, GetEpdQueryVariables>
+  baseOptions?:
+    | ApolloReactHooks.SkipToken
+    | ApolloReactHooks.SuspenseQueryHookOptions<GetEpdQuery, GetEpdQueryVariables>,
+): ApolloReactHooks.UseSuspenseQueryResult<GetEpdQuery | undefined, GetEpdQueryVariables>
 export function useGetEpdSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEpdQuery, GetEpdQueryVariables>,
+  baseOptions?:
+    | ApolloReactHooks.SkipToken
+    | ApolloReactHooks.SuspenseQueryHookOptions<GetEpdQuery, GetEpdQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
-  return Apollo.useSuspenseQuery<GetEpdQuery, GetEpdQueryVariables>(GetEpdDocument, options)
+  const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useSuspenseQuery<GetEpdQuery, GetEpdQueryVariables>(GetEpdDocument, options)
 }
 export type GetEpdQueryHookResult = ReturnType<typeof useGetEpdQuery>
 export type GetEpdLazyQueryHookResult = ReturnType<typeof useGetEpdLazyQuery>
@@ -1663,28 +1671,34 @@ export const SearchEpdsDocument = gql`
  *   },
  * });
  */
-export function useSearchEpdsQuery(baseOptions?: Apollo.QueryHookOptions<SearchEpdsQuery, SearchEpdsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<SearchEpdsQuery, SearchEpdsQueryVariables>(SearchEpdsDocument, options)
-}
-export function useSearchEpdsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<SearchEpdsQuery, SearchEpdsQueryVariables>,
+export function useSearchEpdsQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<SearchEpdsQuery, SearchEpdsQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<SearchEpdsQuery, SearchEpdsQueryVariables>(SearchEpdsDocument, options)
+  return ApolloReactHooks.useQuery<SearchEpdsQuery, SearchEpdsQueryVariables>(SearchEpdsDocument, options)
+}
+export function useSearchEpdsLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchEpdsQuery, SearchEpdsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useLazyQuery<SearchEpdsQuery, SearchEpdsQueryVariables>(SearchEpdsDocument, options)
 }
 // @ts-ignore
 export function useSearchEpdsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<SearchEpdsQuery, SearchEpdsQueryVariables>,
-): Apollo.UseSuspenseQueryResult<SearchEpdsQuery, SearchEpdsQueryVariables>
+  baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<SearchEpdsQuery, SearchEpdsQueryVariables>,
+): ApolloReactHooks.UseSuspenseQueryResult<SearchEpdsQuery, SearchEpdsQueryVariables>
 export function useSearchEpdsSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SearchEpdsQuery, SearchEpdsQueryVariables>,
-): Apollo.UseSuspenseQueryResult<SearchEpdsQuery | undefined, SearchEpdsQueryVariables>
+  baseOptions?:
+    | ApolloReactHooks.SkipToken
+    | ApolloReactHooks.SuspenseQueryHookOptions<SearchEpdsQuery, SearchEpdsQueryVariables>,
+): ApolloReactHooks.UseSuspenseQueryResult<SearchEpdsQuery | undefined, SearchEpdsQueryVariables>
 export function useSearchEpdsSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SearchEpdsQuery, SearchEpdsQueryVariables>,
+  baseOptions?:
+    | ApolloReactHooks.SkipToken
+    | ApolloReactHooks.SuspenseQueryHookOptions<SearchEpdsQuery, SearchEpdsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
-  return Apollo.useSuspenseQuery<SearchEpdsQuery, SearchEpdsQueryVariables>(SearchEpdsDocument, options)
+  const options = baseOptions === ApolloReactHooks.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useSuspenseQuery<SearchEpdsQuery, SearchEpdsQueryVariables>(SearchEpdsDocument, options)
 }
 export type SearchEpdsQueryHookResult = ReturnType<typeof useSearchEpdsQuery>
 export type SearchEpdsLazyQueryHookResult = ReturnType<typeof useSearchEpdsLazyQuery>

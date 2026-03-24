@@ -11,7 +11,6 @@ type GraphQlProviderProps = {
 export const GraphQLProvider = ({ children, url }: GraphQlProviderProps) => {
   const backendLink = new HttpLink({
     uri: `${url}/graphql`,
-    credentials: 'include',
   })
   const client = useMemo(
     () =>

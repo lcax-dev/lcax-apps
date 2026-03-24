@@ -1,5 +1,7 @@
 import { Container, Title, Stack, Text, Loader, Center, SimpleGrid, Grid } from '@mantine/core'
 import { useSearchParams } from 'react-router'
+import { useDebouncedValue } from '@mantine/hooks'
+import { useEffect, useState } from 'react'
 import { useSearchEpdsQuery, UnitEnum } from '@/queries/generated'
 import { EPDCard, FilterSidebar } from '@/components'
 
@@ -8,10 +10,23 @@ export const ResultsPage = () => {
   const query = searchParams.get('q') || ''
   const unit = searchParams.get('unit') || ''
 
+  const [searchInput, setSearchInput] = useState(query)
+  const [debouncedQuery] = useDebouncedValue(searchInput, 500)
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams)
+    if (debouncedQuery) {
+      params.set('q', debouncedQuery)
+    } else {
+      params.delete('q')
+    }
+    setSearchParams(params)
+  }, [debouncedQuery])
+
   const { data, loading, error } = useSearchEpdsQuery({
     variables: {
       where: {
-        name: { contains: query },
+        name: query ? { contains: query } : undefined,
         declaredUnit: unit ? { eq: unit as UnitEnum } : undefined,
       },
       limit: 50,
@@ -20,13 +35,7 @@ export const ResultsPage = () => {
   })
 
   const handleNameChange = (name: string) => {
-    const params = new URLSearchParams(searchParams)
-    if (name) {
-      params.set('q', name)
-    } else {
-      params.delete('q')
-    }
-    setSearchParams(params)
+    setSearchInput(name)
   }
 
   const handleUnitChange = (unit: string | null) => {
@@ -43,7 +52,12 @@ export const ResultsPage = () => {
     <Container size='lg' py={50}>
       <Grid gutter='xl'>
         <Grid.Col span={{ base: 12, md: 3 }}>
-          <FilterSidebar name={query} unit={unit} onNameChange={handleNameChange} onUnitChange={handleUnitChange} />
+          <FilterSidebar
+            name={searchInput}
+            unit={unit}
+            onNameChange={handleNameChange}
+            onUnitChange={handleUnitChange}
+          />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 9 }}>
           <Stack gap='xl'>

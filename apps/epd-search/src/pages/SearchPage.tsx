@@ -1,12 +1,12 @@
 import { Container, TextInput, Title, Stack, Text, ActionIcon, Group, Card, UnstyledButton } from '@mantine/core'
 import { useSearchParams, useNavigate } from 'react-router'
 import { useEffect, useState } from 'react'
-import { IconSearch } from '@tabler/icons-react'
+import { IconSearch, IconWindow, IconGizmo, IconWall } from '@tabler/icons-react'
 
 const SUGGESTIONS = [
-  { term: 'Wood alu window', label: '🪟 Wood alu window' },
-  { term: 'Steel beam', label: '🏗️ Steel beam' },
-  { term: 'Concrete', label: '🧱 Concrete' },
+  { term: 'Wood alu window', label: 'Wood alu window', icon: IconWindow },
+  { term: 'Steel beam', label: 'Steel beam', icon: IconGizmo },
+  { term: 'Concrete', label: 'Concrete', icon: IconWall },
 ]
 
 export const SearchPage = () => {
@@ -76,9 +76,12 @@ export const SearchPage = () => {
                 style={{ flex: 1, minWidth: '150px', maxWidth: '200px' }}
               >
                 <Card shadow='sm' padding='md' radius='md' withBorder h='100%'>
-                  <Text ta='center' fw={500} size='sm'>
-                    {suggestion.label}
-                  </Text>
+                  <Stack align='center' gap='xs'>
+                    <suggestion.icon size={24} stroke={1.5} />
+                    <Text ta='center' fw={500} size='sm'>
+                      {suggestion.label}
+                    </Text>
+                  </Stack>
                 </Card>
               </UnstyledButton>
             ))}

@@ -401,6 +401,7 @@ input EpdsFilters {
 }
 
 input StringFilter {
+  contains: String
   eq: String
   isNull: Boolean
 }

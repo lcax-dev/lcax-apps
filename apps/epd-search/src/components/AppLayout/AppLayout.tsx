@@ -13,7 +13,7 @@ export const AppLayout = () => {
       <AppShell.Header withBorder={false} pl='lg' bg='grey.0'>
         <Logo height={headerHeight} />
       </AppShell.Header>
-      <AppShell.Main pt={`calc(${headerHeight})`}>
+      <AppShell.Main pt={headerHeight}>
         <Outlet />
       </AppShell.Main>
     </AppShell>

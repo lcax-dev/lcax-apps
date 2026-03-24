@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, or } from 'drizzle-orm'
+import { and, asc, desc, eq, ilike, isNotNull, isNull, or } from 'drizzle-orm'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { orderByHelper } from './orderBy'
 import { whereHelper } from './where'
@@ -11,6 +11,9 @@ vi.mock('drizzle-orm', async () => {
     and: vi.fn((...args) => ({ type: 'and', args })),
     or: vi.fn((...args) => ({ type: 'or', args })),
     eq: vi.fn((col, val) => ({ type: 'eq', col, val })),
+    ilike: vi.fn((col, val) => ({ type: 'ilike', col, val })),
+    isNull: vi.fn((col) => ({ type: 'isNull', col })),
+    isNotNull: vi.fn((col) => ({ type: 'isNotNull', col })),
     asc: vi.fn((col) => ({ type: 'asc', col })),
     desc: vi.fn((col) => ({ type: 'desc', col })),
   }
@@ -44,6 +47,33 @@ describe('whereHelper', () => {
     expect(eq).toHaveBeenCalledWith(mockModel.id, '123')
     expect(and).not.toHaveBeenCalled()
     expect(result).toEqual({ type: 'eq', col: mockModel.id, val: '123' })
+  })
+
+  it('should return a single contains filter', () => {
+    const where = { name: { contains: 'test' } }
+    // @ts-expect-error ignore
+    const result = whereHelper(where, mockModel)
+
+    expect(ilike).toHaveBeenCalledWith(mockModel.name, '%test%')
+    expect(result).toEqual({ type: 'ilike', col: mockModel.name, val: '%test%' })
+  })
+
+  it('should return a single isNull filter', () => {
+    const where = { name: { isNull: true } }
+    // @ts-expect-error ignore
+    const result = whereHelper(where, mockModel)
+
+    expect(isNull).toHaveBeenCalledWith(mockModel.name)
+    expect(result).toEqual({ type: 'isNull', col: mockModel.name })
+  })
+
+  it('should return a single isNotNull filter', () => {
+    const where = { name: { isNull: false } }
+    // @ts-expect-error ignore
+    const result = whereHelper(where, mockModel)
+
+    expect(isNotNull).toHaveBeenCalledWith(mockModel.name)
+    expect(result).toEqual({ type: 'isNotNull', col: mockModel.name })
   })
 
   it('should return multiple filters joined by and', () => {

@@ -8,7 +8,7 @@ import '@mantine/charts/styles.css'
 export const App = () => {
   return (
     <MantineProvider theme={theme} cssVariablesResolver={resolver}>
-      <GraphQLProvider url={import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}>
+      <GraphQLProvider url={import.meta.env.VITE_BACKEND_URL}>
         <BrowserRouter>
           <AppRouter />
         </BrowserRouter>

@@ -168,7 +168,7 @@ export const EPDDetailPage = () => {
                     <Table.Td>{impact.name}</Table.Td>
                     <Table.Td>{impact.unit}</Table.Td>
                     <Table.Td ta='right' fw={500}>
-                      {value !== undefined ? value.toExponential(4) : 'N/A'}
+                      {value != null ? value.toExponential(4) : 'N/A'}
                     </Table.Td>
                   </Table.Tr>
                 )
