@@ -4,7 +4,7 @@ import type { HttpLogger } from 'pino-http'
 
 export type GraphQLContext = {
   logger: HttpLogger
-  session: typeof auth.$Infer.Session | null
+  session: Awaited<ReturnType<typeof auth.getSession>>
 }
 
 export const createContext = async ({ req }: { req: IncomingMessage }): Promise<GraphQLContext> => {
