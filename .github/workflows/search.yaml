@@ -1,0 +1,77 @@
+name: Deploy Search Page
+
+on:
+  push:
+    branches:
+      - main
+      - stage
+    paths:
+      - apps/epd-search/**
+      - packages/**
+      - .github/workflows/search.yaml
+  pull_request:
+    branches:
+      - main
+      - stage
+    paths:
+      - apps/epd-search/**
+      - packages/**
+      - .github/workflows/search.yaml
+
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '24.x'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          lfs: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: NPM Install
+        run: npm ci
+
+      - name: Check
+        run: npm run check
+
+      - name: Build
+        run: npx turbo run @lcax/search#build
+        env:
+          VITE_UMAMI_ID: ${{ secrets.SEARCH_UMAMI_ID }}
+          VITE_BACKEND_URL: https://api.lcax.tools
+
+      - name: Upload artifact for deployment job
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: app
+          path: ./apps/epd-search/dist
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v8
+        with:
+          name: app
+
+      - uses: mc-actions/configure@v1
+        with:
+          s3_server: 'https://minio.chrk.site'
+          s3_access_key: '${{ secrets.MINIO_ACCESS_KEY }}'
+          s3_secret_key: '${{ secrets.MINIO_SECRET_KEY }}'
+
+      - name: Upload to Bundle
+        run: mc cp -r ./ default/bundles/lcax/${{ github.ref_name }}/search

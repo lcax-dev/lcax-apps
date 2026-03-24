@@ -1,5 +1,5 @@
 {
-  "name": "epd-search",
+  "name": "@lcax/search",
   "private": true,
   "version": "0.0.1",
   "type": "module",
