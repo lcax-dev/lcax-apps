@@ -1,5 +1,7 @@
 import {
   addEPDResolver,
+  calculateAssemblyResolver,
+  calculateProductResolver,
   calculateProjectResolver,
   deleteEPDsResolver,
   getEPDsResolver,
@@ -14,6 +16,11 @@ import {
   GraphQLEpd,
   GraphQLProject,
   GraphQLProjectInput,
+  GraphQLAssembly,
+  GraphQLAssemblyInput,
+  GraphQLProduct,
+  GraphQLProductInput,
+  GraphQLCalculationOptionsInput,
 } from '@/schema/types'
 
 export const graphQLSchema = new GraphQLSchema({
@@ -41,6 +48,22 @@ export const graphQLSchema = new GraphQLSchema({
           project: { type: GraphQLProjectInput },
         },
         resolve: calculateProjectResolver,
+      },
+      calculateAssembly: {
+        type: new GraphQLNonNull(GraphQLAssembly),
+        args: {
+          assembly: { type: GraphQLAssemblyInput },
+          options: { type: GraphQLCalculationOptionsInput },
+        },
+        resolve: calculateAssemblyResolver,
+      },
+      calculateProduct: {
+        type: new GraphQLNonNull(GraphQLProduct),
+        args: {
+          product: { type: GraphQLProductInput },
+          options: { type: GraphQLCalculationOptionsInput },
+        },
+        resolve: calculateProductResolver,
       },
       addEpds: {
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLEpd))),
