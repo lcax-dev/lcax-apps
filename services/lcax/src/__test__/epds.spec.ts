@@ -1,10 +1,35 @@
 import gql from 'graphql-tag'
-import { afterEach, beforeEach, describe, test } from 'vitest'
+import { afterEach, beforeEach, describe, test, vi } from 'vitest'
 import { epdData } from '@/__test__/__data__'
 import { dbConnection, ResponseBody } from '@/__test__/__mock__'
 import { server } from '@/config'
 import { epds } from '@/models'
 import { type EPD } from '@/models/types'
+import type { GraphQLContext } from '@/schema/context'
+import type { HttpLogger } from 'pino-http'
+
+const adminContext: GraphQLContext = {
+  logger: {} as HttpLogger,
+  session: {
+    session: {
+      id: 'session-id',
+      userId: 'admin-id',
+      token: 'admin-token',
+      expiresAt: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    user: {
+      id: 'admin-id',
+      name: 'Admin User',
+      email: 'admin@example.com',
+      emailVerified: true,
+      role: 'admin',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  } as any,
+}
 
 describe('query epds', async () => {
   beforeEach(async () => {
@@ -50,17 +75,22 @@ describe('mutate epds', async () => {
   })
 
   test('add epd', async ({ expect }) => {
-    const response = await server.executeOperation({
-      query: gql`
-        mutation addEPD($values: [EpdsInsertInput!]!) {
-          addEpds(values: $values) {
-            id
-            name
+    const response = await server.executeOperation(
+      {
+        query: gql`
+          mutation addEPD($values: [EpdsInsertInput!]!) {
+            addEpds(values: $values) {
+              id
+              name
+            }
           }
-        }
-      `,
-      variables: { values: epdData },
-    })
+        `,
+        variables: { values: epdData },
+      },
+      {
+        contextValue: adminContext,
+      },
+    )
 
     const result = response.body as unknown as ResponseBody<{ addEpds: EPD[] }>
 
@@ -73,17 +103,22 @@ describe('mutate epds', async () => {
   test('delete epd', async ({ expect }) => {
     await dbConnection.insert(epds).values(epdData)
 
-    const response = await server.executeOperation({
-      query: gql`
-        mutation deleteEPD($where: EpdsFilters) {
-          deleteEpds(where: $where) {
-            id
-            name
+    const response = await server.executeOperation(
+      {
+        query: gql`
+          mutation deleteEPD($where: EpdsFilters) {
+            deleteEpds(where: $where) {
+              id
+              name
+            }
           }
-        }
-      `,
-      variables: { where: { id: { eq: epdData[0].id } } },
-    })
+        `,
+        variables: { where: { id: { eq: epdData[0].id } } },
+      },
+      {
+        contextValue: adminContext,
+      },
+    )
 
     const result = response.body as unknown as ResponseBody<{ deleteEpds: EPD[] }>
 
@@ -100,24 +135,29 @@ describe('mutate epds', async () => {
     await dbConnection.insert(epds).values(epdData)
     const newName = 'Updated EPD Name'
 
-    const response = await server.executeOperation({
-      query: gql`
-        mutation updateEPD($set: EpdsUpdateInput!, $where: EpdsFilters) {
-          updateEpds(set: $set, where: $where) {
-            id
-            name
-            source {
+    const response = await server.executeOperation(
+      {
+        query: gql`
+          mutation updateEPD($set: EpdsUpdateInput!, $where: EpdsFilters) {
+            updateEpds(set: $set, where: $where) {
+              id
               name
-              url
+              source {
+                name
+                url
+              }
             }
           }
-        }
-      `,
-      variables: {
-        set: { name: newName },
-        where: { id: { eq: epdData[0].id } },
+        `,
+        variables: {
+          set: { name: newName },
+          where: { id: { eq: epdData[0].id } },
+        },
       },
-    })
+      {
+        contextValue: adminContext,
+      },
+    )
 
     const result = response.body as unknown as ResponseBody<{ updateEpds: EPD[] }>
 

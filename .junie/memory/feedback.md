@@ -30,3 +30,11 @@
     "NEW INSTRUCTION": "WHEN creating GitHub issues THEN add the 'EPD Search' label"
 }
 
+[2026-03-24 17:17] - Updated by Junie
+{
+    "TYPE": "correction",
+    "CATEGORY": "Tests/checks failing",
+    "EXPECTATION": "All tests and repository checks must pass before marking work In review or claiming success.",
+    "NEW INSTRUCTION": "WHEN moving an issue to In review THEN run npm run check and npm run build and ensure pass"
+}
+

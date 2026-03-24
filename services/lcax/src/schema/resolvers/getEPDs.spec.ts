@@ -12,7 +12,7 @@ vi.mock('@/config/database', () => ({
           orderBy: vi.fn().mockReturnThis(),
           limit: vi.fn().mockReturnThis(),
           offset: vi.fn().mockReturnThis(),
-          then: vi.fn().mockImplementation((callback) => Promise.resolve([]).then(callback)),
+          then: (onfulfilled: any) => Promise.resolve([]).then(onfulfilled),
         }),
       }),
     }),

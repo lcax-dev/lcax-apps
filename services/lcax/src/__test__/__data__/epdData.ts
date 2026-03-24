@@ -4,7 +4,7 @@ export const epdData = [
   {
     id: '0a758688-df9d-514a-a123-3a393d25dd08',
     name: 'Overflade, Metal maling (opløsningsmiddelbaseret) ',
-    declaredUnit: 'm2',
+    declaredUnit: 'M2',
     version: '2025',
     publishedDate: '2025-07-01',
     validUntil: '2030-07-01',
@@ -13,10 +13,10 @@ export const epdData = [
       url: 'https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/b2a5f872-5e24-461c-a6e4-88ef88ad7c8c?version=20.23.050',
     },
     referenceServiceLife: null,
-    standard: 'en15804a2',
+    standard: 'EN15804_A2',
     comment: '#G0990',
-    location: 'dnk',
-    subtype: 'generic',
+    location: 'DNK',
+    subtype: 'Generic',
     conversions: [
       {
         value: 0.21,
@@ -39,7 +39,7 @@ export const epdData = [
   {
     id: '0e5cfef7-d391-5890-877a-4f6f421189d4',
     name: 'ETICS-limning og belægning af silikatdispersionspuds ',
-    declaredUnit: 'm2',
+    declaredUnit: 'M2',
     version: '2025',
     publishedDate: '2025-07-01',
     validUntil: '2030-07-01',
@@ -48,10 +48,10 @@ export const epdData = [
       url: 'https://www.oekobaudat.de/OEKOBAU.DAT/resource/processes/2d42602d-9913-43ed-8703-d953f7854bca?version=20.23.050',
     },
     referenceServiceLife: null,
-    standard: 'en15804a2',
+    standard: 'EN15804_A2',
     comment: '#G1251',
-    location: 'dnk',
-    subtype: 'generic',
+    location: 'DNK',
+    subtype: 'Generic',
     conversions: [
       {
         value: 12.48,
