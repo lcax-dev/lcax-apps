@@ -1,0 +1,6 @@
+mutation AddEpds($values: [EpdsInsertInput!]!) {
+  addEpds(values: $values) {
+    id
+    name
+  }
+}

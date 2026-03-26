@@ -1345,6 +1345,15 @@ export type Resolvers<ContextType = any> = {
   SoftwareInfo?: SoftwareInfoResolvers<ContextType>
 }
 
+export type AddEpdsMutationVariables = Exact<{
+  values: Array<EpdsInsertInput> | EpdsInsertInput
+}>
+
+export type AddEpdsMutation = {
+  __typename?: 'Mutation'
+  addEpds: Array<{ __typename?: 'EPD'; id?: string | null; name?: string | null }>
+}
+
 export type GetEpdQueryVariables = Exact<{
   id: Scalars['String']['input']
 }>
@@ -1482,6 +1491,42 @@ export type SearchEpdsQuery = {
   }>
 }
 
+export const AddEpdsDocument = gql`
+  mutation AddEpds($values: [EpdsInsertInput!]!) {
+    addEpds(values: $values) {
+      id
+      name
+    }
+  }
+`
+export type AddEpdsMutationFn = Apollo.MutationFunction<AddEpdsMutation, AddEpdsMutationVariables>
+
+/**
+ * __useAddEpdsMutation__
+ *
+ * To run a mutation, you first call `useAddEpdsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddEpdsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addEpdsMutation, { data, loading, error }] = useAddEpdsMutation({
+ *   variables: {
+ *      values: // value for 'values'
+ *   },
+ * });
+ */
+export function useAddEpdsMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<AddEpdsMutation, AddEpdsMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return ApolloReactHooks.useMutation<AddEpdsMutation, AddEpdsMutationVariables>(AddEpdsDocument, options)
+}
+export type AddEpdsMutationHookResult = ReturnType<typeof useAddEpdsMutation>
+export type AddEpdsMutationResult = Apollo.MutationResult<AddEpdsMutation>
+export type AddEpdsMutationOptions = Apollo.BaseMutationOptions<AddEpdsMutation, AddEpdsMutationVariables>
 export const GetEpdDocument = gql`
   query GetEpd($id: String!) {
     epds(where: { id: { eq: $id } }, limit: 1) {
