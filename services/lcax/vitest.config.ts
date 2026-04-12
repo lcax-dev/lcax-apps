@@ -11,6 +11,9 @@ export default defineConfig({
     // dedupe: ['graphql', '@apollo/server', 'graphql-type-json'],
   },
   test: {
+    env: {
+      BASE_URL: 'http://localhost:4000',
+    },
     alias: {
       '@/config/database': resolve(__dirname, './src/__test__/__mock__/database.ts'),
       '@/config/server': resolve(__dirname, './src/config/server.ts'),

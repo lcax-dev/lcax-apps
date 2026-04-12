@@ -15,8 +15,11 @@
     "db:stop": "docker kill postgres",
     "db:push": "drizzle-kit push --config drizzle.config.ts",
     "db:wait": "tsx ./src/scripts/waitForConnection.ts",
+    "db:seed": "tsx ./src/scripts/seed/index.ts",
     "db:generate": "drizzle-kit generate --config drizzle.config.ts",
     "db:migrate": "drizzle-kit migrate --config drizzle.config.ts",
+    "auth:generate": "auth generate --yes --config src/config/auth.ts",
+    "auth:migrate": "auth migrate --yes",
     "tsc": "tsc --noEmit",
     "lint": "oxlint src/",
     "lint:fix": "oxlint --fix src/",
@@ -26,9 +29,11 @@
   },
   "dependencies": {
     "@apollo/server": "5.4.0",
+    "@better-auth/drizzle-adapter": "^1.5.6",
+    "auth": "^1.5.6",
     "better-auth": "^1.5.6",
     "dotenv": "^17.3.1",
-    "drizzle-orm": "^0.45.1",
+    "drizzle-orm": "^1.0.0-beta.19",
     "graphql": "^16.13.1",
     "graphql-type-json": "^0.3.2",
     "lcax": "^3.4.3",
@@ -39,6 +44,6 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.3.16",
-    "drizzle-kit": "^0.31.10"
+    "drizzle-kit": "^1.0.0-beta.19"
   }
 }

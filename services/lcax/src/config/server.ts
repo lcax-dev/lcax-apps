@@ -5,4 +5,5 @@ import { graphQLSchema } from '@/schema'
 export const server = new ApolloServer({
   schema: graphQLSchema,
   plugins: [ApolloLoggerPlugin({})],
+  introspection: true,
 })

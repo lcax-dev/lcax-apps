@@ -6,8 +6,10 @@ import {
   deleteEPDsResolver,
   getEPDsResolver,
   updateEPDsResolver,
+  signupResolver,
+  loginResolver,
 } from '@/schema/resolvers'
-import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema } from 'graphql'
+import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
 import {
   EpdsFilters,
   GraphQLEpdsInsertInput,
@@ -21,6 +23,7 @@ import {
   GraphQLProduct,
   GraphQLProductInput,
   GraphQLCalculationOptionsInput,
+  GraphQLAuthResponse,
 } from '@/schema/types'
 
 export const graphQLSchema = new GraphQLSchema({
@@ -86,6 +89,23 @@ export const graphQLSchema = new GraphQLSchema({
           where: { type: EpdsFilters },
         },
         resolve: updateEPDsResolver,
+      },
+      signup: {
+        type: new GraphQLNonNull(GraphQLAuthResponse),
+        args: {
+          email: { type: new GraphQLNonNull(GraphQLString) },
+          password: { type: new GraphQLNonNull(GraphQLString) },
+          name: { type: new GraphQLNonNull(GraphQLString) },
+        },
+        resolve: signupResolver,
+      },
+      login: {
+        type: new GraphQLNonNull(GraphQLAuthResponse),
+        args: {
+          email: { type: new GraphQLNonNull(GraphQLString) },
+          password: { type: new GraphQLNonNull(GraphQLString) },
+        },
+        resolve: loginResolver,
       },
     },
   }),
