@@ -5,7 +5,9 @@
   "scripts": {
     "test": "vitest --run",
     "check": "turbo run check",
-    "build": "turbo run build"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:search": "turbo run dev:search"
   },
   "author": "Christian Kongsgaard",
   "license": "Apache-2.0",

@@ -1,9 +1,4 @@
-import {
-  GraphQLBoolean,
-  GraphQLNonNull,
-  GraphQLObjectType,
-  GraphQLString,
-} from 'graphql'
+import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql'
 
 export const GraphQLUser = new GraphQLObjectType({
   name: 'User',

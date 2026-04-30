@@ -16,10 +16,7 @@ export const StandardEnum = new GraphQLEnumType({
 
 export const CountryEnum = new GraphQLEnumType({
   name: 'CountryEnum',
-  values: countries().reduce(
-    (acc, country) => ({ ...acc, [country.toUpperCase()]: { value: country } }),
-    {},
-  ),
+  values: countries().reduce((acc, country) => ({ ...acc, [country.toUpperCase()]: { value: country } }), {}),
 })
 
 export const SubTypeEnum = new GraphQLEnumType({

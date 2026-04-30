@@ -1,4 +1,5 @@
 import { auth } from '@/config/auth'
+import { fromNodeHeaders } from 'better-auth/node'
 import type { IncomingMessage } from 'node:http'
 import type { HttpLogger } from 'pino-http'
 
@@ -9,7 +10,7 @@ export type GraphQLContext = {
 
 export const createContext = async ({ req }: { req: IncomingMessage }): Promise<GraphQLContext> => {
   const session = await auth.api.getSession({
-    headers: req.headers,
+    headers: fromNodeHeaders(req.headers),
   })
 
   return {

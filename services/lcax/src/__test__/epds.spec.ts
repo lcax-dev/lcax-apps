@@ -1,12 +1,13 @@
 import gql from 'graphql-tag'
 import { afterEach, beforeEach, describe, test, vi } from 'vitest'
 import { epdData } from '@/__test__/__data__'
-import { dbConnection, ResponseBody } from '@/__test__/__mock__'
+import { ResponseBody } from '@/__test__/__mock__'
 import { server } from '@/config'
 import { epds } from '@/models'
 import { type EPD } from '@/models/types'
 import type { GraphQLContext } from '@/schema/context'
 import type { HttpLogger } from 'pino-http'
+import { dbConnection } from '@/config/database'
 
 const adminContext: GraphQLContext = {
   logger: {} as HttpLogger,

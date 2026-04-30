@@ -9,17 +9,10 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "dev": "tsx --watch ./src/index.ts",
-    "schema": "tsx ./src/scripts/generateSchema.ts",
     "test": "vitest --run",
-    "db:start": "docker run -p 5432:5432 --rm -e POSTGRES_PASSWORD=test -e POSTGRES_USER=lcax -e POSTGRES_DB=lcax --name postgres postgres:16-alpine",
-    "db:stop": "docker kill postgres",
-    "db:push": "drizzle-kit push --config drizzle.config.ts",
-    "db:wait": "tsx ./src/scripts/waitForConnection.ts",
-    "db:seed": "tsx ./src/scripts/seed/index.ts",
     "db:generate": "drizzle-kit generate --config drizzle.config.ts",
     "db:migrate": "drizzle-kit migrate --config drizzle.config.ts",
     "auth:generate": "auth generate --yes --config src/config/auth.ts",
-    "auth:migrate": "auth migrate --yes",
     "tsc": "tsc --noEmit",
     "lint": "oxlint src/",
     "lint:fix": "oxlint --fix src/",
@@ -28,12 +21,12 @@
     "fix": "npm run lint:fix && npm run format:fix"
   },
   "dependencies": {
-    "@apollo/server": "5.4.0",
-    "@better-auth/drizzle-adapter": "^1.5.6",
-    "auth": "^1.5.6",
-    "better-auth": "^1.5.6",
+    "@as-integrations/express5": "^1.1.2",
+    "@better-auth/drizzle-adapter": "^1.6.9",
+    "better-auth": "^1.6.9",
     "dotenv": "^17.3.1",
-    "drizzle-orm": "^1.0.0-beta.19",
+    "drizzle-orm": "0.45.2",
+    "cors": "^2.8.6",
     "graphql": "^16.13.1",
     "graphql-type-json": "^0.3.2",
     "lcax": "^3.4.3",
@@ -43,7 +36,11 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "^0.3.16",
-    "drizzle-kit": "^1.0.0-beta.19"
+    "@electric-sql/pglite": "^0.4.4",
+    "drizzle-kit": "^0.31.10",
+    "auth": "^1.5.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/pg": "^8.20.0"
   }
 }
