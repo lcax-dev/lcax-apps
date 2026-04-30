@@ -5,7 +5,6 @@ import path from 'node:path'
 
 import { logger } from '@/config/logger'
 import * as schema from '@/models'
-import { type Auth } from 'better-auth'
 
 const globalForPglite = globalThis as unknown as {
   pglite: PGlite | undefined

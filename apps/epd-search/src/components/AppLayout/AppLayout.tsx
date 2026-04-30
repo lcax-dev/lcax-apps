@@ -30,11 +30,7 @@ export const AppLayout = () => {
                   Sign out
                 </Button>
               </>
-            ) : (
-              <Button component={Link} to='/login' variant='subtle'>
-                Sign in
-              </Button>
-            )}
+            ) : null}
           </Group>
         </Group>
       </AppShell.Header>
