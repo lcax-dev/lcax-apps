@@ -1,17 +1,25 @@
 {
   "compilerOptions": {
-    "rootDirs": ["src"],
-    "outDir": "dist",
-    "lib": ["es2023"],
-    "target": "es2023",
-    "module": "esnext",
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "ESNext",
     "skipLibCheck": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "types": ["node"],
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    "strict": false,
+
+    /* Paths */
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "esModuleInterop": true,
+    "types": ["node"]
   },
   "include": ["src"],
   "exclude": ["node_modules"]
