@@ -13,7 +13,7 @@
     "db:generate": "drizzle-kit generate --config drizzle.config.ts",
     "db:migrate": "drizzle-kit migrate --config drizzle.config.ts",
     "auth:generate": "auth generate --yes --config src/config/auth.ts",
-    "tsc": "tsc --noEmit",
+    "tsc": "tsgo --noEmit",
     "lint": "oxlint src/",
     "lint:fix": "oxlint --fix src/",
     "format:fix": "oxfmt src/",
@@ -33,7 +33,7 @@
     "pg": "^8.20.0",
     "pino-http": "^11.0.0",
     "tsx": "^4.21.0",
-    "uuid": "^13.0.0"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.4.4",
