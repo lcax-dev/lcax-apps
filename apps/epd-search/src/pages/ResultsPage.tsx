@@ -2,8 +2,9 @@ import { Container, Title, Stack, Text, Loader, Center, SimpleGrid, Grid } from 
 import { useSearchParams } from 'react-router'
 import { useDebouncedValue } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
-import { useSearchEpdsQuery, UnitEnum } from '@/queries/generated'
+import { useSearchEpdsQuery } from '@/queries'
 import { EPDCard, FilterSidebar } from '@/components'
+import { UnitEnum } from '@/queries/generated/graphql.ts'
 
 export const ResultsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -31,7 +32,6 @@ export const ResultsPage = () => {
       },
       limit: 50,
     },
-    skip: !query && !unit,
   })
 
   const handleNameChange = (name: string) => {
@@ -50,7 +50,7 @@ export const ResultsPage = () => {
 
   return (
     <Container size='lg' py={50}>
-      <Grid gutter='xl'>
+      <Grid gap='xl'>
         <Grid.Col span={{ base: 12, md: 3 }}>
           <FilterSidebar
             name={searchInput}
@@ -102,12 +102,6 @@ export const ResultsPage = () => {
             {data?.epds && data.epds.length === 0 && !loading && (
               <Text ta='center' py='xl' c='dimmed'>
                 No EPDs found matching your search.
-              </Text>
-            )}
-
-            {!query && !unit && !loading && (
-              <Text ta='center' py='xl' c='dimmed'>
-                Please enter a search term or select a filter.
               </Text>
             )}
           </Stack>

@@ -41,7 +41,7 @@ export const SearchPage = () => {
         <Title order={1} size='h1' ta='center'>
           LCAx Search
         </Title>
-        <Text size='lg' ta='center' color='dimmed'>
+        <Text size='lg' ta='center' c='dimmed'>
           Search for Environmental Product Declarations (EPDs) in seconds.
         </Text>
         <TextInput
@@ -89,7 +89,7 @@ export const SearchPage = () => {
         </Stack>
 
         {query && (
-          <Text size='sm' color='dimmed'>
+          <Text size='sm' c='dimmed'>
             Last search: <strong>{query}</strong>
           </Text>
         )}

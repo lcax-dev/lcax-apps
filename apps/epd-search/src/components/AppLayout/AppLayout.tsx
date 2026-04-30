@@ -1,14 +1,19 @@
-import { AppShell, rem, Group, Button } from '@mantine/core'
-import { Outlet, Link } from 'react-router'
+import { AppShell, Button, Group, rem } from '@mantine/core'
+import { Link, Outlet } from 'react-router'
 import { Logo } from '@/components'
 import { useHeadroom } from '@mantine/hooks'
 import { useMatches } from '@lcax/ui'
-import { useSession, authClient } from '@/lib/auth'
+import { authClient } from '@/lib'
 
 export const AppLayout = () => {
   const pinned = useHeadroom({ fixedAt: 120 })
   const headerHeight = useMatches({ base: rem(50), lg: rem(65), xxl: rem(100) })
-  const { data: session } = useSession()
+  const { data: sessionData } = authClient.useSession()
+
+  const handleSignOut = async () => {
+    await authClient.signOut()
+    window.location.href = '/'
+  }
 
   return (
     <AppShell header={{ height: headerHeight, collapsed: !pinned, offset: false }}>
@@ -16,17 +21,12 @@ export const AppLayout = () => {
         <Group justify='space-between' h='100%'>
           <Logo height={headerHeight} />
           <Group>
-            {session ? (
+            {sessionData ? (
               <>
                 <Button component={Link} to='/profile' variant='subtle'>
                   Profile
                 </Button>
-                <Button
-                  variant='subtle'
-                  onClick={async () => {
-                    await authClient.signOut()
-                  }}
-                >
+                <Button variant='subtle' onClick={handleSignOut}>
                   Sign out
                 </Button>
               </>

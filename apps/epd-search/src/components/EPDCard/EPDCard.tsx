@@ -1,9 +1,9 @@
 import { Card, Text, Group, Badge, Stack, UnstyledButton, Title } from '@mantine/core'
-import { SearchEpdsQuery } from '@/queries/generated'
 import { Link } from 'react-router'
+import { Epd } from '@/queries/generated/graphql.ts'
 
 interface EPDCardProps {
-  epd: NonNullable<SearchEpdsQuery['epds']>[number]
+  epd: Epd
 }
 
 export const EPDCard = ({ epd }: EPDCardProps) => {

@@ -1,31 +1,14 @@
-import { Container, Title, Stack, Paper, Text, Divider } from '@mantine/core'
+import { Container, Divider, Group, Paper, Stack, Text, Title } from '@mantine/core'
 import { UploadEPD } from '@/components'
-import { useSession } from '@/lib/auth'
-import { useNavigate } from 'react-router'
-import { useEffect } from 'react'
-import { useAddEpdsMutation, EpdsInsertInput } from '@/queries/generated'
+import { useAddEpdsMutation } from '@/queries'
 import { notifications } from '@mantine/notifications'
+import { authClient } from '@/lib'
 
 export const ProfilePage = () => {
-  const { data: session, isPending } = useSession()
-  const navigate = useNavigate()
   const [addEpds, { loading: uploading }] = useAddEpdsMutation()
+  const { data: sessionData } = authClient.useSession()
 
-  useEffect(() => {
-    if (!isPending && !session) {
-      navigate('/login')
-    }
-  }, [session, isPending, navigate])
-
-  if (isPending) {
-    return null // Or a loading spinner
-  }
-
-  if (!session) {
-    return null
-  }
-
-  const handleUpload = async (values: EpdsInsertInput[]) => {
+  const handleUpload = async (values: any) => {
     try {
       await addEpds({ variables: { values } })
       notifications.show({
@@ -54,10 +37,20 @@ export const ProfilePage = () => {
 
           <Divider my='lg' />
 
-          <Stack gap='xs'>
-            <Text fw={500}>Email</Text>
-            <Text>{session.user.email}</Text>
-          </Stack>
+          <Group justify='space-around'>
+            <Stack gap='xs'>
+              <Text fw={500}>Name</Text>
+              <Text>{sessionData?.user.name}</Text>
+            </Stack>
+            <Stack gap='xs'>
+              <Text fw={500}>Email</Text>
+              <Text>{sessionData?.user.email}</Text>
+            </Stack>
+            <Stack gap='xs'>
+              <Text fw={500}>Role</Text>
+              <Text>{sessionData?.user.role}</Text>
+            </Stack>
+          </Group>
         </Paper>
 
         <Paper withBorder p='xl' radius='md'>

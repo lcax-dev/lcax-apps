@@ -7,6 +7,7 @@ import '@mantine/core/styles.css'
 import '@mantine/charts/styles.css'
 import '@mantine/notifications/styles.css'
 import '@mantine/dropzone/styles.css'
+import { DevUI } from '@/components/DevUI'
 
 export const App = () => {
   return (
@@ -15,6 +16,7 @@ export const App = () => {
       <GraphQLProvider url={import.meta.env.VITE_BACKEND_URL}>
         <BrowserRouter>
           <AppRouter />
+          {import.meta.env.VITE_DEV && <DevUI />}
         </BrowserRouter>
       </GraphQLProvider>
     </MantineProvider>
