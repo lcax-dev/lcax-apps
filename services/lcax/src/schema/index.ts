@@ -7,7 +7,7 @@ import {
   getEPDsResolver,
   updateEPDsResolver,
 } from '@/schema/resolvers'
-import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema } from 'graphql'
+import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
 import {
   EpdsFilters,
   GraphQLEpdsInsertInput,
@@ -21,6 +21,8 @@ import {
   GraphQLProduct,
   GraphQLProductInput,
   GraphQLCalculationOptionsInput,
+  GraphQLAuthResponse,
+  GraphQLUser,
 } from '@/schema/types'
 
 export const graphQLSchema = new GraphQLSchema({

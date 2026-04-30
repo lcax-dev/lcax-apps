@@ -1,5 +1,5 @@
 import { Select, Stack, TextInput, Title } from '@mantine/core'
-import { UnitEnum } from '@/queries/generated'
+import { UnitEnum } from '@/queries/generated/graphql.ts'
 
 interface FilterSidebarProps {
   name: string

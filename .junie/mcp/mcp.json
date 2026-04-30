@@ -1,0 +1,14 @@
+{
+    "mcpServers": {
+        "better-auth": {
+            "url": "https://mcp.better-auth.com/mcp"
+        },
+        "mantine": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@mantine/mcp-server"
+            ]
+        }
+    }
+}

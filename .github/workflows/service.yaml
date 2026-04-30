@@ -46,7 +46,7 @@ jobs:
             ${{ runner.os }}-turbo-
 
       - name: NPM Install
-        run: npm ci
+        run: npm i
 
       - name: Check
         run: npx turbo run @services/lcax#check

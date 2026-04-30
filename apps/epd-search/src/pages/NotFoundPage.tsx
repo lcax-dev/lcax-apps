@@ -10,7 +10,7 @@ export const NotFoundPage = () => {
           <Text size='xl' fw={500}>
             Page not found
           </Text>
-          <Text color='dimmed' size='lg' ta='center'>
+          <Text c='dimmed' size='lg' ta='center'>
             The page you are looking for does not exist or has been moved.
           </Text>
           <Button component={Link} to='/' size='md' mt='xl'>

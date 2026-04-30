@@ -1,6 +1,7 @@
 export * from './App'
 export * from './AppLayout'
 export * from './AppRouter'
+export * from './UploadEPD/UploadEPD'
 export * from './Theme'
 export * from './Logo'
 export * from './EPDCard'

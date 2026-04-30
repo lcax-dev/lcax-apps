@@ -13,7 +13,7 @@ import {
   Center,
   Button,
 } from '@mantine/core'
-import { useGetEpdQuery } from '@/queries/generated'
+import { useGetEpdQuery } from '@/queries'
 
 export const EPDDetailPage = () => {
   const { id } = useParams<{ id: string }>()

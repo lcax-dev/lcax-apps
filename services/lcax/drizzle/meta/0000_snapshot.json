@@ -1,5 +1,5 @@
 {
-  "id": "43b2ff04-787b-42b3-9b25-eeda2bc5cfdc",
+  "id": "ce76bd0d-5a83-45d2-91ef-53d30dad3e28",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -141,50 +141,50 @@
           "primaryKey": true,
           "notNull": true
         },
-        "accountId": {
-          "name": "accountId",
+        "account_id": {
+          "name": "account_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "providerId": {
-          "name": "providerId",
+        "provider_id": {
+          "name": "provider_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "userId": {
-          "name": "userId",
+        "user_id": {
+          "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "accessToken": {
-          "name": "accessToken",
+        "access_token": {
+          "name": "access_token",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "refreshToken": {
-          "name": "refreshToken",
+        "refresh_token": {
+          "name": "refresh_token",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "idToken": {
-          "name": "idToken",
+        "id_token": {
+          "name": "id_token",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "accessTokenExpiresAt": {
-          "name": "accessTokenExpiresAt",
+        "access_token_expires_at": {
+          "name": "access_token_expires_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
         },
-        "refreshTokenExpiresAt": {
-          "name": "refreshTokenExpiresAt",
+        "refresh_token_expires_at": {
+          "name": "refresh_token_expires_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
@@ -201,32 +201,49 @@
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "account_userId_idx": {
+          "name": "account_userId_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
-        "account_userId_user_id_fk": {
-          "name": "account_userId_user_id_fk",
+        "account_user_id_user_id_fk": {
+          "name": "account_user_id_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
           "columnsFrom": [
-            "userId"
+            "user_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -246,8 +263,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "expiresAt": {
-          "name": "expiresAt",
+        "expires_at": {
+          "name": "expires_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
@@ -258,50 +275,73 @@
           "primaryKey": false,
           "notNull": true
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "ipAddress": {
-          "name": "ipAddress",
+        "ip_address": {
+          "name": "ip_address",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "userAgent": {
-          "name": "userAgent",
+        "user_agent": {
+          "name": "user_agent",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "userId": {
-          "name": "userId",
+        "user_id": {
+          "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "impersonated_by": {
+          "name": "impersonated_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "session_userId_idx": {
+          "name": "session_userId_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
-        "session_userId_user_id_fk": {
-          "name": "session_userId_user_id_fk",
+        "session_user_id_user_id_fk": {
+          "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
           "columnsFrom": [
-            "userId"
+            "user_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -341,11 +381,12 @@
           "primaryKey": false,
           "notNull": true
         },
-        "emailVerified": {
-          "name": "emailVerified",
+        "email_verified": {
+          "name": "email_verified",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": false
         },
         "image": {
           "name": "image",
@@ -353,17 +394,44 @@
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "banned": {
+          "name": "banned",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "ban_reason": {
+          "name": "ban_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ban_expires": {
+          "name": "ban_expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -404,26 +472,44 @@
           "primaryKey": false,
           "notNull": true
         },
-        "expiresAt": {
-          "name": "expiresAt",
+        "expires_at": {
+          "name": "expires_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "verification_identifier_idx": {
+          "name": "verification_identifier_idx",
+          "columns": [
+            {
+              "expression": "identifier",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -437,52 +523,294 @@
       "name": "country",
       "schema": "public",
       "values": [
-        "DNK",
-        "GBR",
-        "USA",
-        "DEU",
-        "FRA",
-        "SWE",
-        "NOR",
-        "FIN",
-        "UNKNOWN"
+        "unknown",
+        "afg",
+        "ala",
+        "alb",
+        "dza",
+        "asm",
+        "and",
+        "ago",
+        "aia",
+        "ata",
+        "atg",
+        "arg",
+        "arm",
+        "abw",
+        "aus",
+        "aut",
+        "aze",
+        "bhs",
+        "bhr",
+        "bgd",
+        "brb",
+        "blr",
+        "bel",
+        "blz",
+        "ben",
+        "bmu",
+        "btn",
+        "bol",
+        "bes",
+        "bih",
+        "bwa",
+        "bvt",
+        "bra",
+        "iot",
+        "brn",
+        "bgr",
+        "bfa",
+        "bdi",
+        "cpv",
+        "khm",
+        "cmr",
+        "can",
+        "cym",
+        "caf",
+        "tcd",
+        "chl",
+        "chn",
+        "cxr",
+        "cck",
+        "col",
+        "com",
+        "cog",
+        "cod",
+        "cok",
+        "cri",
+        "civ",
+        "hrv",
+        "cub",
+        "cuw",
+        "cyp",
+        "cze",
+        "dnk",
+        "dji",
+        "dma",
+        "dom",
+        "ecu",
+        "egy",
+        "slv",
+        "gnq",
+        "eri",
+        "est",
+        "swz",
+        "eth",
+        "flk",
+        "fro",
+        "fji",
+        "fin",
+        "fra",
+        "guf",
+        "pyf",
+        "atf",
+        "gab",
+        "gmb",
+        "geo",
+        "deu",
+        "gha",
+        "gib",
+        "grc",
+        "grl",
+        "grd",
+        "glp",
+        "gum",
+        "gtm",
+        "ggy",
+        "gin",
+        "gnb",
+        "guy",
+        "hti",
+        "hmd",
+        "vat",
+        "hnd",
+        "hkg",
+        "hun",
+        "isl",
+        "ind",
+        "idn",
+        "irn",
+        "irq",
+        "irl",
+        "imn",
+        "isr",
+        "ita",
+        "jam",
+        "jpn",
+        "jey",
+        "jor",
+        "kaz",
+        "ken",
+        "kir",
+        "prk",
+        "kor",
+        "kwt",
+        "kgz",
+        "lao",
+        "lva",
+        "lbn",
+        "lso",
+        "lbr",
+        "lby",
+        "lie",
+        "ltu",
+        "lux",
+        "mac",
+        "mdg",
+        "mwi",
+        "mys",
+        "mdv",
+        "mli",
+        "mlt",
+        "mhl",
+        "mtq",
+        "mrt",
+        "mus",
+        "myt",
+        "mex",
+        "fsm",
+        "mda",
+        "mco",
+        "mng",
+        "mne",
+        "msr",
+        "mar",
+        "moz",
+        "mmr",
+        "nam",
+        "nru",
+        "npl",
+        "nld",
+        "ncl",
+        "nzl",
+        "nic",
+        "ner",
+        "nga",
+        "niu",
+        "nfk",
+        "mkd",
+        "mnp",
+        "nor",
+        "omn",
+        "pak",
+        "plw",
+        "pse",
+        "pan",
+        "png",
+        "pry",
+        "per",
+        "phl",
+        "pcn",
+        "pol",
+        "prt",
+        "pri",
+        "qat",
+        "reu",
+        "rou",
+        "rus",
+        "rwa",
+        "blm",
+        "shn",
+        "kna",
+        "lca",
+        "maf",
+        "spm",
+        "vct",
+        "wsm",
+        "smr",
+        "stp",
+        "sau",
+        "sen",
+        "srb",
+        "syc",
+        "sle",
+        "sgp",
+        "sxm",
+        "svk",
+        "svn",
+        "slb",
+        "som",
+        "zaf",
+        "sgs",
+        "ssd",
+        "esp",
+        "lka",
+        "sdn",
+        "sur",
+        "sjm",
+        "swe",
+        "che",
+        "syr",
+        "twn",
+        "tjk",
+        "tza",
+        "tha",
+        "tls",
+        "tgo",
+        "tkl",
+        "ton",
+        "tto",
+        "tun",
+        "tur",
+        "tkm",
+        "tca",
+        "tuv",
+        "uga",
+        "ukr",
+        "are",
+        "gbr",
+        "usa",
+        "umi",
+        "ury",
+        "uzb",
+        "vut",
+        "ven",
+        "vnm",
+        "vgb",
+        "vir",
+        "wlf",
+        "esh",
+        "yem",
+        "zmb",
+        "zwe"
       ]
     },
     "public.standard": {
       "name": "standard",
       "schema": "public",
       "values": [
-        "EN15804_A1",
-        "EN15804_A2",
-        "ISO14025",
-        "ISO14040",
-        "ISO14044",
-        "UNKNOWN"
+        "en15804a1",
+        "en15804a2",
+        "unknown"
       ]
     },
     "public.subtype": {
       "name": "subtype",
       "schema": "public",
       "values": [
-        "Generic",
-        "Specific",
-        "Industry",
-        "Representative"
+        "generic",
+        "specific",
+        "industry",
+        "representative"
       ]
     },
     "public.unit": {
       "name": "unit",
       "schema": "public",
       "values": [
-        "M",
-        "M2",
-        "M3",
-        "KG",
-        "TONES",
-        "PCS",
-        "L",
-        "M2R1",
-        "UNKNOWN"
+        "m",
+        "m2",
+        "m3",
+        "kg",
+        "tones",
+        "pcs",
+        "kwh",
+        "l",
+        "m2r1",
+        "km",
+        "tones_km",
+        "kgm3",
+        "unknown"
       ]
     }
   },
