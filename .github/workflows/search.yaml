@@ -67,11 +67,24 @@ jobs:
         with:
           name: app
 
-      - uses: mc-actions/configure@v1
-        with:
-          s3_server: 'https://minio.chrk.site'
-          s3_access_key: '${{ secrets.MINIO_ACCESS_KEY }}'
-          s3_secret_key: '${{ secrets.MINIO_SECRET_KEY }}'
+      - name: Download MinIO CLI
+        shell: bash
+        run: |
+          curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+            --create-dirs \
+            -o $HOME/minio-binaries/mc
+          chmod +x $HOME/minio-binaries/mc
+          echo "$HOME/minio-binaries/" >> "$GITHUB_PATH"
+      - name: Create configuration file
+        shell: bash
+        run: |
+          $HOME/minio-binaries/mc alias set \
+          default \
+          https://minio.chrk.site \
+          ${{ secrets.MINIO_ACCESS_KEY }} \
+          ${{ secrets.MINIO_SECRET_KEY }} \
+          --path auto \
+          --api S3v4
 
       - name: Upload to Bundle
         run: mc cp -r ./ default/bundles/lcax/${{ github.ref_name }}/search
