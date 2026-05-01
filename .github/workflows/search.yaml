@@ -67,23 +67,15 @@ jobs:
         with:
           name: app
 
-      - name: Download MinIO CLI
-        shell: bash
-        run: |
-          curl https://dl.min.io/client/mc/release/linux-amd64/mc \
-            --create-dirs \
-            -o $HOME/minio-binaries/mc
-          chmod +x $HOME/minio-binaries/mc
-          echo "$HOME/minio-binaries/" >> "$GITHUB_PATH"
-
-      - name: test
-        run: |
-          ls -lah $HOME/minio-binaries/
-          mc --version
-
-      - name: Create configuration file
-        shell: bash
-        run: $HOME/minio-binaries/mc alias set default https://minio.chrk.site ${{ secrets.MINIO_ACCESS_KEY }} ${{ secrets.MINIO_SECRET_KEY }} --path auto --api S3v4
+      - name: Configure AWS credentials for MinIO
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          aws-access-key-id: ${{ secrets.MINIO_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.MINIO_SECRET_KEY }}
+          aws-region: us-east-1
 
       - name: Upload to Bundle
-        run: mc cp -r ./ default/bundles/lcax/${{ github.ref_name }}/search
+        run: |
+          aws s3 cp ./ s3://bundles/lcax/${{ github.ref_name }}/search \
+            --recursive \
+            --endpoint-url https://minio.chrk.site
