@@ -75,7 +75,6 @@ jobs:
             -o $HOME/minio-binaries/mc
           chmod +x $HOME/minio-binaries/mc
           echo "$HOME/minio-binaries/" >> "$GITHUB_PATH"
-          mc --version
 
       - name: test
         run: |
