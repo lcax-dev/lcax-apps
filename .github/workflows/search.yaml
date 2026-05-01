@@ -77,14 +77,7 @@ jobs:
           echo "$HOME/minio-binaries/" >> "$GITHUB_PATH"
       - name: Create configuration file
         shell: bash
-        run: |
-          $HOME/minio-binaries/mc alias set \
-          default \
-          https://minio.chrk.site \
-          ${{ secrets.MINIO_ACCESS_KEY }} \
-          ${{ secrets.MINIO_SECRET_KEY }} \
-          --path auto \
-          --api S3v4
+        run: $HOME/minio-binaries/mc alias set default https://minio.chrk.site ${{ secrets.MINIO_ACCESS_KEY }} ${{ secrets.MINIO_SECRET_KEY }} --path auto --api S3v4
 
       - name: Upload to Bundle
         run: mc cp -r ./ default/bundles/lcax/${{ github.ref_name }}/search
