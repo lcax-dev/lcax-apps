@@ -78,5 +78,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.MINIO_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.MINIO_SECRET_KEY }}
           AWS_REGION: us-east-1
-        run: |
-          s5cmd --endpoint-url https://minio.chrk.site cp "./*" "s3://bundles/lcax/${{ github.ref_name }}/search/"
+        run: s5cmd --endpoint-url https://minio.chrk.site cp "./*" "s3://bundles/lcax/${{ github.ref_name }}/search/"
