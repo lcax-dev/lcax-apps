@@ -72,12 +72,11 @@ jobs:
         run: |
           curl https://dl.min.io/client/mc/release/linux-amd64/mc \
             --create-dirs \
-            -o $HOME/minio-binaries/mc
-          chmod +x $HOME/minio-binaries/mc
-          echo "$HOME/minio-binaries/" >> "$GITHUB_PATH"
+            -o /home/runner/minio-binaries/mc
+          chmod +x /home/runner/minio-binaries/mc
       - name: Create configuration file
         shell: bash
-        run: $HOME/minio-binaries/mc alias set default https://minio.chrk.site ${{ secrets.MINIO_ACCESS_KEY }} ${{ secrets.MINIO_SECRET_KEY }} --path auto --api S3v4
+        run: /home/runner/minio-binaries/mc alias set default https://minio.chrk.site ${{ secrets.MINIO_ACCESS_KEY }} ${{ secrets.MINIO_SECRET_KEY }} --path auto --api S3v4
 
       - name: Upload to Bundle
-        run: mc cp -r ./ default/bundles/lcax/${{ github.ref_name }}/search
+        run: /home/runner/minio-binaries/mc cp -r ./ default/bundles/lcax/${{ github.ref_name }}/search
