@@ -47,7 +47,7 @@ jobs:
         run: npx turbo run @lcax/search#build
         env:
           VITE_UMAMI_ID: ${{ secrets.SEARCH_UMAMI_ID }}
-          VITE_BACKEND_URL: https://api.lcax.tools
+          VITE_BACKEND_URL: "https://api.lcax.tools"
 
       - name: Upload artifact for deployment job
         if: github.event_name != 'pull_request'
@@ -59,7 +59,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == 'push'
+    if: github.event_name != 'pull_request'
 
     steps:
       - name: Download artifact from build job

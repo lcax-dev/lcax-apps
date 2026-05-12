@@ -48,6 +48,11 @@ export const EPDDetailPage = () => {
   const epd = data.epds[0]
   const meta = (epd.metaData as Record<string, any>) || {}
 
+  const copyEpdUrl = async () => {
+    const epdUrl = `${import.meta.env.VITE_BACKEND_URL}/epds/${epd.id}`
+    await navigator.clipboard.writeText(epdUrl)
+  }
+
   const impacts = [
     { name: 'Global Warming Potential (GWP)', key: 'gwp', unit: 'kg CO2e' },
     { name: 'Ozone Depletion Potential (ODP)', key: 'odp', unit: 'kg CFC11e' },
@@ -79,11 +84,16 @@ export const EPDDetailPage = () => {
               </Badge>
             </Group>
           </Stack>
-          {epd.source?.url && (
-            <Button component='a' href={epd.source.url} target='_blank' variant='outline'>
-              View Source EPD
+          <Group gap='xs'>
+            {epd.source?.url && (
+              <Button component='a' href={epd.source.url} target='_blank' variant='outline'>
+                View Source EPD
+              </Button>
+            )}
+            <Button onClick={copyEpdUrl} variant='outline'>
+              Copy EPD URL
             </Button>
-          )}
+          </Group>
         </Group>
 
         <SimpleGrid cols={{ base: 1, md: 2 }} spacing='xl'>
@@ -99,7 +109,7 @@ export const EPDDetailPage = () => {
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td fw={500}>EPD ID</Table.Td>
-                  <Table.Td>{epd.epdId || 'N/A'}</Table.Td>
+                  <Table.Td>{epd.id || 'N/A'}</Table.Td>
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td fw={500}>Published Date</Table.Td>
@@ -113,10 +123,6 @@ export const EPDDetailPage = () => {
                   <Table.Td fw={500}>Standard</Table.Td>
                   <Table.Td>{epd.standard || 'Unknown'}</Table.Td>
                 </Table.Tr>
-                <Table.Tr>
-                  <Table.Td fw={500}>Data Quality</Table.Td>
-                  <Table.Td>{meta.data_quality || 'Unknown'}</Table.Td>
-                </Table.Tr>
               </Table.Tbody>
             </Table>
           </Card>
@@ -125,6 +131,10 @@ export const EPDDetailPage = () => {
             <Title order={3} mb='md'>
               Conversions
             </Title>
+            <Group>
+              <Text>Declared Unit:</Text>
+              <Text fw={500}>{epd.declaredUnit}</Text>
+            </Group>
             {epd.conversions && epd.conversions.length > 0 ? (
               <Table verticalSpacing='sm'>
                 <Table.Thead>
