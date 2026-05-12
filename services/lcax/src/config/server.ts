@@ -11,8 +11,9 @@ import { graphQLSchema } from '@/schema'
 import { createContext } from '@/schema/context'
 import { toNodeHandler } from 'better-auth/node'
 import { auth } from '@/config/auth'
+import epdsRouter from '@/routes/epds'
 
-const app = express()
+export const app = express()
 export const httpServer = http.createServer(app)
 
 export const server = new ApolloServer({
@@ -34,6 +35,8 @@ app.use(
 )
 
 app.all('/api/auth/*splat', toNodeHandler(auth))
+
+app.use('/epds', epdsRouter)
 
 app.use(
   '/graphql',

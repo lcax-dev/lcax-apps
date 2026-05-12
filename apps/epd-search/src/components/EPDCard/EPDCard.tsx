@@ -12,7 +12,7 @@ export const EPDCard = ({ epd }: EPDCardProps) => {
   const dataQuality = meta.data_quality || 'Unknown'
 
   return (
-    <UnstyledButton component={Link} to={`/epd/${epd.id}`} style={{ display: 'block' }}>
+    <UnstyledButton component={Link} to={`/epds/${epd.id}`} style={{ display: 'block' }}>
       <Card shadow='sm' padding='lg' radius='md' withBorder>
         <Stack gap='xs'>
           <Group justify='space-between'>

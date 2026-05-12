@@ -8,7 +8,7 @@ export const AppRouter = () => {
       <Route element={<AppLayout />}>
         <Route index element={<SearchPage />} />
         <Route path='results' element={<ResultsPage />} />
-        <Route path='epd/:id' element={<EPDDetailPage />} />
+        <Route path='epds/:id' element={<EPDDetailPage />} />
         <Route path='login' element={<LoginPage />} />
         <Route path='*' element={<NotFoundPage />} />
       </Route>
