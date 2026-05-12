@@ -9,6 +9,7 @@ on:
       - apps/epd-search/**
       - packages/**
       - .github/workflows/search.yaml
+      - turbo.json
   pull_request:
     branches:
       - main

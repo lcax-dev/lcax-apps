@@ -4,7 +4,7 @@
     "build": {
       "outputs": ["dist/**"],
       "dependsOn": ["^build"],
-      "env": ["VITE_UMAMI_ID"],
+      "env": ["VITE_UMAMI_ID", "VITE_BACKEND_URL"],
       "inputs": ["$TURBO_DEFAULT$", ".env"]
     },
     "check": {
