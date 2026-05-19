@@ -95,7 +95,7 @@ describe('mutate epds', async () => {
 
     const result = response.body as unknown as ResponseBody<{ addEpds: EPD[] }>
 
-    expect(result.kind === 'single')
+    expect(result.kind).toBe('single')
     expect(result.singleResult.errors).toBeUndefined()
     expect(result.singleResult.data.addEpds.length).toBe(2)
     expect(result.singleResult.data.addEpds[0].id).toBeDefined()
@@ -123,7 +123,7 @@ describe('mutate epds', async () => {
 
     const result = response.body as unknown as ResponseBody<{ deleteEpds: EPD[] }>
 
-    expect(result.kind === 'single')
+    expect(result.kind).toBe('single')
     expect(result.singleResult.errors).toBeUndefined()
     expect(result.singleResult.data.deleteEpds.length).toBe(1)
     expect(result.singleResult.data.deleteEpds[0].id).toBe(epdData[0].id)
@@ -162,7 +162,7 @@ describe('mutate epds', async () => {
 
     const result = response.body as unknown as ResponseBody<{ updateEpds: EPD[] }>
 
-    expect(result.kind === 'single')
+    expect(result.kind).toBe('single')
     expect(result.singleResult.errors).toBeUndefined()
     expect(result.singleResult.data.updateEpds.length).toBe(1)
     expect(result.singleResult.data.updateEpds[0].name).toBe(newName)

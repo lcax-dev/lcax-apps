@@ -9,9 +9,10 @@ type UUID = EPD['id']
 export const getEpd = async (req: Request, res: Response) => {
   const { epdId } = req.params
   const version = req.query.version as string | undefined
+  const format = req.query.format as string | undefined
   const accept = req.get('Accept')
 
-  if (accept === 'application/json') {
+  if (accept === 'application/json' || format?.toLowerCase() === 'json') {
     try {
       let query = dbConnection
         .select()

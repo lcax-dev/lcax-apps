@@ -143,3 +143,19 @@ export const searchEpdsQueryDocument = gql`
 export const useSearchEpdsQuery = (options?: useQuery.Options<{ epds: Epd[] }, QueryEpdsArgs>) => {
   return useQuery<{ epds: Epd[] }, QueryEpdsArgs>(searchEpdsQueryDocument, options)
 }
+
+export const getEpdStatisticsQueryDocument = gql`
+  query getEpdStatistics {
+    epdStatistics {
+      totalCount
+      uploads {
+        date
+        count
+      }
+    }
+  }
+`
+
+export const useGetEpdStatisticsQuery = (options?: any) => {
+  return useQuery(getEpdStatisticsQueryDocument, options)
+}

@@ -6,6 +6,7 @@ import {
   deleteEPDsResolver,
   getEPDsResolver,
   updateEPDsResolver,
+  getEPDStatisticsResolver,
 } from '@/schema/resolvers'
 import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
 import {
@@ -23,6 +24,7 @@ import {
   GraphQLCalculationOptionsInput,
   GraphQLAuthResponse,
   GraphQLUser,
+  GraphQLEPDStatistics,
 } from '@/schema/types'
 
 export const graphQLSchema = new GraphQLSchema({
@@ -38,6 +40,10 @@ export const graphQLSchema = new GraphQLSchema({
           orderBy: { type: new GraphQLList(EpdsOrderBy) },
         },
         resolve: getEPDsResolver,
+      },
+      epdStatistics: {
+        type: new GraphQLNonNull(GraphQLEPDStatistics),
+        resolve: getEPDStatisticsResolver,
       },
     },
   }),

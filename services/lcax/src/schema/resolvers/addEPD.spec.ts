@@ -1,19 +1,23 @@
-import { describe, test, vi } from 'vitest'
+import { describe, test, vi, expect } from 'vitest'
 import { addEPDResolver } from '@/schema/resolvers/addEPD'
 import { epdData } from '@/__test__/__data__'
 import { GraphQLError } from 'graphql'
 import type { GraphQLContext } from '@/schema/context'
 import type { HttpLogger } from 'pino-http'
+import { dbConnection } from '@/config/database'
 
-vi.mock('@/config/database', () => ({
-  dbConnection: {
-    insert: vi.fn().mockReturnValue({
-      values: vi.fn().mockReturnValue({
-        returning: vi.fn().mockResolvedValue([]),
-      }),
+vi.mock('@/config/database', () => {
+  const mockInsert = vi.fn().mockReturnValue({
+    values: vi.fn().mockReturnValue({
+      returning: vi.fn().mockResolvedValue([]),
     }),
-  },
-}))
+  })
+  return {
+    dbConnection: {
+      insert: mockInsert,
+    },
+  }
+})
 
 describe('addEPDResolver', () => {
   const mockLogger = {} as HttpLogger
@@ -92,7 +96,11 @@ describe('addEPDResolver', () => {
       } as any,
     }
 
-    const result = await addEPDResolver(null, { values: epdData }, context, null)
+    const result = await addEPDResolver(null, { values: [epdData[0]] }, context, null)
+
+    expect(dbConnection.insert).toHaveBeenCalled()
+    const insertedValues = (dbConnection.insert as any).mock.results[0].value.values.mock.calls[0][0]
+    expect(insertedValues[0].metaData.uploadedAt).toBeDefined()
     expect(result).toEqual([])
   })
 })

@@ -25,7 +25,7 @@ describe('Calculate Project', async () => {
 
     const result = response.body as unknown as ResponseBody<{ calculateProject: Project }>
 
-    expect(result.kind === 'single')
+    expect(result.kind).toBe('single')
     expect(result.singleResult.errors).toBeUndefined()
     expect(result.singleResult.data.calculateProject.id).toBe(projectData.id)
     expect(result.singleResult.data.calculateProject.results.gwp.a1a3).toBe(160532500)

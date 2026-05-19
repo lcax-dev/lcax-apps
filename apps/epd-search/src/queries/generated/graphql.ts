@@ -418,6 +418,18 @@ export type EpdSourceInput = {
   url?: InputMaybe<Scalars['String']['input']>
 }
 
+export type EpdStatistics = {
+  __typename?: 'EPDStatistics'
+  totalCount: Scalars['Int']['output']
+  uploads: Array<EpdUploadStat>
+}
+
+export type EpdUploadStat = {
+  __typename?: 'EPDUploadStat'
+  count: Scalars['Int']['output']
+  date: Scalars['String']['output']
+}
+
 export type EpdsFilters = {
   OR?: InputMaybe<Array<InputMaybe<EpdsFilters>>>
   comment?: InputMaybe<StringFilter>
@@ -806,6 +818,7 @@ export type ProjectLocationInput = {
 
 export type Query = {
   __typename?: 'Query'
+  epdStatistics: EpdStatistics
   epds: Array<Epd>
 }
 

@@ -22,5 +22,13 @@ export const addEPDResolver = async (source, args, context: GraphQLContext, info
     })
   }
 
-  return dbConnection.insert(models.epds).values(args.values).returning()
+  const values = args.values.map((v) => ({
+    ...v,
+    metaData: {
+      ...v.metaData,
+      uploadedAt: v.metaData?.uploadedAt || new Date().toISOString(),
+    },
+  }))
+
+  return dbConnection.insert(models.epds).values(values).returning()
 }

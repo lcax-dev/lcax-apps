@@ -1,4 +1,4 @@
 export interface ResponseBody<T> {
   kind: 'single' | 'multi'
-  singleResult?: { data: T; errors: { message: string }[] }
+  singleResult?: { data: T; errors?: { message: string; extensions?: { code: string } }[] }
 }
