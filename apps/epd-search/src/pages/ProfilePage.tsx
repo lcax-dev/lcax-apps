@@ -1,30 +1,10 @@
 import { Container, Divider, Group, Paper, Stack, Text, Title } from '@mantine/core'
-import { UploadEPD } from '@/components'
-import { useAddEpdsMutation } from '@/queries'
-import { notifications } from '@mantine/notifications'
+import { UploadEPD, EPDStatisticsCard } from '@/components'
+import { RolePermitter } from '@lcax/ui'
 import { authClient } from '@/lib'
 
 export const ProfilePage = () => {
-  const [addEpds, { loading: uploading }] = useAddEpdsMutation()
   const { data: sessionData } = authClient.useSession()
-
-  const handleUpload = async (values: any) => {
-    try {
-      await addEpds({ variables: { values } })
-      notifications.show({
-        title: 'Success',
-        message: `${values.length} EPD(s) uploaded successfully`,
-        color: 'green',
-      })
-    } catch (error) {
-      console.error('Upload failed:', error)
-      notifications.show({
-        title: 'Upload Failed',
-        message: error instanceof Error ? error.message : 'An unknown error occurred during upload',
-        color: 'red',
-      })
-    }
-  }
 
   return (
     <Container size='md' py='xl'>
@@ -53,16 +33,19 @@ export const ProfilePage = () => {
           </Group>
         </Paper>
 
-        <Paper withBorder p='xl' radius='md'>
-          <Title order={3} mb='lg'>
-            Upload EPD
-          </Title>
-          <Text size='sm' mb='xl'>
-            Upload your EPDs in LCAx JSON format to make them available in the search engine.
-          </Text>
+        <RolePermitter sessionData={sessionData} requiredRole='admin'>
+          <EPDStatisticsCard />
+          <Paper withBorder p='xl' radius='md'>
+            <Title order={3} mb='lg'>
+              Upload EPD
+            </Title>
+            <Text size='sm' mb='xl'>
+              Upload your EPDs in LCAx JSON format to make them available in the search engine.
+            </Text>
 
-          <UploadEPD onUpload={handleUpload} loading={uploading} />
-        </Paper>
+            <UploadEPD />
+          </Paper>
+        </RolePermitter>
       </Stack>
     </Container>
   )

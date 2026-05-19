@@ -1,17 +1,14 @@
-import { Group, Text, rem, Stack, Paper, Button, List, ThemeIcon, ActionIcon, Loader } from '@mantine/core'
-import { Dropzone, FileWithPath, MIME_TYPES } from '@mantine/dropzone'
-import { IconUpload, IconX, IconFileCode, IconCheck } from '@tabler/icons-react'
+import { ActionIcon, Button, Group, List, Loader, Paper, rem, Stack, Text, ThemeIcon } from '@mantine/core'
+import { Dropzone, FileWithPath } from '@mantine/dropzone'
+import { IconCheck, IconFileCode, IconUpload, IconX } from '@tabler/icons-react'
 import { useState } from 'react'
-import { EpdsInsertInput } from '@/queries/generated'
+import { useAddEpdsMutation } from '@/queries'
+import { notifications } from '@mantine/notifications'
 
-export interface UploadEPDProps {
-  onUpload?: (data: EpdsInsertInput[]) => void
-  loading?: boolean
-}
-
-export const UploadEPD = ({ onUpload, loading }: UploadEPDProps) => {
+export const UploadEPD = () => {
   const [files, setFiles] = useState<FileWithPath[]>([])
   const [parsing, setParsing] = useState(false)
+  const [addEpds, { loading }] = useAddEpdsMutation()
 
   const handleDrop = (acceptedFiles: FileWithPath[]) => {
     setFiles((prev) => [...prev, ...acceptedFiles])
@@ -21,32 +18,54 @@ export const UploadEPD = ({ onUpload, loading }: UploadEPDProps) => {
     setFiles((prev) => prev.filter((_, i) => i !== index))
   }
 
+  const uploadEPDs = async (values: any) => {
+    try {
+      await addEpds({ variables: { values } })
+      notifications.show({
+        title: 'Success',
+        message: `${values.length} EPD(s) uploaded successfully`,
+        color: 'green',
+      })
+    } catch (error) {
+      console.error('Upload failed:', error)
+      notifications.show({
+        title: 'Upload Failed',
+        message: error instanceof Error ? error.message : 'An unknown error occurred during upload',
+        color: 'red',
+      })
+    }
+  }
+
   const handleUpload = async () => {
-    if (onUpload) {
-      setParsing(true)
-      try {
-        const epdData: EpdsInsertInput[] = await Promise.all(
-          files.map(async (file) => {
-            const text = await file.text()
-            return JSON.parse(text)
-          }),
-        )
-        onUpload(epdData)
-      } catch (error) {
-        console.error('Failed to parse JSON files:', error)
-      } finally {
-        setParsing(false)
-      }
+    setParsing(true)
+    try {
+      const epdData = await Promise.all(
+        files.map(async (file) => {
+          const text = await file.text()
+          return JSON.parse(text)
+        }),
+      )
+      await uploadEPDs(epdData)
+      setFiles([])
+    } catch (error) {
+      console.error('Failed to parse JSON files:', error)
+      notifications.show({
+        title: 'Parsing Failed',
+        message: error instanceof Error ? error.message : 'Failed to parse JSON files.',
+        color: 'red',
+      })
+    } finally {
+      setParsing(false)
     }
   }
 
   return (
     <Stack>
       <Dropzone
-        onDrop={handleDrop}
+        onDrop={(files) => handleDrop(files)}
         onReject={(files) => console.log('rejected files', files)}
         maxSize={5 * 1024 ** 2}
-        accept={[MIME_TYPES.json]}
+        accept={['application/json']}
         loading={loading || parsing}
       >
         <Group justify='center' gap='xl' mih={220} style={{ pointerEvents: 'none' }}>
