@@ -4,6 +4,14 @@ LABEL authors="kongsgaard"
 ARG IDE_CODE=WS
 ARG IDE_VERSION=2026.1
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        curl \
+        jq \
+        wget \
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 # Fetch and install IDE dynamically
 RUN mkdir -p ~/JetBrains \
     && IDE_URL=$(curl -s "https://data.services.jetbrains.com/products/releases?code=${IDE_CODE}&majorVersion=${IDE_VERSION}&latest=true" | jq -r ".${IDE_CODE}[0].downloads.linux.link") \
