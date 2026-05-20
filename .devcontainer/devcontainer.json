@@ -21,5 +21,6 @@
       "npmVersion": "11.6.2"
     }
   },
+  "containerUser": "ubuntu",
   "remoteUser": "ubuntu"
 }

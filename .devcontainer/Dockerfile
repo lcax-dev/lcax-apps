@@ -1,8 +1,6 @@
 FROM ubuntu:24.04
 LABEL authors="kongsgaard"
 
-USER ubuntu
-
 ARG IDE_CODE=WS
 ARG IDE_VERSION=2026.1
 
@@ -15,6 +13,8 @@ RUN mkdir -p ~/JetBrains \
     && tar -xzf /tmp/$(basename ${IDE_URL}) -C ~/JetBrains \
     && rm -f /tmp/$(basename ${IDE_URL}) \
     && echo "${IDE_NAME} installed successfully"
+
+USER ubuntu
 
 # Set work directory
 WORKDIR /workspaces
