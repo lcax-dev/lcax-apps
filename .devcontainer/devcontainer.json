@@ -1,0 +1,25 @@
+{
+  "name": "LCAx Apps",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".",
+  },
+  "customizations" : {
+    "jetbrains" : {
+      "backend" : "IntelliJ",
+      "settings" : {},
+      "plugins": []
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/git" : {},
+    "ghcr.io/devcontainers/features/git-lfs" : {},
+    "ghcr.io/devcontainers/features/github-cli" : {},
+    "ghcr.io/devcontainers/features/node:2": {
+      "version": "24.13.0",
+      "npmVersion": "11.6.2"
+    }
+  },
+  "remoteUser": "ubuntu"
+}
