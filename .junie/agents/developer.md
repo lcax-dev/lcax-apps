@@ -1,7 +1,7 @@
 ---
 name: developer
 description: Implement the requested changes using TDD and verify with tests.
-tools: ["Read", "Edit", "Write", "Bash", "Glob", "Grep"]
+skills: ['tdd', 'diagnose']
 allowPromptArgument: true
 ---
 

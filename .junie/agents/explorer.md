@@ -1,7 +1,6 @@
 ---
 name: explorer
 description: Explore the codebase and analyze the issue to provide context for implementation.
-tools: ["Read", "Glob", "Grep", "WebSearch"]
 allowPromptArgument: true
 ---
 
