@@ -86,3 +86,8 @@ Only offer to create an ADR when all three are true:
 If any of the three is missing, skip the ADR. Use the format in [ADR-FORMAT.md](./ADR-FORMAT.md).
 
 </supporting-info>
+
+### After the session
+
+After the grilling session is over, DO NOT implement right away.
+Ask the user whether they want to implement the changes or create a PRD or issues.
