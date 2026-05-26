@@ -10,6 +10,11 @@ export default defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
+  server: {
+    allowedHosts: [
+      process.env.FRONTEND_URL?.replace('https://', '') as string
+    ]
+  },
   test: {
     globals: true,
     passWithNoTests: true,

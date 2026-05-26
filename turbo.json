@@ -21,7 +21,15 @@
     },
     "dev": {
       "persistent": true,
-      "cache": false
+      "cache": false,
+      "env": [
+        "DATABASE_URL",
+        "BASE_URL",
+        "FRONTEND_URL",
+        "BETTER_AUTH_SECRET",
+        "VITE_BACKEND_URL",
+        "VITE_DEV"
+      ]
     },
     "test": {
       "dependsOn": ["^build"]
