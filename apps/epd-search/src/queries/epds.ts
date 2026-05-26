@@ -135,6 +135,10 @@ export const searchEpdsQueryDocument = gql`
       declaredUnit
       location
       subtype
+      type
+      standard
+      publishedDate
+      validUntil
       metaData
     }
   }

@@ -863,7 +863,11 @@ export type StandardFilter = {
 export type StringFilter = {
   contains?: InputMaybe<Scalars['String']['input']>
   eq?: InputMaybe<Scalars['String']['input']>
+  gt?: InputMaybe<Scalars['String']['input']>
+  gte?: InputMaybe<Scalars['String']['input']>
   isNull?: InputMaybe<Scalars['Boolean']['input']>
+  lt?: InputMaybe<Scalars['String']['input']>
+  lte?: InputMaybe<Scalars['String']['input']>
 }
 
 export enum SubTypeEnum {

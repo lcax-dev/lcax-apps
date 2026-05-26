@@ -42,6 +42,10 @@ export const StringFilter = new GraphQLInputObjectType({
     contains: { type: GraphQLString },
     eq: { type: GraphQLString },
     isNull: { type: GraphQLBoolean },
+    gt: { type: GraphQLString },
+    gte: { type: GraphQLString },
+    lt: { type: GraphQLString },
+    lte: { type: GraphQLString },
   },
 })
 

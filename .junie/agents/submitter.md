@@ -1,7 +1,6 @@
 ---
 name: submitter
 description: Commit the changes, push to GitHub, and create a pull request.
-tools: ["Bash", "Read"]
 allowPromptArgument: true
 ---
 
