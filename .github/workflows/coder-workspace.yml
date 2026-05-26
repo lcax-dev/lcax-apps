@@ -24,4 +24,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-issue-number: ${{ github.event.issue.number }}
           parameters: |-
-            junie_prompt: ${{ github.event.issue.number }}
+            junie_prompt: "${{ github.event.issue.number }}"
