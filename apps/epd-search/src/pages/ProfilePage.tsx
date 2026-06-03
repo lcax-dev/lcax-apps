@@ -1,5 +1,5 @@
 import { Container, Divider, Group, Paper, Stack, Text, Title } from '@mantine/core'
-import { UploadEPD, EPDStatisticsCard } from '@/components'
+import { UploadLCAxData, EPDStatisticsCard } from '@/components'
 import { RolePermitter } from '@lcax/ui'
 import { authClient } from '@/lib'
 
@@ -12,7 +12,7 @@ export const ProfilePage = () => {
         <Paper withBorder p='xl' radius='md'>
           <Title order={2}>User Profile</Title>
           <Text c='dimmed' size='sm' mt='xs'>
-            Manage your account and uploaded EPDs
+            Manage your account and uploaded LCAx data
           </Text>
 
           <Divider my='lg' />
@@ -37,13 +37,13 @@ export const ProfilePage = () => {
           <EPDStatisticsCard />
           <Paper withBorder p='xl' radius='md'>
             <Title order={3} mb='lg'>
-              Upload EPD
+              Upload LCAx Data
             </Title>
             <Text size='sm' mb='xl'>
-              Upload your EPDs in LCAx JSON format to make them available in the search engine.
+              Upload your EPDs, Assemblies, or Products in LCAx JSON format.
             </Text>
 
-            <UploadEPD />
+            <UploadLCAxData />
           </Paper>
         </RolePermitter>
       </Stack>

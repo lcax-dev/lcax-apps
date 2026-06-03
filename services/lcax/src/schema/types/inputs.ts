@@ -219,6 +219,40 @@ export const GraphQLProjectInput = new GraphQLInputObjectType({
   }),
 })
 
+export const GraphQLLCAxInput = new GraphQLInputObjectType({
+  name: 'LCAxInput',
+  fields: () => ({
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    type: { type: GraphQLString },
+    description: { type: GraphQLString },
+    comment: { type: GraphQLString },
+    quantity: { type: GraphQLFloat },
+    unit: { type: GraphQLString },
+    metaData: { type: JSONObject },
+    // EPD specific
+    declaredUnit: { type: GraphQLString },
+    version: { type: GraphQLString },
+    publishedDate: { type: GraphQLString },
+    validUntil: { type: GraphQLString },
+    referenceServiceLife: { type: GraphQLInt },
+    standard: { type: GraphQLString },
+    location: { type: GraphQLString },
+    subtype: { type: GraphQLString },
+    source: { type: GraphQLEPDSourceInput },
+    conversions: { type: GraphQLEPDConversionInput },
+    impacts: { type: GraphQLEPDImpactInput },
+    // Assembly specific
+    classification: { type: new GraphQLList(GraphQLClassificationInput) },
+    products: { type: new GraphQLList(JSONObject) },
+    // Product specific
+    impactData: { type: new GraphQLList(JSONObject) },
+    transport: { type: new GraphQLList(JSONObject) },
+    // Results
+    results: { type: GraphQLImpactInput },
+  }),
+})
+
 export const GraphQLCalculationOptionsInput = new GraphQLInputObjectType({
   name: 'CalculationOptionsInput',
   fields: {

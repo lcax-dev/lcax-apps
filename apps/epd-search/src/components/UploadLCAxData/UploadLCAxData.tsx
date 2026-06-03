@@ -2,13 +2,13 @@ import { ActionIcon, Button, Group, List, Loader, Paper, rem, Stack, Text, Theme
 import { Dropzone, FileWithPath } from '@mantine/dropzone'
 import { IconCheck, IconFileCode, IconUpload, IconX } from '@tabler/icons-react'
 import { useState } from 'react'
-import { useAddEpdsMutation } from '@/queries'
+import { useAddLCAxDataMutation } from '@/queries'
 import { notifications } from '@mantine/notifications'
 
-export const UploadEPD = () => {
+export const UploadLCAxData = () => {
   const [files, setFiles] = useState<FileWithPath[]>([])
   const [parsing, setParsing] = useState(false)
-  const [addEpds, { loading }] = useAddEpdsMutation()
+  const [addLCAxData, { loading }] = useAddLCAxDataMutation()
 
   const handleDrop = (acceptedFiles: FileWithPath[]) => {
     setFiles((prev) => [...prev, ...acceptedFiles])
@@ -18,12 +18,12 @@ export const UploadEPD = () => {
     setFiles((prev) => prev.filter((_, i) => i !== index))
   }
 
-  const uploadEPDs = async (values: any) => {
+  const uploadLCAxData = async (values: any) => {
     try {
-      await addEpds({ variables: { values } })
+      await addLCAxData({ variables: { values } })
       notifications.show({
         title: 'Success',
-        message: `${values.length} EPD(s) uploaded successfully`,
+        message: `${values.length} item(s) uploaded successfully`,
         color: 'green',
       })
     } catch (error) {
@@ -39,13 +39,13 @@ export const UploadEPD = () => {
   const handleUpload = async () => {
     setParsing(true)
     try {
-      const epdData = await Promise.all(
+      const lcaxData = await Promise.all(
         files.map(async (file) => {
           const text = await file.text()
           return JSON.parse(text)
         }),
       )
-      await uploadEPDs(epdData)
+      await uploadLCAxData(lcaxData)
       setFiles([])
     } catch (error) {
       console.error('Failed to parse JSON files:', error)

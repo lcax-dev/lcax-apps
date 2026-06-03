@@ -1,5 +1,6 @@
 import {
   addEPDResolver,
+  addLCAxDataResolver,
   calculateAssemblyResolver,
   calculateProductResolver,
   calculateProjectResolver,
@@ -12,6 +13,7 @@ import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSche
 import {
   EpdsFilters,
   GraphQLEpdsInsertInput,
+  GraphQLLCAxInput,
   EpdsOrderBy,
   EpdsUpdateInput,
   GraphQLEpd,
@@ -25,6 +27,7 @@ import {
   GraphQLAuthResponse,
   GraphQLUser,
   GraphQLEPDStatistics,
+  JSONObject,
 } from '@/schema/types'
 
 export const graphQLSchema = new GraphQLSchema({
@@ -79,6 +82,13 @@ export const graphQLSchema = new GraphQLSchema({
           values: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLEpdsInsertInput))) },
         },
         resolve: addEPDResolver,
+      },
+      addLCAxData: {
+        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(JSONObject))),
+        args: {
+          values: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLLCAxInput))) },
+        },
+        resolve: addLCAxDataResolver,
       },
       deleteEpds: {
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLEpd))),
