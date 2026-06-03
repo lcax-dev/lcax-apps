@@ -22,4 +22,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-issue-number: ${{ github.event.issue.number }}
           parameters: |-
-            junie_prompt: "/do-work issueId=${{ github.event.issue.number }}"
+            junie_prompt: "load skills, agents and commands. Then use /do-work issueId=${{ github.event.issue.number }}"
