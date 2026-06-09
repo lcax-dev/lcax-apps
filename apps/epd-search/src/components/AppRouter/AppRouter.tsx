@@ -1,6 +1,14 @@
 import { Routes, Route } from 'react-router'
 import { AppLayout, AuthenticatedAppLayout } from '@/components'
-import { NotFoundPage, SearchPage, ResultsPage, EPDDetailPage, LoginPage, ProfilePage } from '@/pages'
+import {
+  NotFoundPage,
+  SearchPage,
+  ResultsPage,
+  EPDDetailPage,
+  LoginPage,
+  ProfilePage,
+  OrganizationsPage,
+} from '@/pages'
 
 export const AppRouter = () => {
   return (
@@ -14,6 +22,7 @@ export const AppRouter = () => {
       </Route>
       <Route element={<AuthenticatedAppLayout />}>
         <Route path='profile' element={<ProfilePage />} />
+        <Route path='organizations' element={<OrganizationsPage />} />
       </Route>
     </Routes>
   )
