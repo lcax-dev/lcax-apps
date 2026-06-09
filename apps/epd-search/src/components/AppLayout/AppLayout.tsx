@@ -23,6 +23,11 @@ export const AppLayout = () => {
           <Group>
             {sessionData ? (
               <>
+                {sessionData.user.role === 'admin' && (
+                  <Button component={Link} to='/organizations' variant='subtle'>
+                    Organizations
+                  </Button>
+                )}
                 <Button component={Link} to='/profile' variant='subtle'>
                   Profile
                 </Button>
