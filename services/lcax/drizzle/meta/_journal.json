@@ -15,6 +15,13 @@
       "when": 1780480246434,
       "tag": "0001_lethal_nekra",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781015756776,
+      "tag": "0002_stormy_queen_noir",
+      "breakpoints": true
     }
   ]
 }

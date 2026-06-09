@@ -1,6 +1,6 @@
 import { drizzleAdapter } from '@better-auth/drizzle-adapter'
 import { betterAuth } from 'better-auth'
-import { admin, testUtils } from 'better-auth/plugins'
+import { admin, organization, testUtils } from 'better-auth/plugins'
 
 import { dbConnection } from '@/config/database'
 
@@ -18,7 +18,7 @@ export const auth = betterAuth({
   },
   baseURL: process.env.BASE_URL,
   secret: process.env.BETTER_AUTH_SECRET,
-  plugins: [admin(), testUtils()],
+  plugins: [admin(), organization(), testUtils()],
   trustedOrigins: [process.env.FRONTEND_URL],
 })
 

@@ -1,7 +1,8 @@
 import { doublePrecision, json, pgTable, text, uuid } from 'drizzle-orm/pg-core'
 import type { ImpactData, Impacts, MetaData, Transport } from 'lcax'
 import { v4 as uuid4 } from 'uuid'
-import { Unit } from './enums'
+import { Unit, Visibility } from './enums'
+import { organization } from './auth'
 
 export const products = pgTable('products', {
   id: uuid('id')
@@ -17,4 +18,6 @@ export const products = pgTable('products', {
   transport: json('transport').$type<Transport[]>().default([]),
   results: json('results').$type<Impacts>(),
   metaData: json('metaData').$type<MetaData>().default({}),
+  organizationId: uuid('organization_id').references(() => organization.id, { onDelete: 'cascade' }),
+  visibility: Visibility().default('Public').notNull(),
 })
