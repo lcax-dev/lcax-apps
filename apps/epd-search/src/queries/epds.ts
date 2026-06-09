@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 import { useMutation, useQuery } from '@apollo/client/react'
-import { Epd, MutationAddEpdsArgs, QueryEpdsArgs } from '@/queries/generated/graphql.ts'
+import { Epd, MutationAddEpdsArgs, MutationAddLcAxDataArgs, QueryEpdsArgs } from '@/queries/generated/graphql.ts'
 
 export const addEpdsMutationDocument = gql`
   mutation addEpds($values: [EpdsInsertInput!]!) {
@@ -13,6 +13,18 @@ export const addEpdsMutationDocument = gql`
 
 export const useAddEpdsMutation = (options?: useMutation.Options<{ addEpds: Epd[] }, MutationAddEpdsArgs>) => {
   return useMutation<{ addEpds: Epd[] }, MutationAddEpdsArgs>(addEpdsMutationDocument, options)
+}
+
+export const addLCAxDataMutationDocument = gql`
+  mutation addLCAxData($values: [LCAxInput!]!) {
+    addLCAxData(values: $values)
+  }
+`
+
+export const useAddLCAxDataMutation = (
+  options?: useMutation.Options<{ addLCAxData: any[] }, MutationAddLcAxDataArgs>,
+) => {
+  return useMutation<{ addLCAxData: any[] }, MutationAddLcAxDataArgs>(addLCAxDataMutationDocument, options)
 }
 
 export const getEpdQueryDocument = gql`

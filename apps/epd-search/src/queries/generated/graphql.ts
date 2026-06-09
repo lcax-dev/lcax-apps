@@ -626,9 +626,37 @@ export type IntFilter = {
   isNull?: InputMaybe<Scalars['Boolean']['input']>
 }
 
+export type LcAxInput = {
+  classification?: InputMaybe<Array<InputMaybe<ClassificationInput>>>
+  comment?: InputMaybe<Scalars['String']['input']>
+  conversions?: InputMaybe<Array<InputMaybe<EpdConversionInput>>>
+  declaredUnit?: InputMaybe<Scalars['String']['input']>
+  description?: InputMaybe<Scalars['String']['input']>
+  id?: InputMaybe<Scalars['String']['input']>
+  impactData?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>
+  impacts?: InputMaybe<EpdImpactInput>
+  location?: InputMaybe<Scalars['String']['input']>
+  metaData?: InputMaybe<Scalars['JSONObject']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+  products?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>
+  publishedDate?: InputMaybe<Scalars['String']['input']>
+  quantity?: InputMaybe<Scalars['Float']['input']>
+  referenceServiceLife?: InputMaybe<Scalars['Int']['input']>
+  results?: InputMaybe<ImpactInput>
+  source?: InputMaybe<EpdSourceInput>
+  standard?: InputMaybe<Scalars['String']['input']>
+  subtype?: InputMaybe<Scalars['String']['input']>
+  transport?: InputMaybe<Array<InputMaybe<Scalars['JSONObject']['input']>>>
+  type?: InputMaybe<Scalars['String']['input']>
+  unit?: InputMaybe<Scalars['String']['input']>
+  validUntil?: InputMaybe<Scalars['String']['input']>
+  version?: InputMaybe<Scalars['String']['input']>
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   addEpds: Array<Epd>
+  addLCAxData: Array<Scalars['JSONObject']['output']>
   calculateAssembly: Assembly
   calculateProduct: Product
   calculateProject: Project
@@ -638,6 +666,10 @@ export type Mutation = {
 
 export type MutationAddEpdsArgs = {
   values: Array<EpdsInsertInput>
+}
+
+export type MutationAddLcAxDataArgs = {
+  values: Array<LcAxInput>
 }
 
 export type MutationCalculateAssemblyArgs = {

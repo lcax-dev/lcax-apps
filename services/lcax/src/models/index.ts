@@ -1,3 +1,5 @@
 export * from './enums'
 export * from './epds'
+export * from './assemblies'
+export * from './products'
 export * from './auth'

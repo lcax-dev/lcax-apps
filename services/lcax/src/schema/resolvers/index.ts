@@ -1,4 +1,5 @@
 export * from './addEPD'
+export * from './addLCAxData'
 export * from './calculateAssembly'
 export * from './calculateProduct'
 export * from './calculateProject'
