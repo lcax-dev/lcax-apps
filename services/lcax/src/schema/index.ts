@@ -7,7 +7,7 @@ import {
   deleteEPDsResolver,
   getEPDsResolver,
   updateEPDsResolver,
-  getEPDStatisticsResolver,
+  getLCAxStatisticsResolver,
 } from '@/schema/resolvers'
 import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
 import {
@@ -26,7 +26,7 @@ import {
   GraphQLCalculationOptionsInput,
   GraphQLAuthResponse,
   GraphQLUser,
-  GraphQLEPDStatistics,
+  GraphQLLCAxStatistics,
   JSONObject,
 } from '@/schema/types'
 
@@ -44,9 +44,9 @@ export const graphQLSchema = new GraphQLSchema({
         },
         resolve: getEPDsResolver,
       },
-      epdStatistics: {
-        type: new GraphQLNonNull(GraphQLEPDStatistics),
-        resolve: getEPDStatisticsResolver,
+      lcaxStatistics: {
+        type: new GraphQLNonNull(GraphQLLCAxStatistics),
+        resolve: getLCAxStatisticsResolver,
       },
     },
   }),

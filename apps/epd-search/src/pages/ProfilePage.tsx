@@ -1,5 +1,5 @@
 import { Container, Divider, Group, Paper, Stack, Text, Title } from '@mantine/core'
-import { UploadLCAxData, EPDStatisticsCard } from '@/components'
+import { UploadLCAxData, LCAxStatisticsCard } from '@/components'
 import { RolePermitter } from '@lcax/ui'
 import { authClient } from '@/lib'
 
@@ -34,7 +34,7 @@ export const ProfilePage = () => {
         </Paper>
 
         <RolePermitter sessionData={sessionData} requiredRole='admin'>
-          <EPDStatisticsCard />
+          <LCAxStatisticsCard />
           <Paper withBorder p='xl' radius='md'>
             <Title order={3} mb='lg'>
               Upload LCAx Data

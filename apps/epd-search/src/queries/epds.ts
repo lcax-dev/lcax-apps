@@ -160,18 +160,24 @@ export const useSearchEpdsQuery = (options?: useQuery.Options<{ epds: Epd[] }, Q
   return useQuery<{ epds: Epd[] }, QueryEpdsArgs>(searchEpdsQueryDocument, options)
 }
 
-export const getEpdStatisticsQueryDocument = gql`
-  query getEpdStatistics {
-    epdStatistics {
+export const getLcaxStatisticsQueryDocument = gql`
+  query getLcaxStatistics {
+    lcaxStatistics {
       totalCount
+      epdsCount
+      assembliesCount
+      productsCount
       uploads {
         date
         count
+        epds
+        assemblies
+        products
       }
     }
   }
 `
 
-export const useGetEpdStatisticsQuery = (options?: any) => {
-  return useQuery(getEpdStatisticsQueryDocument, options)
+export const useGetLcaxStatisticsQuery = (options?: any) => {
+  return useQuery(getLcaxStatisticsQueryDocument, options)
 }

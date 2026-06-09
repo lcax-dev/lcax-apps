@@ -3,7 +3,7 @@ import { afterEach, describe, test, expect } from 'vitest'
 import { epdData } from '@/__test__/__data__'
 import { ResponseBody } from '@/__test__/__mock__'
 import { server } from '@/config'
-import { epds } from '@/models'
+import { epds, assemblies, products } from '@/models'
 import { dbConnection } from '@/config/database'
 import type { GraphQLContext } from '@/schema/context'
 import type { HttpLogger } from 'pino-http'
@@ -54,26 +54,34 @@ const userContext: GraphQLContext = {
   } as any,
 }
 
-const GET_EPD_STATISTICS = gql`
-  query getEpdStatistics {
-    epdStatistics {
+const GET_LCAX_STATISTICS = gql`
+  query getLcaxStatistics {
+    lcaxStatistics {
       totalCount
+      epdsCount
+      assembliesCount
+      productsCount
       uploads {
         date
         count
+        epds
+        assemblies
+        products
       }
     }
   }
 `
 
-describe('getEPDStatistics resolver', () => {
+describe('getLCAxStatistics resolver', () => {
   afterEach(async () => {
     await dbConnection.delete(epds)
+    await dbConnection.delete(assemblies)
+    await dbConnection.delete(products)
   })
 
   test('should throw error if user is not authenticated', async () => {
     const response = await server.executeOperation({
-      query: GET_EPD_STATISTICS,
+      query: GET_LCAX_STATISTICS,
     })
 
     const result = response.body as unknown as ResponseBody<any>
@@ -86,7 +94,7 @@ describe('getEPDStatistics resolver', () => {
   test('should throw error if user is not an admin', async () => {
     const response = await server.executeOperation(
       {
-        query: GET_EPD_STATISTICS,
+        query: GET_LCAX_STATISTICS,
       },
       {
         contextValue: userContext,
@@ -103,22 +111,33 @@ describe('getEPDStatistics resolver', () => {
   test('should return zero statistics when database is empty', async () => {
     const response = await server.executeOperation(
       {
-        query: GET_EPD_STATISTICS,
+        query: GET_LCAX_STATISTICS,
       },
       {
         contextValue: adminContext,
       },
     )
 
-    const result = response.body as unknown as ResponseBody<{ epdStatistics: { totalCount: number; uploads: any[] } }>
+    const result = response.body as unknown as ResponseBody<{
+      lcaxStatistics: {
+        totalCount: number
+        epdsCount: number
+        assembliesCount: number
+        productsCount: number
+        uploads: any[]
+      }
+    }>
     expect(result.kind).toBe('single')
     expect(result.singleResult.errors).toBeUndefined()
-    expect(result.singleResult.data?.epdStatistics.totalCount).toBe(0)
-    expect(result.singleResult.data?.epdStatistics.uploads).toEqual([])
+    expect(result.singleResult.data?.lcaxStatistics.totalCount).toBe(0)
+    expect(result.singleResult.data?.lcaxStatistics.epdsCount).toBe(0)
+    expect(result.singleResult.data?.lcaxStatistics.assembliesCount).toBe(0)
+    expect(result.singleResult.data?.lcaxStatistics.productsCount).toBe(0)
+    expect(result.singleResult.data?.lcaxStatistics.uploads).toEqual([])
   })
 
   test('should return correct statistics with data', async () => {
-    const testData = [
+    const epdTestData = [
       {
         ...epdData[0],
         id: '00000000-0000-0000-0000-000000000001',
@@ -136,11 +155,34 @@ describe('getEPDStatistics resolver', () => {
       },
     ]
 
-    await dbConnection.insert(epds).values(testData as any)
+    const assemblyTestData = [
+      {
+        id: '00000000-0000-0000-0001-000000000001',
+        name: 'Assembly 1',
+        quantity: 1,
+        unit: 'm2',
+        metaData: { uploadedAt: '2024-01-01T12:00:00Z' },
+      },
+    ]
+
+    const productTestData = [
+      {
+        id: '00000000-0000-0000-0002-000000000001',
+        name: 'Product 1',
+        quantity: 1,
+        unit: 'kg',
+        referenceServiceLife: 50,
+        metaData: { uploadedAt: '2024-01-02T14:00:00Z' },
+      },
+    ]
+
+    await dbConnection.insert(epds).values(epdTestData as any)
+    await dbConnection.insert(assemblies).values(assemblyTestData as any)
+    await dbConnection.insert(products).values(productTestData as any)
 
     const response = await server.executeOperation(
       {
-        query: GET_EPD_STATISTICS,
+        query: GET_LCAX_STATISTICS,
       },
       {
         contextValue: adminContext,
@@ -148,16 +190,25 @@ describe('getEPDStatistics resolver', () => {
     )
 
     const result = response.body as unknown as ResponseBody<{
-      epdStatistics: { totalCount: number; uploads: { date: string; count: number }[] }
+      lcaxStatistics: {
+        totalCount: number
+        epdsCount: number
+        assembliesCount: number
+        productsCount: number
+        uploads: { date: string; count: number; epds: number; assemblies: number; products: number }[]
+      }
     }>
     expect(result.kind).toBe('single')
     expect(result.singleResult.errors).toBeUndefined()
-    expect(result.singleResult.data?.epdStatistics.totalCount).toBe(3)
+    expect(result.singleResult.data?.lcaxStatistics.totalCount).toBe(5)
+    expect(result.singleResult.data?.lcaxStatistics.epdsCount).toBe(3)
+    expect(result.singleResult.data?.lcaxStatistics.assembliesCount).toBe(1)
+    expect(result.singleResult.data?.lcaxStatistics.productsCount).toBe(1)
 
-    const uploads = result.singleResult.data?.epdStatistics.uploads
+    const uploads = result.singleResult.data?.lcaxStatistics.uploads
     expect(uploads).toHaveLength(2)
-    expect(uploads).toContainEqual({ date: '2024-01-01', count: 2 })
-    expect(uploads).toContainEqual({ date: '2024-01-02', count: 1 })
+    expect(uploads).toContainEqual({ date: '2024-01-01', count: 3, epds: 2, assemblies: 1, products: 0 })
+    expect(uploads).toContainEqual({ date: '2024-01-02', count: 2, epds: 1, assemblies: 0, products: 1 })
     // Verify sorting
     expect(uploads![0].date).toBe('2024-01-01')
     expect(uploads![1].date).toBe('2024-01-02')
@@ -181,7 +232,7 @@ describe('getEPDStatistics resolver', () => {
 
     const response = await server.executeOperation(
       {
-        query: GET_EPD_STATISTICS,
+        query: GET_LCAX_STATISTICS,
       },
       {
         contextValue: adminContext,
@@ -189,11 +240,22 @@ describe('getEPDStatistics resolver', () => {
     )
 
     const result = response.body as unknown as ResponseBody<{
-      epdStatistics: { totalCount: number; uploads: { date: string; count: number }[] }
+      lcaxStatistics: {
+        totalCount: number
+        epdsCount: number
+        uploads: { date: string; count: number; epds: number }[]
+      }
     }>
-    expect(result.singleResult.data?.epdStatistics.totalCount).toBe(2)
-    expect(result.singleResult.data?.epdStatistics.uploads).toHaveLength(1)
-    expect(result.singleResult.data?.epdStatistics.uploads[0]).toEqual({ date: '2024-01-01', count: 1 })
+    expect(result.singleResult.data?.lcaxStatistics.totalCount).toBe(2)
+    expect(result.singleResult.data?.lcaxStatistics.epdsCount).toBe(2)
+    expect(result.singleResult.data?.lcaxStatistics.uploads).toHaveLength(1)
+    expect(result.singleResult.data?.lcaxStatistics.uploads[0]).toEqual({
+      date: '2024-01-01',
+      count: 1,
+      epds: 1,
+      assemblies: 0,
+      products: 0,
+    })
   })
 
   test('should handle EPDs with null metadata', async () => {
@@ -209,7 +271,7 @@ describe('getEPDStatistics resolver', () => {
 
     const response = await server.executeOperation(
       {
-        query: GET_EPD_STATISTICS,
+        query: GET_LCAX_STATISTICS,
       },
       {
         contextValue: adminContext,
@@ -217,9 +279,14 @@ describe('getEPDStatistics resolver', () => {
     )
 
     const result = response.body as unknown as ResponseBody<{
-      epdStatistics: { totalCount: number; uploads: { date: string; count: number }[] }
+      lcaxStatistics: {
+        totalCount: number
+        epdsCount: number
+        uploads: { date: string; count: number; epds: number }[]
+      }
     }>
-    expect(result.singleResult.data?.epdStatistics.totalCount).toBe(1)
-    expect(result.singleResult.data?.epdStatistics.uploads).toHaveLength(0)
+    expect(result.singleResult.data?.lcaxStatistics.totalCount).toBe(1)
+    expect(result.singleResult.data?.lcaxStatistics.epdsCount).toBe(1)
+    expect(result.singleResult.data?.lcaxStatistics.uploads).toHaveLength(0)
   })
 })
