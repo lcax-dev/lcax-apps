@@ -19,3 +19,21 @@ A timestamp indicating when an EPD was uploaded to the LCAx system. This is stor
 
 ### Database Statistics
 An admin-only dashboard feature providing insights into the database, including total counts and upload trends over time. The statistics are broken down by LCAx data type (EPDs, Assemblies, and Products).
+
+### Organization
+A logical grouping of users and LCAx Data. Every piece of data (EPDs, Assemblies, Products) belongs to an Organization. Each user is associated with exactly one Organization.
+
+### Member
+A user who belongs to an Organization.
+
+### admin (Global Admin)
+A super-administrator with system-wide access across all Organizations. Can perform any action in the system.
+
+### organization-admin (Organization Admin)
+A user with administrative privileges scoped to a specific Organization. They can manage members (CRUD), organization metadata, and the organization's LCAx Data.
+
+### user (Organization User)
+A regular user within an Organization. They can manage (CRUD) the organization's LCAx Data and view private data within their own Organization.
+
+### Visibility
+Data within an Organization can be either **Public** (searchable and viewable by anyone using the platform) or **Private** (viewable only by members of that specific Organization).
