@@ -1,7 +1,8 @@
 import { date, integer, json, pgTable, primaryKey, text, uuid } from 'drizzle-orm/pg-core'
 import type { Conversion, Impacts, Source } from 'lcax'
 import { v4 as uuid4 } from 'uuid'
-import { Country, Standard, SubType, Unit } from './enums'
+import { Country, Standard, SubType, Unit, Visibility } from './enums'
+import { organization } from './auth'
 
 export const epds = pgTable(
   'epds',
@@ -30,6 +31,8 @@ export const epds = pgTable(
       .$type<Impacts>()
       .default({} as Impacts),
     metaData: json().default({}),
+    organizationId: uuid('organization_id').references(() => organization.id, { onDelete: 'cascade' }),
+    visibility: Visibility().default('Public').notNull(),
   },
   (table) => [primaryKey({ columns: [table.id, table.version] })],
 )
