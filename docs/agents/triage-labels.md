@@ -10,7 +10,12 @@ The skills speak in terms of the canonical triage roles. This file maps those ro
 | `ready-for-human`          | `ready-for-human`    | Requires human implementation            |
 | `blocked`                  | `blocked`            | Blocked by other issues                  |
 | `wontfix`                  | `wontfix`            | Will not be actioned                     |
+| `prd`                      | `prd`                | Product Requirement Document             |
 
 When a skill mentions a role (e.g. "apply the AFK-ready triage label"), use the corresponding label string from this table.
+
+## Blocked Issues
+
+Issues which are blocked by other issues should not be created with `ready-for-agent`, but should be created with the label `blocked`.
 
 Edit the right-hand column to match whatever vocabulary you actually use.
