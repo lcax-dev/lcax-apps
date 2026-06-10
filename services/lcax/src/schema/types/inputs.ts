@@ -1,5 +1,6 @@
 import {
   GraphQLBoolean,
+  GraphQLEnumType,
   GraphQLFloat,
   GraphQLInputObjectType,
   GraphQLInt,
@@ -8,6 +9,76 @@ import {
 } from 'graphql/type'
 import { JSONObject } from '@/schema/types/objects'
 import { impactCategories, lifeCycleModules } from 'lcax'
+import { CountryEnum, StandardEnum, SubTypeEnum, UnitEnum } from '@/schema/types/enums'
+
+export const GraphQLSortOrder = new GraphQLEnumType({
+  name: 'SortOrder',
+  values: {
+    asc: { value: 'asc' },
+    desc: { value: 'desc' },
+  },
+})
+
+export const StringFilter = new GraphQLInputObjectType({
+  name: 'StringFilter',
+  fields: {
+    contains: { type: GraphQLString },
+    eq: { type: GraphQLString },
+    isNull: { type: GraphQLBoolean },
+    gt: { type: GraphQLString },
+    gte: { type: GraphQLString },
+    lt: { type: GraphQLString },
+    lte: { type: GraphQLString },
+  },
+})
+
+export const IntFilter = new GraphQLInputObjectType({
+  name: 'IntFilter',
+  fields: {
+    eq: { type: GraphQLInt },
+    isNull: { type: GraphQLBoolean },
+  },
+})
+
+export const FloatFilter = new GraphQLInputObjectType({
+  name: 'FloatFilter',
+  fields: {
+    eq: { type: GraphQLFloat },
+    isNull: { type: GraphQLBoolean },
+  },
+})
+
+export const UnitFilter = new GraphQLInputObjectType({
+  name: 'UnitFilter',
+  fields: {
+    eq: { type: UnitEnum },
+    isNull: { type: GraphQLBoolean },
+  },
+})
+
+export const StandardFilter = new GraphQLInputObjectType({
+  name: 'StandardFilter',
+  fields: {
+    eq: { type: StandardEnum },
+    isNull: { type: GraphQLBoolean },
+  },
+})
+
+export const CountryFilter = new GraphQLInputObjectType({
+  name: 'CountryFilter',
+  fields: {
+    eq: { type: CountryEnum },
+    isNull: { type: GraphQLBoolean },
+  },
+})
+
+export const SubTypeFilter = new GraphQLInputObjectType({
+  name: 'SubTypeFilter',
+  fields: {
+    eq: { type: SubTypeEnum },
+    isNull: { type: GraphQLBoolean },
+  },
+})
 
 export const GraphQLImpactCategoryInput = new GraphQLInputObjectType({
   name: 'ImpactCategoryInput',

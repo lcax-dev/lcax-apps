@@ -7,12 +7,13 @@ vi.mock('@/config/database', () => ({
   dbConnection: {
     select: vi.fn().mockReturnValue({
       from: vi.fn().mockReturnValue({
-        $dynamic: vi.fn().mockReturnValue({
-          where: vi.fn().mockReturnThis(),
-          orderBy: vi.fn().mockReturnThis(),
-          limit: vi.fn().mockReturnThis(),
-          offset: vi.fn().mockReturnThis(),
-          then: (onfulfilled: any) => Promise.resolve([]).then(onfulfilled),
+        $dynamic: vi.fn().mockImplementation(() => {
+          const query = Promise.resolve([]) as any
+          query.where = vi.fn().mockReturnValue(query)
+          query.orderBy = vi.fn().mockReturnValue(query)
+          query.limit = vi.fn().mockReturnValue(query)
+          query.offset = vi.fn().mockReturnValue(query)
+          return query
         }),
       }),
     }),
