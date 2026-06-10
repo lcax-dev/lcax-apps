@@ -1,8 +1,10 @@
 import { Request, Response } from 'express'
-import { and, desc, eq } from 'drizzle-orm'
+import { and, desc, eq, or } from 'drizzle-orm'
 import { dbConnection } from '@/config/database'
 import { epds } from '@/models'
 import { EPD } from '@/models/types.ts'
+import { auth } from '@/config/auth'
+import { fromNodeHeaders } from 'better-auth/node'
 
 type UUID = EPD['id']
 
@@ -14,10 +16,25 @@ export const getEpd = async (req: Request, res: Response) => {
 
   if (accept === 'application/json' || format?.toLowerCase() === 'json') {
     try {
+      const session = await auth.api.getSession({
+        headers: fromNodeHeaders(req.headers),
+      })
+      const isAdmin = session?.user?.role === 'admin'
+      const orgId = session?.session?.activeOrganizationId
+
+      const visibilityFilters = []
+      if (!isAdmin) {
+        visibilityFilters.push(eq(epds.visibility, 'Public'))
+        if (orgId) {
+          visibilityFilters.push(eq(epds.organizationId, orgId))
+        }
+      }
+      const visibilitySql = visibilityFilters.length > 0 ? or(...visibilityFilters) : undefined
+
       let query = dbConnection
         .select()
         .from(epds)
-        .where(eq(epds.id, epdId as UUID))
+        .where(and(eq(epds.id, epdId as UUID), visibilitySql))
         .orderBy(desc(epds.publishedDate))
         .limit(1)
         .$dynamic()
@@ -26,7 +43,7 @@ export const getEpd = async (req: Request, res: Response) => {
         query = dbConnection
           .select()
           .from(epds)
-          .where(and(eq(epds.id, epdId as UUID), eq(epds.version, version)))
+          .where(and(eq(epds.id, epdId as UUID), eq(epds.version, version), visibilitySql))
           .limit(1)
           .$dynamic()
       }

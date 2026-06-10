@@ -1,6 +1,5 @@
 import {
   GraphQLBoolean,
-  GraphQLEnumType,
   GraphQLFloat,
   GraphQLInputObjectType,
   GraphQLInt,
@@ -10,6 +9,15 @@ import {
 } from 'graphql/type'
 import { CountryEnum, StandardEnum, SubTypeEnum, UnitEnum } from '@/schema/types/enums'
 import { GraphQLImpacts, JSONObject } from '@/schema/types/objects'
+import {
+  CountryFilter,
+  IntFilter,
+  StandardFilter,
+  StringFilter,
+  SubTypeFilter,
+  UnitFilter,
+  GraphQLSortOrder,
+} from '@/schema/types/inputs'
 
 export const GraphQLEPDSource = new GraphQLObjectType({
   name: 'EPDSource',
@@ -28,67 +36,6 @@ export const GraphQLEPDConversion = new GraphQLObjectType({
   },
 })
 
-export const GraphQLSortOrder = new GraphQLEnumType({
-  name: 'SortOrder',
-  values: {
-    asc: { value: 'asc' },
-    desc: { value: 'desc' },
-  },
-})
-
-export const StringFilter = new GraphQLInputObjectType({
-  name: 'StringFilter',
-  fields: {
-    contains: { type: GraphQLString },
-    eq: { type: GraphQLString },
-    isNull: { type: GraphQLBoolean },
-    gt: { type: GraphQLString },
-    gte: { type: GraphQLString },
-    lt: { type: GraphQLString },
-    lte: { type: GraphQLString },
-  },
-})
-
-export const IntFilter = new GraphQLInputObjectType({
-  name: 'IntFilter',
-  fields: {
-    eq: { type: GraphQLInt },
-    isNull: { type: GraphQLBoolean },
-  },
-})
-
-export const UnitFilter = new GraphQLInputObjectType({
-  name: 'UnitFilter',
-  fields: {
-    eq: { type: UnitEnum },
-    isNull: { type: GraphQLBoolean },
-  },
-})
-
-export const StandardFilter = new GraphQLInputObjectType({
-  name: 'StandardFilter',
-  fields: {
-    eq: { type: StandardEnum },
-    isNull: { type: GraphQLBoolean },
-  },
-})
-
-export const CountryFilter = new GraphQLInputObjectType({
-  name: 'CountryFilter',
-  fields: {
-    eq: { type: CountryEnum },
-    isNull: { type: GraphQLBoolean },
-  },
-})
-
-export const SubTypeFilter = new GraphQLInputObjectType({
-  name: 'SubTypeFilter',
-  fields: {
-    eq: { type: SubTypeEnum },
-    isNull: { type: GraphQLBoolean },
-  },
-})
-
 export const EpdsFilters: GraphQLInputObjectType = new GraphQLInputObjectType({
   name: 'EpdsFilters',
   fields: () => ({
@@ -104,6 +51,8 @@ export const EpdsFilters: GraphQLInputObjectType = new GraphQLInputObjectType({
     subtype: { type: SubTypeFilter },
     comment: { type: StringFilter },
     referenceServiceLife: { type: IntFilter },
+    organizationId: { type: StringFilter },
+    visibility: { type: StringFilter },
     OR: { type: new GraphQLList(EpdsFilters) },
   }),
 })
@@ -150,6 +99,8 @@ export const GraphQLEpd = new GraphQLObjectType({
     subtype: {
       type: SubTypeEnum,
     },
+    organizationId: { type: GraphQLString },
+    visibility: { type: GraphQLString },
     metaData: { type: JSONObject },
     workspaceId: { type: GraphQLString },
     projectId: { type: GraphQLString },
