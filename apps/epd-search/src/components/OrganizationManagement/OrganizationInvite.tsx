@@ -2,6 +2,8 @@ import { Button, Select, Stack, TextInput } from '@mantine/core'
 import { useState } from 'react'
 import { notifications } from '@mantine/notifications'
 import { inviteMember } from './logic'
+import { RolePermitter } from '@lcax/ui'
+import { authClient } from '@/lib'
 
 interface OrganizationInviteProps {
   organizationId: string
@@ -9,6 +11,7 @@ interface OrganizationInviteProps {
 }
 
 export const OrganizationInvite = ({ organizationId, onSuccess }: OrganizationInviteProps) => {
+  const { data: activeMember } = authClient.organization.useActiveMember()
   const [email, setEmail] = useState('')
   const [role, setRole] = useState('member')
   const [loading, setLoading] = useState(false)
@@ -63,9 +66,11 @@ export const OrganizationInvite = ({ organizationId, onSuccess }: OrganizationIn
           value={role}
           onChange={(value) => setRole(value || 'member')}
         />
-        <Button type='submit' loading={loading}>
-          Send Invitation
-        </Button>
+        <RolePermitter requiredRole='organization-admin' sessionData={activeMember}>
+          <Button type='submit' loading={loading}>
+            Send Invitation
+          </Button>
+        </RolePermitter>
       </Stack>
     </form>
   )

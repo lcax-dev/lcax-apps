@@ -2,6 +2,8 @@ import { Button, Stack, TextInput, Textarea } from '@mantine/core'
 import { useState } from 'react'
 import { notifications } from '@mantine/notifications'
 import { updateOrganization } from './logic'
+import { RolePermitter } from '@lcax/ui'
+import { authClient } from '@/lib'
 
 interface OrganizationSettingsProps {
   organization: {
@@ -13,6 +15,7 @@ interface OrganizationSettingsProps {
 }
 
 export const OrganizationSettings = ({ organization, onSuccess }: OrganizationSettingsProps) => {
+  const { data: activeMember } = authClient.organization.useActiveMember()
   const [name, setName] = useState(organization.name)
   const [description, setDescription] = useState(organization.metadata?.description || '')
   const [loading, setLoading] = useState(false)
@@ -63,9 +66,11 @@ export const OrganizationSettings = ({ organization, onSuccess }: OrganizationSe
           value={description}
           onChange={(e) => setDescription(e.currentTarget.value)}
         />
-        <Button type='submit' loading={loading}>
-          Update Settings
-        </Button>
+        <RolePermitter requiredRole='organization-admin' sessionData={activeMember}>
+          <Button type='submit' loading={loading}>
+            Update Settings
+          </Button>
+        </RolePermitter>
       </Stack>
     </form>
   )

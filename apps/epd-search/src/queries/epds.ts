@@ -16,8 +16,8 @@ export const useAddEpdsMutation = (options?: useMutation.Options<{ addEpds: Epd[
 }
 
 export const addLCAxDataMutationDocument = gql`
-  mutation addLCAxData($values: [LCAxInput!]!) {
-    addLCAxData(values: $values)
+  mutation addLCAxData($values: [LCAxInput!]!, $organizationId: String, $visibility: String) {
+    addLCAxData(values: $values, organizationId: $organizationId, visibility: $visibility)
   }
 `
 
