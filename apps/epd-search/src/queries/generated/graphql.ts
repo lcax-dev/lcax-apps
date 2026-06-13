@@ -669,7 +669,9 @@ export type MutationAddEpdsArgs = {
 }
 
 export type MutationAddLcAxDataArgs = {
+  organizationId?: InputMaybe<Scalars['String']['input']>
   values: Array<LcAxInput>
+  visibility?: InputMaybe<Scalars['String']['input']>
 }
 
 export type MutationCalculateAssemblyArgs = {

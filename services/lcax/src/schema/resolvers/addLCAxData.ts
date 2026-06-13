@@ -13,7 +13,7 @@ export const addLCAxDataResolver = async (source, args, context: GraphQLContext,
     })
   }
 
-  const values = args.values
+  const { values, organizationId, visibility } = args
   const epdsToInsert = []
   const assembliesToInsert = []
   const productsToInsert = []
@@ -22,6 +22,8 @@ export const addLCAxDataResolver = async (source, args, context: GraphQLContext,
     const type = (value.type || 'EPD').toLowerCase()
     const data = {
       ...value,
+      organizationId: organizationId || value.organizationId,
+      visibility: visibility || value.visibility || 'Public',
       metaData: {
         ...value.metaData,
         uploadedAt: value.metaData?.uploadedAt || new Date().toISOString(),

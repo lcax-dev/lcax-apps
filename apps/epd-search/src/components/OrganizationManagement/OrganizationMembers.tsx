@@ -3,6 +3,7 @@ import { authClient } from '@/lib'
 import { notifications } from '@mantine/notifications'
 import { removeMember, updateMemberRole } from './logic'
 import { IconTrash } from '@tabler/icons-react'
+import { RolePermitter } from '@lcax/ui'
 
 interface OrganizationMembersProps {
   organizationId: string
@@ -91,9 +92,11 @@ export const OrganizationMembers = ({ organizationId }: OrganizationMembersProps
             </Table.Td>
             <Table.Td>
               {canManage && member.id !== activeMember?.id && (
-                <ActionIcon color='red' variant='subtle' onClick={() => handleRemove(member.id)}>
-                  <IconTrash size={16} />
-                </ActionIcon>
+                <RolePermitter requiredRole='organization-admin' sessionData={activeMember}>
+                  <ActionIcon color='red' variant='subtle' onClick={() => handleRemove(member.id)}>
+                    <IconTrash size={16} />
+                  </ActionIcon>
+                </RolePermitter>
               )}
             </Table.Td>
           </Table.Tr>
