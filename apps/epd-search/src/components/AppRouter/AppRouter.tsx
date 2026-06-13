@@ -8,6 +8,7 @@ import {
   LoginPage,
   ProfilePage,
   OrganizationsPage,
+  OrganizationPage,
 } from '@/pages'
 
 export const AppRouter = () => {
@@ -23,6 +24,7 @@ export const AppRouter = () => {
       <Route element={<AuthenticatedAppLayout />}>
         <Route path='profile' element={<ProfilePage />} />
         <Route path='organizations' element={<OrganizationsPage />} />
+        <Route path='organization' element={<OrganizationPage />} />
       </Route>
     </Routes>
   )
