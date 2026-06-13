@@ -9,6 +9,7 @@ export const AppLayout = () => {
   const pinned = useHeadroom({ fixedAt: 120 })
   const headerHeight = useMatches({ base: rem(50), lg: rem(65), xxl: rem(100) })
   const { data: sessionData } = authClient.useSession()
+  const { data: activeOrg } = authClient.useActiveOrganization()
 
   const handleSignOut = async () => {
     await authClient.signOut()
@@ -26,6 +27,11 @@ export const AppLayout = () => {
                 {sessionData.user.role === 'admin' && (
                   <Button component={Link} to='/organizations' variant='subtle'>
                     Organizations
+                  </Button>
+                )}
+                {activeOrg && (
+                  <Button component={Link} to='/organization' variant='subtle'>
+                    My Organization
                   </Button>
                 )}
                 <Button component={Link} to='/profile' variant='subtle'>
