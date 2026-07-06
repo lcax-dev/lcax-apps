@@ -1,10 +1,22 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "futureFlags": { "globalConfiguration": true},
+  "global": {
+    "inputs": [".env"],
+    "env": [
+      "DATABASE_URL",
+      "BASE_URL",
+      "FRONTEND_URL",
+      "BETTER_AUTH_SECRET",
+      "VITE_BACKEND_URL",
+      "VITE_DEV",
+      "VITE_UMAMI_ID"
+    ]
+  },
   "tasks": {
     "build": {
       "outputs": ["dist/**"],
       "dependsOn": ["^build"],
-      "env": ["VITE_UMAMI_ID", "VITE_BACKEND_URL"],
       "inputs": ["$TURBO_DEFAULT$", ".env"]
     },
     "check": {
@@ -21,28 +33,12 @@
     },
     "dev": {
       "persistent": true,
-      "cache": false,
-      "env": [
-        "DATABASE_URL",
-        "BASE_URL",
-        "FRONTEND_URL",
-        "BETTER_AUTH_SECRET",
-        "VITE_BACKEND_URL",
-        "VITE_DEV"
-      ]
+      "cache": false
     },
     "dev:search": {
-      "with": ["@services/lcax#dev", "@lcax/ui#dev", "@lcax/search#dev"],
+      "with": ["@services/lcax#dev", "@lcax/search#dev", "@lcax/user-management#dev"],
       "persistent": true,
-      "cache": false,
-      "env": [
-        "DATABASE_URL",
-        "BASE_URL",
-        "FRONTEND_URL",
-        "BETTER_AUTH_SECRET",
-        "VITE_BACKEND_URL",
-        "VITE_DEV"
-      ]
+      "cache": false
     },
     "test": {
       "dependsOn": ["^build"]

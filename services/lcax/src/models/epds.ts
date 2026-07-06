@@ -31,7 +31,7 @@ export const epds = pgTable(
       .$type<Impacts>()
       .default({} as Impacts),
     metaData: json().default({}),
-    organizationId: uuid('organization_id').references(() => organization.id, { onDelete: 'cascade' }),
+    organizationId: text('organization_id').references(() => organization.id, { onDelete: 'cascade' }),
     visibility: Visibility().default('Public').notNull(),
   },
   (table) => [primaryKey({ columns: [table.id, table.version] })],

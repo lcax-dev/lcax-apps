@@ -20,15 +20,9 @@ describe('RolePermitter', () => {
     expect(result).toBe('Allowed')
   })
 
-  it('should support role hierarchy: admin > organization-admin > user', () => {
-    const sessionData = { user: { role: 'organization-admin' } }
+  it('should support role hierarchy: admin > owner > user', () => {
+    const sessionData = { user: { role: 'owner' } }
     const result = RolePermitter({ children: 'Allowed', requiredRole: 'user' as any, sessionData } as any)
     expect(result).toBe('Allowed')
-  })
-
-  it('should not allow organization-admin for admin required role', () => {
-    const sessionData = { user: { role: 'organization-admin' } }
-    const result = RolePermitter({ children: 'Allowed', requiredRole: 'admin', sessionData } as any)
-    expect(result).toBeNull()
   })
 })

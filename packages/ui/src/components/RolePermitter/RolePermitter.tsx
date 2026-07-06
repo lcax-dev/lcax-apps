@@ -1,22 +1,19 @@
 import { ReactNode } from 'react'
+import { ErrorBoundary } from '@lcax/ui/components'
+import { authClient } from '@lcax/ui/lib'
 
 interface RolePermitterProps {
   children: ReactNode
-  requiredRole: 'admin' | 'organization-admin' | 'user'
-  sessionData: any
+  requiredRole: 'admin' | 'owner' | 'member'
 }
 
 export const RolePermitter = (props: RolePermitterProps) => {
-  const { children, requiredRole, sessionData } = props
+  const { children, requiredRole } = props
+  const { data: sessionData } = authClient.useSession()
+  const userRole = sessionData?.user?.role
 
-  const roles = ['user', 'member', 'organization-admin', 'owner', 'admin']
-  const userRole = sessionData?.user?.role || sessionData?.role
-
-  const userRoleIndex = roles.indexOf(userRole)
-  const requiredRoleIndex = roles.indexOf(requiredRole)
-
-  if (userRoleIndex >= requiredRoleIndex && userRoleIndex !== -1) {
-    return children
+  if (userRole && userRole === requiredRole) {
+    return <ErrorBoundary>{children}</ErrorBoundary>
   }
   return null
 }

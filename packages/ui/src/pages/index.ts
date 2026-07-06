@@ -1,2 +1,2 @@
-export * from './404Page'
+export * from './NotFoundPage'
 export * from './LoadingPage'

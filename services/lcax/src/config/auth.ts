@@ -7,6 +7,7 @@ import { dbConnection } from '@/config/database'
 import * as schema from '../models'
 import 'dotenv/config'
 import { createUsers } from '@/config/pglite'
+import { getInitialOrganization } from '@/lib'
 
 export const auth = betterAuth({
   database: drizzleAdapter(dbConnection, {
@@ -20,6 +21,22 @@ export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
   plugins: [admin(), organization(), testUtils()],
   trustedOrigins: [process.env.FRONTEND_URL],
+  databaseHooks: {
+    session: {
+      create: {
+        before: async (session) => {
+          // Implement your custom logic to set initial active organization
+          const organizationId = await getInitialOrganization(session.userId)
+          return {
+            data: {
+              ...session,
+              activeOrganizationId: organizationId,
+            },
+          }
+        },
+      },
+    },
+  },
 })
 
 if (!process.env.DATABASE_URL?.startsWith('postgres')) {

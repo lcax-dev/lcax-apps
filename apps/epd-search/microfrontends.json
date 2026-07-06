@@ -1,0 +1,30 @@
+{
+  "$schema": "https://turborepo.dev/microfrontends/schema.json",
+  "applications": {
+    "search": {
+      "packageName": "@lcax/search",
+      "development": {
+        "local": {
+          "port": 5200
+        }
+      }
+    },
+    "user-management": {
+      "packageName": "@lcax/user-management",
+      "development": {
+        "local": {
+          "port": 5300
+        }
+      },
+      "routing": [
+        {
+          "paths": [
+            "/login",
+            "/organizations",
+            "/profile"
+          ]
+        }
+      ]
+    }
+  }
+}
