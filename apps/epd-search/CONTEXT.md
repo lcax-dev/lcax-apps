@@ -1,4 +1,6 @@
-# Context: EPD Search
+# Context: LCAx Search
+
+Catalog of Organization-owned LCAx Data. Records are searchable when Public, or when the viewer is a Member of the owning Organization.
 
 ## Glossary
 
@@ -6,7 +8,8 @@
 A collective term for the various JSON formats standardized by LCAx, including EPDs, Assemblies, and Products.
 
 ### Assembly
-A structured collection of Products or other Assemblies, representing a larger component or building element in a life cycle assessment.
+A structured collection of Products, representing a larger component or building element in a life cycle assessment.
+_Avoid_: Nested Assembly, sub-assembly, assembly of assemblies
 
 ### Product
 A specific material or component used within an Assembly or project in a life cycle assessment.
@@ -37,3 +40,11 @@ A regular user within an Organization. They can manage (CRUD) the organization's
 
 ### Visibility
 Data within an Organization can be either **Public** (searchable and viewable by anyone using the platform) or **Private** (viewable only by members of that specific Organization).
+
+### Public Assembly
+An Assembly whose Visibility is Public. Its nested Products and those Products' impact EPDs are also Public, and none of them can be Private while the Assembly remains Public.
+_Avoid_: Public assembly with private children
+
+### Draft
+An incomplete Private Assembly that Members can persist and resume. It is never Public.
+_Avoid_: unpublished, draft visibility, third visibility
