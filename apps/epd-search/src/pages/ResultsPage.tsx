@@ -10,8 +10,6 @@ import { IconArrowBack } from '@tabler/icons-react'
 import { useSearchEpdsQuery, CountryEnum, StandardEnum, SubTypeEnum, UnitEnum } from '@/queries'
 const kindLabel = (kind: LCAxKindParam) => (kind === 'ASSEMBLY' ? 'Assembly' : 'EPD')
 
-
-
 export const ResultsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const query = searchParams.get('q') || ''
@@ -236,17 +234,17 @@ export const ResultsPage = () => {
                   </SimpleGrid>
                 )}
 
-            {data?.search && results.length === 0 && !loading && (
-              <Stack justify='center' align='center' py={80} gap='lg'>
-                <Title order={2}>No LCAx Data found matching your search.</Title>
-                <ActionIcon variant='transparent' component={Link} to='/' size='xl'>
-                  <IconArrowBack size={64} color='black' />
-                </ActionIcon>
+                {data?.search && results.length === 0 && !loading && (
+                  <Stack justify='center' align='center' py={80} gap='lg'>
+                    <Title order={2}>No LCAx Data found matching your search.</Title>
+                    <ActionIcon variant='transparent' component={Link} to='/' size='xl'>
+                      <IconArrowBack size={64} color='black' />
+                    </ActionIcon>
+                  </Stack>
+                )}
               </Stack>
-            )}
-          </Stack>
-        </Grid.Col>
-      </Grid>
+            </Grid.Col>
+          </Grid>
         </Stack>
       </Container>
     </Container>

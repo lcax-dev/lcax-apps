@@ -49,7 +49,7 @@ export const SearchPage = () => {
 
           <TextInput
             placeholder='Search LCAx Data by name...'
-          aria-label='Search LCAx Data'
+            aria-label='Search LCAx Data'
             size='xl'
             radius='xl'
             w={{ base: '100%', xl: '66%' }}
