@@ -42,10 +42,11 @@ export const SearchPage = () => {
           LCAx Search
         </Title>
         <Text size='lg' ta='center' c='dimmed'>
-          Search for Environmental Product Declarations (EPDs) in seconds.
+          Search for LCAx Data (EPDs and Assemblies) in seconds.
         </Text>
         <TextInput
-          placeholder='Search EPDs by name...'
+          placeholder='Search LCAx Data by name...'
+          aria-label='Search LCAx Data'
           size='xl'
           radius='xl'
           w='100%'

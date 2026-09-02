@@ -1,40 +1,50 @@
 import { Select, Stack, TextInput, Title } from '@mantine/core'
+import { TypeChips } from '../TypeChips'
+import { LCAxKindParam } from '@/lib/searchParams.ts'
 import { CountryEnum, StandardEnum, SubTypeEnum, UnitEnum } from '@/queries/generated/graphql.ts'
 
 interface FilterSidebarProps {
   name: string
+  kinds: LCAxKindParam[]
   unit: string
   location: string
   subtype: string
   standard: string
   type: string
+  classification: string
   publishedDate: string
   validUntil: string
   onNameChange: (value: string) => void
+  onKindsChange: (value: LCAxKindParam[]) => void
   onUnitChange: (value: string | null) => void
   onLocationChange: (value: string | null) => void
   onSubtypeChange: (value: string | null) => void
   onStandardChange: (value: string | null) => void
   onTypeChange: (value: string) => void
+  onClassificationChange: (value: string) => void
   onPublishedDateChange: (value: string) => void
   onValidUntilChange: (value: string) => void
 }
 
 export const FilterSidebar = ({
   name,
+  kinds,
   unit,
   location,
   subtype,
   standard,
   type,
+  classification,
   publishedDate,
   validUntil,
   onNameChange,
+  onKindsChange,
   onUnitChange,
   onLocationChange,
   onSubtypeChange,
   onStandardChange,
   onTypeChange,
+  onClassificationChange,
   onPublishedDateChange,
   onValidUntilChange,
 }: FilterSidebarProps) => {
@@ -61,14 +71,21 @@ export const FilterSidebar = ({
   return (
     <Stack gap='md'>
       <Title order={4}>Filters</Title>
+      <TypeChips value={kinds} onChange={onKindsChange} />
       <TextInput
         label='Name'
         placeholder='Filter by name...'
         value={name}
         onChange={(event) => onNameChange(event.currentTarget.value)}
       />
+      <TextInput
+        label='Classification'
+        placeholder='Filter assemblies by classification...'
+        value={classification}
+        onChange={(event) => onClassificationChange(event.currentTarget.value)}
+      />
       <Select
-        label='Declared Unit'
+        label='Unit'
         placeholder='Select unit'
         data={unitOptions}
         value={unit}
