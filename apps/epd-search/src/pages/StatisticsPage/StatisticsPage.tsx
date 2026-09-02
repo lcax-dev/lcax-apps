@@ -1,5 +1,5 @@
 import { Container, Divider, Stack, useMatches } from '@mantine/core'
-import { LCAxStatisticsCard, UploadLCAxData } from '../components'
+import { LCAxStatisticsCard, UploadLCAxData } from '@/components'
 import { ErrorBoundary } from '@lcax/ui'
 
 export const StatisticsPage = () => {
