@@ -1,27 +1,25 @@
-import { Container, Paper, Stack, Text, Title } from '@mantine/core'
-import { LCAxStatisticsCard, UploadLCAxData } from '@/components'
+import { Container, Divider, Stack, useMatches } from '@mantine/core'
+import { LCAxStatisticsCard, UploadLCAxData } from '../components'
 import { ErrorBoundary } from '@lcax/ui'
 
 export const StatisticsPage = () => {
-  return (
-    <Container size='md' py='xl'>
-      <Stack gap='xl'>
-        <ErrorBoundary>
-          <LCAxStatisticsCard />
-        </ErrorBoundary>
+  const containerSize = useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })
 
-        <Paper withBorder p='xl' radius='md'>
-          <Title order={3} mb='lg'>
-            Upload LCAx Data
-          </Title>
-          <Text size='sm' mb='xl'>
-            Upload your EPDs, Assemblies, or Products in LCAx JSON format.
-          </Text>
+  return (
+    <Container fluid bg='grey.0' p={0} pb='xl'>
+      <Container size={containerSize} py='xl'>
+        <Stack gap='xl'>
+          <ErrorBoundary>
+            <LCAxStatisticsCard />
+          </ErrorBoundary>
+
+          <Divider my='xl' />
+
           <ErrorBoundary>
             <UploadLCAxData />
           </ErrorBoundary>
-        </Paper>
-      </Stack>
+        </Stack>
+      </Container>
     </Container>
   )
 }

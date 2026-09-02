@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
-import { ErrorBoundary } from '@lcax/ui/components'
-import { authClient } from '@lcax/ui/lib'
+import { ErrorBoundary } from '../ErrorBoundary'
+import { authClient } from '../../lib'
 
 interface RolePermitterProps {
   children: ReactNode

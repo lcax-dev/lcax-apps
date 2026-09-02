@@ -1,5 +1,5 @@
-import { Select, Stack, TextInput, Title } from '@mantine/core'
-import { CountryEnum, StandardEnum, SubTypeEnum, UnitEnum } from '@/queries/generated/graphql.ts'
+import { Divider, Select, Stack, TextInput, Title } from '@mantine/core'
+import { CountryEnum, StandardEnum, SubTypeEnum, UnitEnum } from '../../queries'
 
 interface FilterSidebarProps {
   name: string
@@ -60,16 +60,20 @@ export const FilterSidebar = ({
 
   return (
     <Stack gap='md'>
-      <Title order={4}>Filters</Title>
+      <Title order={3}>Filters</Title>
+      <Divider />
       <TextInput
         label='Name'
         placeholder='Filter by name...'
+        radius='xl'
         value={name}
         onChange={(event) => onNameChange(event.currentTarget.value)}
       />
       <Select
         label='Declared Unit'
         placeholder='Select unit'
+        radius='xl'
+        comboboxProps={{ radius: 0 }}
         data={unitOptions}
         value={unit}
         onChange={onUnitChange}
@@ -78,6 +82,8 @@ export const FilterSidebar = ({
       <Select
         label='Location'
         placeholder='Select location'
+        radius='xl'
+        comboboxProps={{ radius: 0 }}
         data={locationOptions}
         value={location}
         onChange={onLocationChange}
@@ -87,6 +93,8 @@ export const FilterSidebar = ({
       <Select
         label='Subtype'
         placeholder='Select subtype'
+        radius='xl'
+        comboboxProps={{ radius: 0 }}
         data={subtypeOptions}
         value={subtype}
         onChange={onSubtypeChange}
@@ -95,6 +103,8 @@ export const FilterSidebar = ({
       <Select
         label='Standard'
         placeholder='Select standard'
+        radius='xl'
+        comboboxProps={{ radius: 0 }}
         data={standardOptions}
         value={standard}
         onChange={onStandardChange}
@@ -103,18 +113,21 @@ export const FilterSidebar = ({
       <TextInput
         label='Type'
         placeholder='Filter by type...'
+        radius='xl'
         value={type}
         onChange={(event) => onTypeChange(event.currentTarget.value)}
       />
       <TextInput
         label='Published After'
         type='date'
+        radius='xl'
         value={publishedDate}
         onChange={(event) => onPublishedDateChange(event.currentTarget.value)}
       />
       <TextInput
         label='Valid Until'
         type='date'
+        radius='xl'
         value={validUntil}
         onChange={(event) => onValidUntilChange(event.currentTarget.value)}
       />
