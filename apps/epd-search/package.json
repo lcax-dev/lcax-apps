@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5200 --host",
+    "dev": "vite --port $TURBO_MFE_PORT --host",
     "build": "vite build",
     "preview": "vite preview --port 5210",
     "tsc": "tsgo --noEmit",
@@ -13,6 +13,7 @@
     "format:fix": "oxfmt src/",
     "format": "oxfmt --check src/",
     "fix": "npm run lint:fix && npm run format:fix",
+    "check": "npm run lint && npm run format && npm run tsc",
     "codegen": "graphql-codegen --config codegen.ts",
     "codegen:watch": "graphql-codegen --config codegen.ts --watch"
   },
@@ -26,6 +27,7 @@
     "@mantine/hooks": "^9.1.1",
     "@mantine/notifications": "^9.1.1",
     "@mantine/store": "^9.1.1",
+    "@module-federation/vite": "^1.16.10",
     "@tabler/icons-react": "^3.40.0",
     "better-auth": "^1.6.9",
     "graphql": "^16.13.1",

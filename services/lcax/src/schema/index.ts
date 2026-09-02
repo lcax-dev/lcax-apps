@@ -87,6 +87,8 @@ export const graphQLSchema = new GraphQLSchema({
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(JSONObject))),
         args: {
           values: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLLCAxInput))) },
+          organizationId: { type: GraphQLString },
+          visibility: { type: GraphQLString },
         },
         resolve: addLCAxDataResolver,
       },

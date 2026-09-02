@@ -1,4 +1,5 @@
 export * from './server'
 export * from './logger'
+export * from './emails'
 export * from './waitForConnection'
 export * from './ApolloLoggerPlugin'

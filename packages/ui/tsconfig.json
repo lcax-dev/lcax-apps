@@ -3,7 +3,7 @@
   "compilerOptions": {
     "sourceMap": true,
     "declaration": true,
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
@@ -17,10 +17,11 @@
     "outDir": "./dist/esm",
     "rootDir": "./src",
     "jsx": "react-jsx",
-    "strict": true,
+    "strict": false,
+    "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "*": ["./src/*"]
+      "@lcax/ui/*": ["./src/*"]
     },
     "isolatedModules": true,
     "esModuleInterop": true

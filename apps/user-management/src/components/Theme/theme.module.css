@@ -1,0 +1,19 @@
+.heading {
+  overflow-wrap: break-word;
+  &:is(h1) {
+    @media screen and (min-width: 48em) {
+      font-size: 3rem;
+    }
+    @media screen and (min-width: 75em) {
+      font-size: 4.5rem;
+    }
+  }
+  &:is(h2) {
+    @media screen and (min-width: 48em) {
+      font-size: 2.5rem;
+    }
+    @media screen and (min-width: 75em) {
+      font-size: 3rem;
+    }
+  }
+}

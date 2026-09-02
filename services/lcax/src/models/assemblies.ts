@@ -18,6 +18,6 @@ export const assemblies = pgTable('assemblies', {
   products: json('products').$type<ProductReference[]>().notNull().default([]),
   results: json('results').$type<Impacts>(),
   metaData: json('metaData').$type<MetaData>().default({}),
-  organizationId: uuid('organization_id').references(() => organization.id, { onDelete: 'cascade' }),
+  organizationId: text('organization_id').references(() => organization.id, { onDelete: 'cascade' }),
   visibility: Visibility().default('Public').notNull(),
 })

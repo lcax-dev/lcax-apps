@@ -29,7 +29,7 @@ A user who belongs to an Organization.
 ### admin (Global Admin)
 A super-administrator with system-wide access across all Organizations. Can perform any action in the system.
 
-### organization-admin (Organization Admin)
+### owner (Owner)
 A user with administrative privileges scoped to a specific Organization. They can manage members (CRUD), organization metadata, and the organization's LCAx Data.
 
 ### user (Organization User)

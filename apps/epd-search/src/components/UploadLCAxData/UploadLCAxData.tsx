@@ -1,13 +1,28 @@
-import { ActionIcon, Button, Group, List, Loader, Paper, rem, Stack, Text, ThemeIcon } from '@mantine/core'
+import {
+  ActionIcon,
+  Button,
+  Group,
+  List,
+  Loader,
+  Paper,
+  rem,
+  Stack,
+  Text,
+  ThemeIcon,
+  SegmentedControl,
+} from '@mantine/core'
 import { Dropzone, FileWithPath } from '@mantine/dropzone'
 import { IconCheck, IconFileCode, IconUpload, IconX } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useAddLCAxDataMutation } from '@/queries'
 import { notifications } from '@mantine/notifications'
+import { authClient } from '@/lib'
 
 export const UploadLCAxData = () => {
   const [files, setFiles] = useState<FileWithPath[]>([])
   const [parsing, setParsing] = useState(false)
+  const [visibility, setVisibility] = useState<string>('Public')
+  const { data: activeMember } = authClient.organization.useActiveMember()
   const [addLCAxData, { loading }] = useAddLCAxDataMutation()
 
   const handleDrop = (acceptedFiles: FileWithPath[]) => {
@@ -20,7 +35,13 @@ export const UploadLCAxData = () => {
 
   const uploadLCAxData = async (values: any) => {
     try {
-      await addLCAxData({ variables: { values } })
+      await addLCAxData({
+        variables: {
+          values,
+          organizationId: activeMember?.organizationId,
+          visibility,
+        },
+      })
       notifications.show({
         title: 'Success',
         message: `${values.length} item(s) uploaded successfully`,
@@ -99,7 +120,23 @@ export const UploadLCAxData = () => {
       {files.length > 0 && (
         <Paper withBorder p='md' radius='md'>
           <Stack>
-            <Text fw={500}>Selected Files ({files.length})</Text>
+            <Group justify='space-between' align='center'>
+              <Text fw={500}>Selected Files ({files.length})</Text>
+              <Group gap='xs'>
+                <Text size='xs' c='dimmed'>
+                  Visibility:
+                </Text>
+                <SegmentedControl
+                  value={visibility}
+                  onChange={setVisibility}
+                  data={[
+                    { label: 'Public', value: 'Public' },
+                    { label: 'Private', value: 'Private' },
+                  ]}
+                  size='xs'
+                />
+              </Group>
+            </Group>
             <List
               spacing='xs'
               size='sm'

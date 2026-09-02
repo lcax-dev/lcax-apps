@@ -1,5 +1,5 @@
 {
-  "id": "e414c95e-7937-4376-adc3-9cebda343892",
+  "id": "26fd91dd-ddb1-4678-88ee-69beda6df697",
   "prevId": "3b9fa246-39fe-408d-983c-fabb6e291e72",
   "version": "7",
   "dialect": "postgresql",
@@ -116,7 +116,7 @@
         },
         "organization_id": {
           "name": "organization_id",
-          "type": "uuid",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -229,7 +229,7 @@
         },
         "organization_id": {
           "name": "organization_id",
-          "type": "uuid",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -334,7 +334,7 @@
         },
         "organization_id": {
           "name": "organization_id",
-          "type": "uuid",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -503,7 +503,7 @@
         },
         "organization_id": {
           "name": "organization_id",
-          "type": "uuid",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -517,19 +517,27 @@
           "name": "role",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "status": {
           "name": "status",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'pending'"
         },
         "expires_at": {
           "name": "expires_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         },
         "inviter_id": {
           "name": "inviter_id",
@@ -538,7 +546,38 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "invitation_organizationId_idx": {
+          "name": "invitation_organizationId_idx",
+          "columns": [
+            {
+              "expression": "organization_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "invitation_email_idx": {
+          "name": "invitation_email_idx",
+          "columns": [
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "invitation_organization_id_organization_id_fk": {
           "name": "invitation_organization_id_organization_id_fk",
@@ -585,7 +624,7 @@
         },
         "organization_id": {
           "name": "organization_id",
-          "type": "uuid",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -599,17 +638,48 @@
           "name": "role",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'member'"
         },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "member_organizationId_idx": {
+          "name": "member_organizationId_idx",
+          "columns": [
+            {
+              "expression": "organization_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "member_userId_idx": {
+          "name": "member_userId_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "member_organization_id_organization_id_fk": {
           "name": "member_organization_id_organization_id_fk",
@@ -650,7 +720,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -676,8 +746,7 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
         },
         "metadata": {
           "name": "metadata",
@@ -686,7 +755,23 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "organization_slug_uidx": {
+          "name": "organization_slug_uidx",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
@@ -763,7 +848,7 @@
         },
         "active_organization_id": {
           "name": "active_organization_id",
-          "type": "uuid",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         }

@@ -6,8 +6,9 @@
     "test": "vitest --run",
     "check": "turbo run check",
     "build": "turbo run build",
-    "dev": "turbo run dev",
-    "dev:search": "turbo run dev:search"
+    "dev": "dotenv -e .env -- turbo run dev",
+    "dev:search": "dotenv -e .env -- turbo run dev:search",
+    "format": "turbo run format:fix"
   },
   "author": "Christian Kongsgaard",
   "license": "Apache-2.0",
@@ -22,6 +23,7 @@
     "oxlint": "^1.62.0",
     "turbo": "^2.8.20",
     "@typescript/native-preview": "^7.0.0-dev.20260430.1",
+    "dotenv-cli": "^11.0.0",
     "vite": "^8.0.10",
     "vitest": "^4.1.5"
   },

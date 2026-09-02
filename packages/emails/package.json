@@ -1,0 +1,34 @@
+{
+  "name": "@lcax/emails",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "email:dev": "email dev --dir src/templates --port 3003",
+    "test": "vitest --run",
+    "tsc:noEmit": "tsc --noEmit",
+    "format:fix": "oxfmt src/ scripts/",
+    "format": "oxfmt --check src/ scripts/",
+    "lint": "oxlint src/ scripts/",
+    "lint:fix": "oxlint --fix src/ scripts/",
+    "check": "npm run format && npm run lint && npm run tsc:noEmit",
+    "fix": "npm run lint:fix && npm run format:fix"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "devDependencies": {
+    "@react-email/ui": "^6.9.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@types/nodemailer": "^8.0.1"
+  },
+  "dependencies": {
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "react-email": "6.9.2",
+    "nodemailer": "^9.0.5"
+  }
+}

@@ -65,8 +65,8 @@ const createMockContext = (role: string | null, orgId: string | null): GraphQLCo
 describe('EPD Visibility Filtering', async () => {
   beforeEach(async () => {
     await dbConnection.insert(organization).values([
-      { id: orgAId, name: 'Org A', slug: 'org-a' },
-      { id: orgBId, name: 'Org B', slug: 'org-b' },
+      { id: orgAId, name: 'Org A', slug: 'org-a', createdAt: new Date() },
+      { id: orgBId, name: 'Org B', slug: 'org-b', createdAt: new Date() },
     ])
     await dbConnection.insert(epds).values(visibilityTestData)
   })
