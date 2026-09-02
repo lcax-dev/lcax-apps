@@ -1,7 +1,9 @@
 import { Loading, notifications } from '@lcax/ui'
 import { useListUserInvitations } from '@/lib/hooks'
 import { acceptInvitation, rejectInvitation } from './logic'
-import { Button, Group, Table, Text } from '@mantine/core'
+import { Button, Divider, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { IconCheck, IconX } from '@tabler/icons-react'
+import { InfoBlock } from '@/components'
 
 export const OrganizationInvitation = () => {
   const { invitations, isPending, refetch } = useListUserInvitations()
@@ -38,60 +40,51 @@ export const OrganizationInvitation = () => {
   }
 
   return (
-    <Table>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Organization</Table.Th>
-          <Table.Th>Role</Table.Th>
-          <Table.Th>Invited At</Table.Th>
-          <Table.Th>Expires</Table.Th>
-          <Table.Th>Status</Table.Th>
-          <Table.Th>Actions</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
+    <Stack gap='lg'>
+      <div>
+        <Text>Pending</Text>
+        <Title order={2}>Organization Invitations</Title>
+      </div>
+      <Text c='dimmed' w={{ base: '100%', xl: '66%' }}>
+        You have been invited to collaborate in the following organizations.
+      </Text>
+      <Divider my='xs' />
+      <Stack gap='xl'>
         {invitations.map((invitation) => (
-          <Table.Tr key={invitation.id}>
-            <Table.Td>
-              <Text size='sm' fw={500}>
-                {invitation.organizationName}
-              </Text>
-            </Table.Td>
-            <Table.Td>
-              <Text size='sm'>{invitation.role}</Text>
-            </Table.Td>
-            <Table.Td>
-              <Text size='sm'>{invitation.createdAt.toLocaleString()}</Text>
-            </Table.Td>
-            <Table.Td>
-              <Text size='sm'>{invitation.expiresAt.toLocaleString()}</Text>
-            </Table.Td>
-            <Table.Td>
-              <Text size='sm'>{invitation.status}</Text>
-            </Table.Td>
-            <Table.Td>
-              <Group gap='xs'>
-                <Button
-                  size='xs'
-                  onClick={() => handleAccept(invitation.id)}
-                  disabled={invitation.status !== 'pending'}
-                >
-                  Accept
-                </Button>
-                <Button
-                  size='xs'
-                  variant='outline'
-                  color='red'
-                  onClick={() => handleReject(invitation.id)}
-                  disabled={invitation.status !== 'pending'}
-                >
-                  Reject
-                </Button>
-              </Group>
-            </Table.Td>
-          </Table.Tr>
+          <Stack gap='md' key={invitation.id}>
+            <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing='md'>
+              <InfoBlock title='Organization' info={invitation.organizationName} />
+              <InfoBlock title='Role' info={invitation.role} />
+              <InfoBlock title='Invited At' info={new Date(invitation.createdAt).toLocaleDateString()} />
+              <InfoBlock title='Status' info={invitation.status} />
+            </SimpleGrid>
+            <Group gap='md' justify='flex-end'>
+              <Button
+                c='black'
+                size='xl'
+                rightSection={<IconCheck />}
+                onClick={() => handleAccept(invitation.id)}
+                disabled={invitation.status !== 'pending'}
+                w='fit-content'
+              >
+                Accept
+              </Button>
+              <Button
+                variant='subtle'
+                color='red'
+                size='xl'
+                rightSection={<IconX />}
+                onClick={() => handleReject(invitation.id)}
+                disabled={invitation.status !== 'pending'}
+                w='fit-content'
+              >
+                Reject
+              </Button>
+            </Group>
+            <Divider />
+          </Stack>
         ))}
-      </Table.Tbody>
-    </Table>
+      </Stack>
+    </Stack>
   )
 }

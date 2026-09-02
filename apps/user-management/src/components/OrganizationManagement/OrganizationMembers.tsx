@@ -1,4 +1,4 @@
-import { ActionIcon, Badge, Select, Table, Text } from '@mantine/core'
+import { Button, Divider, Group, Select, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { authClient, useGetActiveMember } from '@/lib'
 import { removeMember, updateMemberRole } from './logic'
 import { IconTrash } from '@tabler/icons-react'
@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 export const OrganizationMembers = () => {
   const { data: activeOrganization, isPending } = authClient.useActiveOrganization()
   const { member: activeMember } = useGetActiveMember()
-  const organizationId = useMemo(() => activeOrganization!.id, [activeOrganization])
+  const organizationId = useMemo(() => activeOrganization?.id ?? '', [activeOrganization])
   const members = useMemo(() => activeOrganization?.members ?? [], [activeOrganization])
 
   const handleRemove = async (memberId: string) => {
@@ -41,53 +41,77 @@ export const OrganizationMembers = () => {
   const canManage = activeMember?.role === 'admin' || activeMember?.role === 'owner'
 
   return (
-    <Table>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>User</Table.Th>
-          <Table.Th>Role</Table.Th>
-          <Table.Th>Actions</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {members?.map((member) => (
-          <Table.Tr key={member.id}>
-            <Table.Td>
-              <Text size='sm' fw={500}>
-                {member.user.name}
-              </Text>
-              <Text size='xs' c='dimmed'>
-                {member.user.email}
-              </Text>
-            </Table.Td>
-            <Table.Td>
-              {canManage && member.id !== activeMember?.id ? (
-                <Select
-                  size='xs'
-                  data={[
-                    { value: 'owner', label: 'Owner' },
-                    { value: 'admin', label: 'Admin' },
-                    { value: 'member', label: 'Member' },
-                  ]}
-                  value={member.role}
-                  onChange={(value) => value && handleRoleChange(member.id, value)}
-                />
-              ) : (
-                <Badge>{member.role}</Badge>
-              )}
-            </Table.Td>
-            <Table.Td>
-              {canManage && member.id !== activeMember?.id && (
-                <RolePermitter requiredRole='owner'>
-                  <ActionIcon color='red' variant='subtle' onClick={() => handleRemove(member.id)}>
-                    <IconTrash size={16} />
-                  </ActionIcon>
-                </RolePermitter>
-              )}
-            </Table.Td>
-          </Table.Tr>
-        ))}
-      </Table.Tbody>
-    </Table>
+    <Stack gap='lg'>
+      <div>
+        <Text>Members</Text>
+        <Title order={3}>Organization Members</Title>
+      </div>
+      <Text c='dimmed' w={{ base: '100%', xl: '66%' }}>
+        Active team members and their permission roles.
+      </Text>
+      <Divider my='xs' />
+      {members.length === 0 ? (
+        <Text c='dimmed' py='md'>
+          No members found
+        </Text>
+      ) : (
+        <Stack gap='md'>
+          {members.map((member) => (
+            <Stack gap='sm' key={member.id}>
+              <SimpleGrid cols={{ base: 1, sm: 3 }} spacing='md' align='center'>
+                <Stack gap={2}>
+                  <Text fw={500} size='md'>
+                    {member.user.name}
+                  </Text>
+                  <Text size='sm' c='dimmed'>
+                    {member.user.email}
+                  </Text>
+                </Stack>
+                <Group gap='md' align='center'>
+                  <Text size='sm' c='dimmed'>
+                    Role:
+                  </Text>
+                  {canManage && member.id !== activeMember?.id ? (
+                    <Select
+                      size='sm'
+                      radius='xl'
+                      data={[
+                        { value: 'owner', label: 'Owner' },
+                        { value: 'admin', label: 'Admin' },
+                        { value: 'member', label: 'Member' },
+                      ]}
+                      value={member.role}
+                      onChange={(value) => value && handleRoleChange(member.id, value)}
+                      w={140}
+                    />
+                  ) : (
+                    <Text fw={500} size='sm'>
+                      {member.role}
+                    </Text>
+                  )}
+                </Group>
+                <Group justify={{ base: 'flex-start', sm: 'flex-end' }}>
+                  {canManage && member.id !== activeMember?.id && (
+                    <RolePermitter requiredRole='owner'>
+                      <Button
+                        variant='subtle'
+                        color='red'
+                        size='sm'
+                        rightSection={<IconTrash size={16} />}
+                        onClick={() => handleRemove(member.id)}
+                        w='fit-content'
+                      >
+                        Remove
+                      </Button>
+                    </RolePermitter>
+                  )}
+                </Group>
+              </SimpleGrid>
+              <Divider />
+            </Stack>
+          ))}
+        </Stack>
+      )}
+    </Stack>
   )
 }
