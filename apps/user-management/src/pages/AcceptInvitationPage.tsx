@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { Alert, Button, Container, Group, Paper, Stack, Text, Title } from '@mantine/core'
-import { IconInfoCircle } from '@tabler/icons-react'
-import { Loading, notifications } from '@lcax/ui'
+import { Button, Container, Divider, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { IconArrowRight, IconCheck, IconX } from '@tabler/icons-react'
+import { Loading, notifications, useMatches } from '@lcax/ui'
 import { authClient } from '@/lib'
 import { acceptInvitation, getInvitation, rejectInvitation } from '@/components/OrganizationManagement/logic'
+import { InfoBlock } from '@/components'
 
 type Invitation = NonNullable<Awaited<ReturnType<typeof getInvitation>>>
 
@@ -21,6 +22,7 @@ export const AcceptInvitationPage = () => {
   const [error, setError] = useState<string | null>(null)
   const [isLoadingInvitation, setIsLoadingInvitation] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const containerSize = useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })
 
   useEffect(() => {
     if (!token || !session) {
@@ -102,19 +104,34 @@ export const AcceptInvitationPage = () => {
 
   if (!session) {
     return (
-      <Container my={40}>
-        <Title ta='center' fw={900}>
-          Organization invitation
-        </Title>
-        <Text c='dimmed' size='sm' ta='center' mt={5}>
-          Sign in to accept or reject this invitation.
-        </Text>
-        <Container size='xs'>
-          <Paper withBorder shadow='md' p={30} mt={30} radius='md'>
-            <Button fullWidth onClick={() => navigate(getLoginPath(token))}>
-              Sign in
-            </Button>
-          </Paper>
+      <Container fluid bg='grey.0' p={0} mih='100vh'>
+        <Container size={containerSize} py='xl' mih={{ base: '80vh', md: '70vh' }}>
+          <Stack justify='center' h='100%' py='xl'>
+            <div>
+              <Text>Invitation</Text>
+              <Title order={1}>Organization invitation</Title>
+            </div>
+            <Divider my='lg' />
+            <SimpleGrid cols={{ base: 1, md: 2 }} spacing='xl'>
+              <Stack justify='flex-start' gap='md'>
+                <Title order={2}>Sign in required</Title>
+                <Text c='dimmed' w={{ base: '100%', xl: '75%' }}>
+                  Sign in to your LCAx account to accept or reject this invitation and access organization data.
+                </Text>
+              </Stack>
+              <Stack justify='center' align='flex-start'>
+                <Button
+                  c='black'
+                  size='xl'
+                  rightSection={<IconArrowRight />}
+                  onClick={() => navigate(getLoginPath(token))}
+                  w='fit-content'
+                >
+                  Sign in to respond
+                </Button>
+              </Stack>
+            </SimpleGrid>
+          </Stack>
         </Container>
       </Container>
     )
@@ -122,10 +139,27 @@ export const AcceptInvitationPage = () => {
 
   if (!token) {
     return (
-      <Container my={40} size='xs'>
-        <Alert color='red' title='Invalid invitation' icon={<IconInfoCircle />}>
-          This invitation link is missing an invitation ID.
-        </Alert>
+      <Container fluid bg='grey.0' p={0} mih='100vh'>
+        <Container size={containerSize} py='xl' mih={{ base: '80vh', md: '70vh' }}>
+          <Stack justify='center' h='100%' py='xl' gap='md'>
+            <div>
+              <Text>Error</Text>
+              <Title order={1}>Invalid invitation</Title>
+            </div>
+            <Divider my='lg' />
+            <Text c='red'>This invitation link is missing a valid token.</Text>
+            <Button
+              c='black'
+              size='xl'
+              rightSection={<IconArrowRight />}
+              onClick={() => navigate('/profile')}
+              w='fit-content'
+              mt='md'
+            >
+              Go to Profile
+            </Button>
+          </Stack>
+        </Container>
       </Container>
     )
   }
@@ -136,10 +170,27 @@ export const AcceptInvitationPage = () => {
 
   if (error || !invitation) {
     return (
-      <Container my={40} size='xs'>
-        <Alert color='red' title='Invitation unavailable' icon={<IconInfoCircle />}>
-          {error || 'This invitation could not be found.'}
-        </Alert>
+      <Container fluid bg='grey.0' p={0} mih='100vh'>
+        <Container size={containerSize} py='xl' mih={{ base: '80vh', md: '70vh' }}>
+          <Stack justify='center' h='100%' py='xl' gap='md'>
+            <div>
+              <Text>Invitation</Text>
+              <Title order={1}>Invitation unavailable</Title>
+            </div>
+            <Divider my='lg' />
+            <Text c='red'>{error || 'This invitation could not be found or has expired.'}</Text>
+            <Button
+              c='black'
+              size='xl'
+              rightSection={<IconArrowRight />}
+              onClick={() => navigate('/profile')}
+              w='fit-content'
+              mt='md'
+            >
+              Go to Profile
+            </Button>
+          </Stack>
+        </Container>
       </Container>
     )
   }
@@ -147,67 +198,54 @@ export const AcceptInvitationPage = () => {
   const isPendingInvitation = invitation.status === 'pending'
 
   return (
-    <Container my={40}>
-      <Title ta='center' fw={900}>
-        You're invited
-      </Title>
-      <Text c='dimmed' size='sm' ta='center' mt={5}>
-        Join {invitation.organizationName} on LCAx
-      </Text>
-      <Container size='xs'>
-        <Paper withBorder shadow='md' p={30} mt={30} radius='md'>
-          <Stack>
-            <Text>
-              <Text span fw={500}>
-                Organization:{' '}
-              </Text>
-              {invitation.organizationName}
-            </Text>
-            <Text>
-              <Text span fw={500}>
-                Role:{' '}
-              </Text>
-              {invitation.role}
-            </Text>
-            <Text>
-              <Text span fw={500}>
-                Invited email:{' '}
-              </Text>
-              {invitation.email}
-            </Text>
-            <Text>
-              <Text span fw={500}>
-                Invited by:{' '}
-              </Text>
-              {invitation.inviterEmail}
-            </Text>
-            <Text>
-              <Text span fw={500}>
-                Expires:{' '}
-              </Text>
-              {new Date(invitation.expiresAt).toLocaleString()}
-            </Text>
-            {!isPendingInvitation && (
-              <Alert variant='light' color='yellow' title='Invitation not pending' icon={<IconInfoCircle />}>
-                This invitation is {invitation.status}.
-              </Alert>
-            )}
-            <Group grow mt='md'>
-              <Button onClick={handleAccept} loading={isSubmitting} disabled={!isPendingInvitation}>
-                Accept
-              </Button>
-              <Button
-                variant='outline'
-                color='red'
-                onClick={handleReject}
-                loading={isSubmitting}
-                disabled={!isPendingInvitation}
-              >
-                Reject
-              </Button>
-            </Group>
-          </Stack>
-        </Paper>
+    <Container fluid bg='grey.0' p={0} mih='100vh'>
+      <Container size={containerSize} py='xl' mih={{ base: '80vh', md: '70vh' }}>
+        <Stack justify='center' h='100%' py='xl'>
+          <div>
+            <Text>Organization Invitation</Text>
+            <Title order={1}>You're invited to join {invitation.organizationName}</Title>
+          </div>
+          <Divider my='lg' />
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing='xl'>
+            <SimpleGrid cols={2} verticalSpacing='lg'>
+              <InfoBlock title='Organization' info={invitation.organizationName} />
+              <InfoBlock title='Role' info={invitation.role} />
+              <InfoBlock title='Invited Email' info={invitation.email} />
+              <InfoBlock title='Invited By' info={invitation.inviterEmail} />
+              <InfoBlock title='Expires' info={new Date(invitation.expiresAt).toLocaleDateString()} />
+              <InfoBlock title='Status' info={invitation.status} />
+            </SimpleGrid>
+
+            <Stack justify='center' gap='lg'>
+              {!isPendingInvitation && <Text c='dimmed'>This invitation is {invitation.status}.</Text>}
+              <Group gap='md'>
+                <Button
+                  c='black'
+                  size='xl'
+                  rightSection={<IconCheck />}
+                  onClick={handleAccept}
+                  loading={isSubmitting}
+                  disabled={!isPendingInvitation}
+                  w='fit-content'
+                >
+                  Accept Invitation
+                </Button>
+                <Button
+                  variant='subtle'
+                  color='red'
+                  size='xl'
+                  rightSection={<IconX />}
+                  onClick={handleReject}
+                  loading={isSubmitting}
+                  disabled={!isPendingInvitation}
+                  w='fit-content'
+                >
+                  Reject
+                </Button>
+              </Group>
+            </Stack>
+          </SimpleGrid>
+        </Stack>
       </Container>
     </Container>
   )

@@ -1,67 +1,78 @@
-import { Divider, Paper, Stack, Tabs, Title, Button, Group, Modal } from '@mantine/core'
+import { Divider, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import {
   OrganizationInvitation,
   OrganizationMembers,
   OrganizationSettings,
   OrganizationInvitations,
   OrganizationInvite,
+  InfoBlock,
 } from '@/components'
 import { authClient, useGetActiveMember } from '@/lib'
 import { useMemo } from 'react'
-import { useDisclosure } from '@mantine/hooks'
 
 export const OrganizationPaper = () => {
   return (
-    <Paper withBorder p='xl' radius='md'>
-      <Stack gap='xl'>
-        <OrganizationInvitation />
-        <OrganizationTabs />
-      </Stack>
-    </Paper>
+    <Stack gap='xl'>
+      <OrganizationInvitation />
+      <ActiveOrganizationSection />
+    </Stack>
   )
 }
 
-const OrganizationTabs = () => {
+const ActiveOrganizationSection = () => {
   const { data: activeOrganization, refetch } = authClient.useActiveOrganization()
   const { member: activeMember } = useGetActiveMember()
   const canManage = useMemo(() => activeMember?.role === 'admin' || activeMember?.role === 'owner', [activeMember])
-  const [inviteModalOpened, { open: openInviteModal, close: closeInviteModal }] = useDisclosure(false)
 
-  if (!activeOrganization) return null
+  if (!activeOrganization) {
+    return (
+      <Stack gap='md'>
+        <div>
+          <Text>Organization</Text>
+          <Title order={2}>No Active Organization</Title>
+        </div>
+        <Text c='dimmed'>You are not currently active in any organization.</Text>
+      </Stack>
+    )
+  }
 
   return (
-    <>
-      <Title order={2}>{activeOrganization.name}</Title>
-      <Divider />
-      <Tabs defaultValue='members'>
-        <Tabs.List>
-          <Tabs.Tab value='members'>Members</Tabs.Tab>
-          {<Tabs.Tab value='invites'>Invites</Tabs.Tab>}
-          {canManage && <Tabs.Tab value='settings'>Settings</Tabs.Tab>}
-        </Tabs.List>
-        <Tabs.Panel value='members' pt='xl'>
-          <OrganizationMembers />
-        </Tabs.Panel>
-        <Tabs.Panel value='invites' pt='xl'>
-          <Group justify='space-between' mb='md'>
-            <div></div>
-            {canManage && <Button onClick={openInviteModal}>Invite Member</Button>}
-          </Group>
-          <OrganizationInvitations />
-        </Tabs.Panel>
-        <Tabs.Panel value='settings' pt='xl'>
-          <OrganizationSettings />
-        </Tabs.Panel>
-      </Tabs>
+    <Stack gap='xl'>
+      <Stack gap='lg'>
+        <div>
+          <Text>Organization</Text>
+          <Title order={2}>{activeOrganization.name}</Title>
+        </div>
+        <Text c='dimmed' w={{ base: '100%', xl: '66%' }}>
+          Manage organization members, invitations, and configuration.
+        </Text>
+        <Divider my='xs' />
+        <SimpleGrid cols={{ base: 1, sm: 3 }} spacing='xl' mt='sm'>
+          <InfoBlock title='Organization Name' info={activeOrganization.name} />
+          <InfoBlock title='Slug' info={activeOrganization.slug} />
+          <InfoBlock title='Your Role' info={activeMember?.role} />
+        </SimpleGrid>
+      </Stack>
 
-      <Modal opened={inviteModalOpened} onClose={closeInviteModal} title='Invite Member'>
-        <OrganizationInvite
-          onSuccess={() => {
-            closeInviteModal()
-            refetch()
-          }}
-        />
-      </Modal>
-    </>
+      <Divider my='lg' />
+      <OrganizationMembers />
+
+      {canManage && (
+        <>
+          <Divider my='lg' />
+          <OrganizationInvite onSuccess={refetch} />
+        </>
+      )}
+
+      <Divider my='lg' />
+      <OrganizationInvitations />
+
+      {canManage && (
+        <>
+          <Divider my='lg' />
+          <OrganizationSettings />
+        </>
+      )}
+    </Stack>
   )
 }

@@ -1,15 +1,15 @@
-import { Button, Container, Group, Modal, Paper, Stack, Table, Title, Text, Loader, Center } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
+import { Button, Container, Divider, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { authClient } from '@/lib'
-import { OrganizationCreate } from '@/components'
-import { notifications, RolePermitter } from '@lcax/ui'
+import { InfoBlock, OrganizationCreate } from '@/components'
+import { Loading, notifications, RolePermitter, useMatches } from '@lcax/ui'
 import { useNavigate } from 'react-router'
+import { IconArrowRight } from '@tabler/icons-react'
 
 export const OrganizationsPage = () => {
   const { data: sessionData } = authClient.useSession()
   const { data: organizations, isPending, refetch } = authClient.useListOrganizations()
   const navigate = useNavigate()
-  const [opened, { open, close }] = useDisclosure(false)
+  const containerSize = useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })
 
   const handleOrgClick = async (orgId: string) => {
     const { error } = await authClient.organization.setActive({
@@ -18,73 +18,75 @@ export const OrganizationsPage = () => {
     if (error) {
       notifications.error({ message: error.message })
     } else {
-      navigate(`/profile`)
+      navigate('/profile')
     }
   }
 
   return (
-    <Container size='lg' py='xl'>
-      <RolePermitter requiredRole='admin'>
-        <Stack gap='xl'>
-          <Group justify='space-between'>
-            <Title order={2}>Organizations</Title>
-            <Button onClick={open}>Create Organization</Button>
-          </Group>
+    <Container fluid bg='grey.0' p={0} pb='xl'>
+      <Container size={containerSize} py='xl'>
+        <RolePermitter requiredRole='admin'>
+          <Stack gap='xl'>
+            <Stack gap='lg'>
+              <div>
+                <Text>Administration</Text>
+                <Title order={2}>Organizations</Title>
+              </div>
+              <Text c='dimmed' w={{ base: '100%', xl: '66%' }}>
+                Manage all registered organizations, access work environments, or create new organizations.
+              </Text>
+              <Divider my='xs' />
 
-          <Paper withBorder p='md' radius='md'>
-            {isPending ? (
-              <Center py='xl'>
-                <Loader />
-              </Center>
-            ) : (
-              <Table>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>Name</Table.Th>
-                    <Table.Th>Slug</Table.Th>
-                    <Table.Th>Created At</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                  {organizations?.map((org) => (
-                    <Table.Tr key={org.id} onClick={() => handleOrgClick(org.id)}>
-                      <Table.Td>{org.name}</Table.Td>
-                      <Table.Td>{org.slug}</Table.Td>
-                      <Table.Td>{new Date(org.createdAt).toLocaleDateString()}</Table.Td>
-                    </Table.Tr>
+              {isPending ? (
+                <Loading />
+              ) : organizations && organizations.length > 0 ? (
+                <Stack gap='md'>
+                  {organizations.map((org) => (
+                    <Stack gap='sm' key={org.id}>
+                      <SimpleGrid cols={{ base: 1, sm: 3 }} spacing='md' align='center'>
+                        <InfoBlock title='Organization Name' info={org.name} />
+                        <InfoBlock title='Slug' info={org.slug} />
+                        <InfoBlock title='Created At' info={new Date(org.createdAt).toLocaleDateString()} />
+                      </SimpleGrid>
+                      <Group justify='flex-end'>
+                        <Button
+                          c='black'
+                          size='md'
+                          rightSection={<IconArrowRight />}
+                          onClick={() => handleOrgClick(org.id)}
+                          w='fit-content'
+                        >
+                          Select Organization
+                        </Button>
+                      </Group>
+                      <Divider />
+                    </Stack>
                   ))}
-                  {organizations?.length === 0 && (
-                    <Table.Tr>
-                      <Table.Td colSpan={3}>
-                        <Text ta='center' c='dimmed' py='xl'>
-                          No organizations found
-                        </Text>
-                      </Table.Td>
-                    </Table.Tr>
-                  )}
-                </Table.Tbody>
-              </Table>
-            )}
-          </Paper>
-        </Stack>
+                </Stack>
+              ) : (
+                <Text c='dimmed' py='md'>
+                  No organizations found
+                </Text>
+              )}
+            </Stack>
 
-        <Modal opened={opened} onClose={close} title='Create Organization'>
-          <OrganizationCreate
-            onSuccess={() => {
-              close()
-              refetch()
-            }}
-          />
-        </Modal>
-      </RolePermitter>
-      {!isPending && sessionData?.user.role !== 'admin' && (
-        <Paper withBorder p='xl' radius='md' bg='red.0'>
-          <Title order={3} c='red'>
-            Access Denied
-          </Title>
-          <Text mt='md'>You do not have permission to view this page.</Text>
-        </Paper>
-      )}
+            <Divider my='xl' />
+            <OrganizationCreate onSuccess={refetch} />
+          </Stack>
+        </RolePermitter>
+
+        {!isPending && sessionData?.user?.role !== 'admin' && (
+          <Stack gap='md'>
+            <div>
+              <Text>Access Control</Text>
+              <Title order={2} c='red'>
+                Access Denied
+              </Title>
+            </div>
+            <Text c='dimmed'>You do not have permission to view this page.</Text>
+          </Stack>
+        )}
+      </Container>
     </Container>
   )
 }
