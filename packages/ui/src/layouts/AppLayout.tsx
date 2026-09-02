@@ -21,6 +21,9 @@ export const AppLayout = () => {
           <Group>
             {sessionData ? (
               <>
+                <Button component={Link} to='/assemblies' variant='subtle'>
+                  Assemblies
+                </Button>
                 <RolePermitter requiredRole='admin'>
                   <Button component={Link} to='/statistics' variant='subtle'>
                     Statistics

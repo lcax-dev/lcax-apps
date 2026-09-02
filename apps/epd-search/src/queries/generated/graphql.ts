@@ -709,6 +709,8 @@ export type Mutation = {
   calculateProduct: Product
   calculateProject: Project
   deleteEpds: Array<Epd>
+  deleteOrganizationAssembly: Scalars['Boolean']['output']
+  saveOrganizationAssembly: OrganizationAssembly
   updateEpds: Array<Epd>
 }
 
@@ -738,6 +740,14 @@ export type MutationCalculateProjectArgs = {
 
 export type MutationDeleteEpdsArgs = {
   where?: InputMaybe<EpdsFilters>
+}
+
+export type MutationDeleteOrganizationAssemblyArgs = {
+  id: Scalars['String']['input']
+}
+
+export type MutationSaveOrganizationAssemblyArgs = {
+  input: SaveOrganizationAssemblyInput
 }
 
 export type MutationUpdateEpdsArgs = {
@@ -900,12 +910,96 @@ export type ProjectLocationInput = {
   country?: InputMaybe<Scalars['String']['input']>
 }
 
+export type OrganizationAssembly = {
+  __typename?: 'OrganizationAssembly'
+  classification: Array<Classification>
+  comment?: Maybe<Scalars['String']['output']>
+  description?: Maybe<Scalars['String']['output']>
+  id: Scalars['String']['output']
+  incomplete: Scalars['Boolean']['output']
+  name: Scalars['String']['output']
+  organizationId?: Maybe<Scalars['String']['output']>
+  productCount: Scalars['Int']['output']
+  products: Array<OrganizationAssemblyProduct>
+  quantity: Scalars['Float']['output']
+  results?: Maybe<Impacts>
+  unit: Scalars['String']['output']
+  visibility: Scalars['String']['output']
+}
+
+export type OrganizationAssemblyProduct = {
+  __typename?: 'OrganizationAssemblyProduct'
+  classification: Array<Classification>
+  description?: Maybe<Scalars['String']['output']>
+  id: Scalars['String']['output']
+  impactData: Array<OrganizationAssemblyProductImpactRef>
+  name: Scalars['String']['output']
+  quantity: Scalars['Float']['output']
+  referenceServiceLife: Scalars['Float']['output']
+  results?: Maybe<Impacts>
+  unit: Scalars['String']['output']
+}
+
+export type OrganizationAssemblyProductImpactRef = {
+  __typename?: 'OrganizationAssemblyProductImpactRef'
+  epd?: Maybe<Epd>
+  id: Scalars['String']['output']
+  version: Scalars['String']['output']
+}
+
+export enum OrganizationAssemblySaveKind {
+  Complete = 'COMPLETE',
+  Draft = 'DRAFT',
+}
+
+export type OrganizationAssemblyProductImpactRefInput = {
+  id: Scalars['String']['input']
+  version: Scalars['String']['input']
+}
+
+export type OrganizationAssemblyProductWriteInput = {
+  classification?: InputMaybe<Array<InputMaybe<ClassificationInput>>>
+  description?: InputMaybe<Scalars['String']['input']>
+  id?: InputMaybe<Scalars['String']['input']>
+  impactData?: InputMaybe<Array<OrganizationAssemblyProductImpactRefInput>>
+  name?: InputMaybe<Scalars['String']['input']>
+  quantity?: InputMaybe<Scalars['Float']['input']>
+  referenceServiceLife?: InputMaybe<Scalars['Float']['input']>
+  unit?: InputMaybe<Scalars['String']['input']>
+}
+
+export type OrganizationAssemblyWriteInput = {
+  classification?: InputMaybe<Array<InputMaybe<ClassificationInput>>>
+  comment?: InputMaybe<Scalars['String']['input']>
+  description?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+  products?: InputMaybe<Array<OrganizationAssemblyProductWriteInput>>
+  quantity?: InputMaybe<Scalars['Float']['input']>
+  unit?: InputMaybe<Scalars['String']['input']>
+}
+
+export type SaveOrganizationAssemblyInput = {
+  assembly: OrganizationAssemblyWriteInput
+  confirmForcePublish?: InputMaybe<Scalars['Boolean']['input']>
+  confirmPrivatize?: InputMaybe<Scalars['Boolean']['input']>
+  id?: InputMaybe<Scalars['String']['input']>
+  kind: OrganizationAssemblySaveKind
+  results?: InputMaybe<Scalars['JSONObject']['input']>
+  visibility?: InputMaybe<Scalars['String']['input']>
+}
+
 export type Query = {
   __typename?: 'Query'
   assemblies: Array<Assembly>
   epds: Array<Epd>
   lcaxStatistics: LcAxStatistics
+  organizationAssemblies: Array<OrganizationAssembly>
+  organizationAssembly?: Maybe<OrganizationAssembly>
   search: Array<LcAxSearchResult>
+}
+
+export type QueryOrganizationAssemblyArgs = {
+  id: Scalars['String']['input']
 }
 
 export type QueryAssembliesArgs = {
@@ -1232,6 +1326,168 @@ export type GetLcaxStatisticsQuery = {
       products: number
     }>
   }
+}
+
+export type OrganizationAssembliesQueryVariables = Exact<{ [key: string]: never }>
+
+export type OrganizationAssembliesQuery = {
+  __typename?: 'Query'
+  organizationAssemblies: Array<{
+    __typename?: 'OrganizationAssembly'
+    id: string
+    name: string
+    visibility: string
+    incomplete: boolean
+    productCount: number
+    results?: {
+      __typename?: 'Impacts'
+      gwp?: { __typename?: 'ImpactCategory'; a1a3?: number | null } | null
+    } | null
+  }>
+}
+
+export type OrganizationAssemblyQueryVariables = Exact<{
+  id: Scalars['String']['input']
+}>
+
+export type OrganizationAssemblyQuery = {
+  __typename?: 'Query'
+  organizationAssembly?: {
+    __typename?: 'OrganizationAssembly'
+    id: string
+    name: string
+    description?: string | null
+    comment?: string | null
+    quantity: number
+    unit: string
+    visibility: string
+    incomplete: boolean
+    classification: Array<{
+      __typename?: 'Classification'
+      name?: string | null
+      system?: string | null
+      code?: string | null
+    }>
+    products: Array<{
+      __typename?: 'OrganizationAssemblyProduct'
+      id: string
+      name: string
+      description?: string | null
+      quantity: number
+      unit: string
+      referenceServiceLife: number
+      classification: Array<{
+        __typename?: 'Classification'
+        name?: string | null
+        system?: string | null
+        code?: string | null
+      }>
+      impactData: Array<{
+        __typename?: 'OrganizationAssemblyProductImpactRef'
+        id: string
+        version: string
+        epd?: {
+          __typename?: 'EPD'
+          id?: string | null
+          name?: string | null
+          version?: string | null
+          declaredUnit?: UnitEnum | null
+          publishedDate?: string | null
+          referenceServiceLife?: number | null
+          impacts?: {
+            __typename?: 'Impacts'
+            gwp?: { __typename?: 'ImpactCategory'; a1a3?: number | null } | null
+          } | null
+        } | null
+      }>
+    }>
+  } | null
+}
+
+export type OrganizationEpdTypeaheadQueryVariables = Exact<{
+  where?: InputMaybe<EpdsFilters>
+  limit?: InputMaybe<Scalars['Int']['input']>
+}>
+
+export type OrganizationEpdTypeaheadQuery = {
+  __typename?: 'Query'
+  epds: Array<{
+    __typename?: 'EPD'
+    id?: string | null
+    name?: string | null
+    version?: string | null
+    publishedDate?: string | null
+    declaredUnit?: UnitEnum | null
+    referenceServiceLife?: number | null
+    impacts?: { __typename?: 'Impacts'; gwp?: { __typename?: 'ImpactCategory'; a1a3?: number | null } | null } | null
+  }>
+}
+
+export type SaveOrganizationAssemblyMutationVariables = Exact<{
+  input: SaveOrganizationAssemblyInput
+}>
+
+export type SaveOrganizationAssemblyMutation = {
+  __typename?: 'Mutation'
+  saveOrganizationAssembly: {
+    __typename?: 'OrganizationAssembly'
+    id: string
+    name: string
+    description?: string | null
+    comment?: string | null
+    quantity: number
+    unit: string
+    visibility: string
+    incomplete: boolean
+    classification: Array<{
+      __typename?: 'Classification'
+      name?: string | null
+      system?: string | null
+      code?: string | null
+    }>
+    products: Array<{
+      __typename?: 'OrganizationAssemblyProduct'
+      id: string
+      name: string
+      description?: string | null
+      quantity: number
+      unit: string
+      referenceServiceLife: number
+      classification: Array<{
+        __typename?: 'Classification'
+        name?: string | null
+        system?: string | null
+        code?: string | null
+      }>
+      impactData: Array<{
+        __typename?: 'OrganizationAssemblyProductImpactRef'
+        id: string
+        version: string
+        epd?: {
+          __typename?: 'EPD'
+          id?: string | null
+          name?: string | null
+          version?: string | null
+          declaredUnit?: UnitEnum | null
+          publishedDate?: string | null
+          referenceServiceLife?: number | null
+          impacts?: {
+            __typename?: 'Impacts'
+            gwp?: { __typename?: 'ImpactCategory'; a1a3?: number | null } | null
+          } | null
+        } | null
+      }>
+    }>
+  }
+}
+
+export type DeleteOrganizationAssemblyMutationVariables = Exact<{
+  id: Scalars['String']['input']
+}>
+
+export type DeleteOrganizationAssemblyMutation = {
+  __typename?: 'Mutation'
+  deleteOrganizationAssembly: boolean
 }
 
 export type SearchQueryVariables = Exact<{

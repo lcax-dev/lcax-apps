@@ -1,6 +1,14 @@
 import { Route, Routes } from 'react-router'
-import { AssemblyDetailPage, EPDDetailPage, ResultsPage, SearchPage, StatisticsPage } from '@/pages'
-import { Loading, NotFoundPage, AppLayout, AdminLayout } from '@lcax/ui'
+import {
+  AssemblyDetailPage,
+  EPDDetailPage,
+  OrganizationAssembliesPage,
+  OrganizationAssemblyEditorPage,
+  ResultsPage,
+  SearchPage,
+  StatisticsPage,
+} from '@/pages'
+import { Loading, NotFoundPage, AppLayout, AdminLayout, AuthenticatedLayout } from '@lcax/ui'
 import { lazy, Suspense } from 'react'
 const UserManagementApp = lazy(async () => {
   // @ts-expect-error import of remote app
@@ -41,6 +49,11 @@ export const AppRouter = () => {
           }
         />
         <Route path='*' element={<NotFoundPage />} />
+      </Route>
+      <Route element={<AuthenticatedLayout />}>
+        <Route path='/assemblies' element={<OrganizationAssembliesPage />} />
+        <Route path='/assemblies/new' element={<OrganizationAssemblyEditorPage />} />
+        <Route path='/assemblies/:id/edit' element={<OrganizationAssemblyEditorPage />} />
       </Route>
       <Route element={<AdminLayout />}>
         <Route path='/statistics' element={<StatisticsPage />} />
