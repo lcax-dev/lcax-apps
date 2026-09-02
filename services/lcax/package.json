@@ -30,6 +30,7 @@
     "graphql": "^16.13.1",
     "graphql-type-json": "^0.3.2",
     "lcax": "^3.6.0",
+    "@lcax/emails": "*",
     "pg": "^8.20.0",
     "pino-http": "^11.0.0",
     "tsx": "^4.21.0",
