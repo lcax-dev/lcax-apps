@@ -11,3 +11,7 @@ Canonical triage roles (`needs-triage`, `needs-info`, etc.). See `docs/agents/tr
 ### Domain docs
 
 Multi-context (`CONTEXT-MAP.md` + per-context `CONTEXT.md`). See `docs/agents/domain.md`.
+
+### Design
+
+Visual language distilled from `@lcax/compare` (tokens, layout, components). See `docs/agents/design.md`.
