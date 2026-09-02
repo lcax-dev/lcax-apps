@@ -1,4 +1,4 @@
-name: Deploy Search Page
+name: Deploy User Management Page
 
 on:
   push:
