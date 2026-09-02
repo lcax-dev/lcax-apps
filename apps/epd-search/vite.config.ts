@@ -16,7 +16,7 @@ export default defineConfig({
         "user-management": {
           type: "module",
           name: "user-management",
-          entry: "http://localhost:5300/remoteEntry.js",
+          entry: `${process.env.MANAGEMENT_URL}/remoteEntry.js`,
           entryGlobalName: "user-management",
           shareScope: "default",
         },
