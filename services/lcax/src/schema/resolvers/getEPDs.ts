@@ -1,26 +1,16 @@
-import { and, eq, or } from 'drizzle-orm'
+import { and } from 'drizzle-orm'
 import { dbConnection } from '@/config/database'
 import * as models from '@/models'
 import { orderByHelper, whereHelper } from '../utils'
+import { visibilityFilter } from '../utils/visibility'
 import type { GraphQLContext } from '@/schema/context'
 
 export const getEPDsResolver = async (source, args, context: GraphQLContext, info) => {
   const { where, offset, limit, orderBy } = args
   const filters = whereHelper(where, models.epds)
-  const isAdmin = context.session?.user?.role === 'admin'
-  const orgId = context.session?.session?.activeOrganizationId
+  const visibilitySql = visibilityFilter(models.epds, context)
 
   let query = dbConnection.select().from(models.epds).$dynamic()
-
-  const visibilityFilters = []
-  if (!isAdmin) {
-    visibilityFilters.push(eq(models.epds.visibility, 'Public'))
-    if (orgId) {
-      visibilityFilters.push(eq(models.epds.organizationId, orgId))
-    }
-  }
-
-  const visibilitySql = visibilityFilters.length > 0 ? or(...visibilityFilters) : undefined
 
   if (filters && visibilitySql) {
     query = query.where(and(filters, visibilitySql))
