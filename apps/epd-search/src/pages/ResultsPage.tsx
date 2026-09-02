@@ -2,12 +2,15 @@ import { Center, Container, Grid, Loader, SimpleGrid, Stack, Text, Title } from 
 import { useDebouncedValue } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router'
-import { FilterSidebar, SearchResultCard, toSearchResultCard } from '@/components'
+import { FilterSidebar, SearchResultCard, toSearchResultCard, EPDCard } from '@/components'
 import { LCAxKindParam, parseKinds, parseUnit, setKindsParam, setUnitParam } from '@/lib/searchParams.ts'
 import { buildSearchVariables } from '@/lib/searchVariables.ts'
 import { useSearchQuery } from '@/queries/search.ts'
-
+import { IconArrowBack } from '@tabler/icons-react'
+import { useSearchEpdsQuery, CountryEnum, StandardEnum, SubTypeEnum, UnitEnum } from '@/queries'
 const kindLabel = (kind: LCAxKindParam) => (kind === 'ASSEMBLY' ? 'Assembly' : 'EPD')
+
+
 
 export const ResultsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -139,6 +142,7 @@ export const ResultsPage = () => {
     setSearchParams(params)
   }
 
+  const containerSize = useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })
   const hasFilters =
     query ||
     kinds.length > 0 ||
@@ -152,141 +156,99 @@ export const ResultsPage = () => {
     validUntil
 
   return (
-    <Container size='lg' py={50}>
-      <Grid gap='xl'>
-        <Grid.Col span={{ base: 12, md: 3 }}>
-          <FilterSidebar
-            name={searchInput}
-            kinds={kinds}
-            unit={unit}
-            location={location}
-            subtype={subtype}
-            standard={standard}
-            type={typeInput}
-            classification={classificationInput}
-            publishedDate={publishedDate}
-            validUntil={validUntil}
-            onNameChange={handleNameChange}
-            onKindsChange={handleKindsChange}
-            onUnitChange={handleUnitChange}
-            onLocationChange={handleLocationChange}
-            onSubtypeChange={handleSubtypeChange}
-            onStandardChange={handleStandardChange}
-            onTypeChange={handleTypeChange}
-            onClassificationChange={handleClassificationChange}
-            onPublishedDateChange={handlePublishedDateChange}
-            onValidUntilChange={handleValidUntilChange}
-          />
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, md: 9 }}>
-          <Stack gap='xl'>
+    <Container fluid bg='grey.0' p={0} pb='xl'>
+      <Container size={containerSize} py='xl'>
+        <Stack gap='xl'>
+          <div>
+            <Text>Results</Text>
             <Title order={1}>Search Results</Title>
-            {hasFilters && (
-              <Stack gap='xs'>
-                <Text c='dimmed'>Showing results for:</Text>
-                <Grid>
-                  {query && (
-                    <Grid.Col span='auto'>
-                      <Text size='sm'>
-                        Name: <strong>{query}</strong>
-                      </Text>
-                    </Grid.Col>
-                  )}
-                  {kinds.length > 0 && (
-                    <Grid.Col span='auto'>
-                      <Text size='sm'>
-                        Type: <strong>{kinds.map(kindLabel).join(', ')}</strong>
-                      </Text>
-                    </Grid.Col>
-                  )}
-                  {unit && (
-                    <Grid.Col span='auto'>
-                      <Text size='sm'>
-                        Unit: <strong>{unit}</strong>
-                      </Text>
-                    </Grid.Col>
-                  )}
-                  {location && (
-                    <Grid.Col span='auto'>
-                      <Text size='sm'>
-                        Location: <strong>{location}</strong>
-                      </Text>
-                    </Grid.Col>
-                  )}
-                  {subtype && (
-                    <Grid.Col span='auto'>
-                      <Text size='sm'>
-                        Subtype: <strong>{subtype}</strong>
-                      </Text>
-                    </Grid.Col>
-                  )}
-                  {standard && (
-                    <Grid.Col span='auto'>
-                      <Text size='sm'>
-                        Standard: <strong>{standard}</strong>
-                      </Text>
-                    </Grid.Col>
-                  )}
-                  {type && (
-                    <Grid.Col span='auto'>
-                      <Text size='sm'>
-                        EPD type: <strong>{type}</strong>
-                      </Text>
-                    </Grid.Col>
-                  )}
-                  {classification && (
-                    <Grid.Col span='auto'>
-                      <Text size='sm'>
-                        Classification: <strong>{classification}</strong>
-                      </Text>
-                    </Grid.Col>
-                  )}
-                  {publishedDate && (
-                    <Grid.Col span='auto'>
-                      <Text size='sm'>
-                        Published After: <strong>{publishedDate}</strong>
-                      </Text>
-                    </Grid.Col>
-                  )}
-                  {validUntil && (
-                    <Grid.Col span='auto'>
-                      <Text size='sm'>
-                        Valid Until: <strong>{validUntil}</strong>
-                      </Text>
-                    </Grid.Col>
-                  )}
-                </Grid>
-              </Stack>
-            )}
+          </div>
+          <Divider />
 
-            {loading && (
-              <Center py='xl'>
-                <Loader size='xl' />
-              </Center>
-            )}
+          <Grid gutter='xl'>
+            <Grid.Col span={{ base: 12, md: 3 }}>
+              <FilterSidebar
+                name={searchInput}
+                kinds={kinds}
+                unit={unit}
+                location={location}
+                subtype={subtype}
+                standard={standard}
+                type={typeInput}
+                classification={classificationInput}
+                publishedDate={publishedDate}
+                validUntil={validUntil}
+                onNameChange={handleNameChange}
+                onKindsChange={handleKindsChange}
+                onUnitChange={handleUnitChange}
+                onLocationChange={handleLocationChange}
+                onSubtypeChange={handleSubtypeChange}
+                onStandardChange={handleStandardChange}
+                onTypeChange={handleTypeChange}
+                onClassificationChange={handleClassificationChange}
+                onPublishedDateChange={handlePublishedDateChange}
+                onValidUntilChange={handleValidUntilChange}
+              />
+            </Grid.Col>
 
-            {error && (
-              <Text c='red' ta='center' py='xl'>
-                An error occurred while searching: {error.message}
-              </Text>
-            )}
+            <Grid.Col span={{ base: 12, md: 9 }}>
+              <Stack gap='xl'>
+                {hasFilters && (
+                  <Stack gap='xs'>
+                    <Text size='sm'>
+                      Active filters:{' '}
+                      {[
+                        query && `Name: "${query}"`,
+                        kinds && `Type: "${kinds.map(kindLabel).join(', ')}"`,
+                        unit && `Unit: ${unit}`,
+                        location && `Location: ${location}`,
+                        subtype && `Subtype: ${subtype}`,
+                        standard && `Standard: ${standard}`,
+                        type && `EPD Type: ${type}`,
+                        classification && `Classification: ${classification}`,
+                        publishedDate && `Published after: ${publishedDate}`,
+                        validUntil && `Valid until: ${validUntil}`,
+                      ]
+                        .filter(Boolean)
+                        .join(' · ')}
+                    </Text>
+                    <Divider />
+                  </Stack>
+                )}
 
-            {data?.search && (
-              <SimpleGrid cols={{ base: 1, sm: 2 }} spacing='md'>
-                {results.map((result) => (
-                  <SearchResultCard key={`${result.kind}-${result.id}`} result={result} />
-                ))}
-              </SimpleGrid>
-            )}
+                {loading && (
+                  <Center py='xl'>
+                    <Loader size='lg' color='yellow.4' />
+                  </Center>
+                )}
+
+                {error && (
+                  <Text c='red' ta='center' py='xl'>
+                    An error occurred while fetching EPDs: {error.message}
+                  </Text>
+                )}
+
+                {data?.search && (
+                  <SimpleGrid cols={{ base: 1, md: 2 }} spacing='xl'>
+                    {results.map((result) => (
+                      <SearchResultCard key={`${result.kind}-${result.id}`} result={result} />
+                    ))}
+                  </SimpleGrid>
+                )}
 
             {data?.search && results.length === 0 && !loading && (
-              <Text ta='center' py='xl' c='dimmed'>
-                No LCAx Data found matching your search.
-              </Text>
+              <Stack justify='center' align='center' py={80} gap='lg'>
+                <Title order={2}>No LCAx Data found matching your search.</Title>
+                <ActionIcon variant='transparent' component={Link} to='/' size='xl'>
+                  <IconArrowBack size={64} color='black' />
+                </ActionIcon>
+              </Stack>
             )}
           </Stack>
         </Grid.Col>
       </Grid>
+        </Stack>
+      </Container>
     </Container>
   )
 }

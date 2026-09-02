@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { authClient } from '@/lib'
+import { authClient } from '../auth-client'
 
 type ListMembersParams = {
   organizationId: string

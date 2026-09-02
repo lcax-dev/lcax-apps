@@ -1,75 +1,46 @@
-import { Table, Text } from '@mantine/core'
+import { Divider, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { authClient } from '@/lib'
 import { Loading } from '@lcax/ui'
 import { useMemo } from 'react'
+import { InfoBlock } from '@/components'
 
 export const OrganizationInvitations = () => {
   const { data: activeOrganization, isPending } = authClient.useActiveOrganization()
-  // const organizationId = useMemo(() => activeOrganization!.id, [activeOrganization])
   const invitations = useMemo(() => activeOrganization?.invitations ?? [], [activeOrganization])
-
-  // const handleRemove = async (memberId: string) => {
-  //   if (!confirm('Are you sure you want to remove this member?')) return
-  //   try {
-  //     await removeMember({ organizationId, memberId })
-  //     notifications.success({ message: 'Member removed' })
-  //   } catch (error) {
-  //     notifications.error({
-  //       message: error instanceof Error ? error.message : 'Failed to remove member',
-  //     })
-  //   }
-  // }
-  //
-  // const handleRoleChange = async (memberId: string, role: string) => {
-  //   try {
-  //     await updateMemberRole({ organizationId, memberId, role: role as any })
-  //     notifications.success({ message: 'Role updated' })
-  //   } catch (error) {
-  //     notifications.error({
-  //       message: error instanceof Error ? error.message : 'Failed to update role',
-  //     })
-  //   }
-  // }
 
   if (isPending) {
     return <Loading />
   }
 
   return (
-    <Table>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Email</Table.Th>
-          <Table.Th>Role</Table.Th>
-          <Table.Th>Invited At</Table.Th>
-          <Table.Th>Expires</Table.Th>
-          <Table.Th>Status</Table.Th>
-          <Table.Th>Actions</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {invitations?.map((invitation) => (
-          <Table.Tr key={invitation.id}>
-            <Table.Td>
-              <Text size='sm' fw={500}>
-                {invitation.email}
-              </Text>
-            </Table.Td>
-            <Table.Td>
-              <Text size='sm'>{invitation.role}</Text>
-            </Table.Td>
-            <Table.Td>
-              <Text size='sm'>{invitation.createdAt.toLocaleString()}</Text>
-            </Table.Td>
-            <Table.Td>
-              <Text size='sm'>{invitation.expiresAt.toLocaleString()}</Text>
-            </Table.Td>
-            <Table.Td>
-              <Text size='sm'>{invitation.status}</Text>
-            </Table.Td>
-          </Table.Tr>
-        ))}
-      </Table.Tbody>
-    </Table>
+    <Stack gap='lg'>
+      <div>
+        <Text>Outbound</Text>
+        <Title order={3}>Sent Invitations</Title>
+      </div>
+      <Text c='dimmed' w={{ base: '100%', xl: '66%' }}>
+        Pending invitations sent to prospective members.
+      </Text>
+      <Divider my='xs' />
+      {invitations.length === 0 ? (
+        <Text c='dimmed' py='md'>
+          No pending invitations
+        </Text>
+      ) : (
+        <Stack gap='md'>
+          {invitations.map((invitation) => (
+            <Stack gap='sm' key={invitation.id}>
+              <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing='md'>
+                <InfoBlock title='Email' info={invitation.email} />
+                <InfoBlock title='Role' info={invitation.role} />
+                <InfoBlock title='Invited At' info={new Date(invitation.createdAt).toLocaleDateString()} />
+                <InfoBlock title='Status' info={invitation.status} />
+              </SimpleGrid>
+              <Divider />
+            </Stack>
+          ))}
+        </Stack>
+      )}
+    </Stack>
   )
 }

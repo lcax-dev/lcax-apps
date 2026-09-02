@@ -1,6 +1,7 @@
-import { Card, Text, Group, Badge, Stack, UnstyledButton, Title } from '@mantine/core'
+import { Divider, SimpleGrid, Stack, Title, UnstyledButton } from '@mantine/core'
 import { Link } from 'react-router'
 import { Epd } from '@/queries/generated/graphql.ts'
+import { InfoBlock } from '../InfoBlock'
 
 interface EPDCardProps {
   epd: Epd
@@ -12,35 +13,20 @@ export const EPDCard = ({ epd }: EPDCardProps) => {
   const dataQuality = meta.data_quality || 'Unknown'
 
   return (
-    <UnstyledButton component={Link} to={`/epds/${epd.id}`} style={{ display: 'block' }}>
-      <Card shadow='sm' padding='lg' radius='md' withBorder>
-        <Stack gap='xs'>
-          <Group justify='space-between'>
-            <Title order={4} size='lg' style={{ flex: 1 }}>
-              {epd.name}
-            </Title>
-            <Badge color='blue' variant='light'>
-              {epd.subtype}
-            </Badge>
-          </Group>
-
-          <Text size='sm' c='dimmed'>
-            Manufacturer: <strong>{manufacturer}</strong>
-          </Text>
-
-          <Group gap='sm'>
-            <Badge variant='outline' color='gray'>
-              {epd.location}
-            </Badge>
-            <Badge variant='outline' color='gray'>
-              {epd.declaredUnit}
-            </Badge>
-            <Badge variant='outline' color='orange'>
-              Quality: {dataQuality}
-            </Badge>
-          </Group>
-        </Stack>
-      </Card>
+    <UnstyledButton component={Link} to={`/epds/${epd.id}`} style={{ display: 'block', width: '100%' }}>
+      <Stack gap='md' py='md'>
+        <Title order={3} c='black'>
+          {epd.name}
+        </Title>
+        <Divider />
+        <SimpleGrid cols={{ base: 2, sm: 3 }} spacing='md'>
+          <InfoBlock title='Manufacturer' info={manufacturer} />
+          <InfoBlock title='Subtype' info={epd.subtype} />
+          <InfoBlock title='Location' info={epd.location} />
+          <InfoBlock title='Declared Unit' info={epd.declaredUnit} />
+          <InfoBlock title='Quality' info={dataQuality} />
+        </SimpleGrid>
+      </Stack>
     </UnstyledButton>
   )
 }

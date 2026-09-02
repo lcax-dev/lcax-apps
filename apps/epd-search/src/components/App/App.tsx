@@ -1,12 +1,12 @@
 import { MantineProvider } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
-import { theme, AppRouter } from '@/components'
+import { theme } from '../Theme'
+import { AppRouter } from '../AppRouter'
 import { resolver, GraphQLProvider, DevUI } from '@lcax/ui'
 import { BrowserRouter } from 'react-router'
 import '@mantine/core/styles.css'
 import '@mantine/charts/styles.css'
 import '@mantine/notifications/styles.css'
-import '@mantine/dropzone/styles.css'
 
 export const App = () => {
   return (
