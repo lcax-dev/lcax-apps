@@ -17,17 +17,17 @@
   "dependencies": {
     "@mantine/core": "^9.1.1",
     "@mantine/hooks": "^9.1.1",
-    "lcax": "3.4.3",
+    "lcax": "3.6.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-router": "^7.13.1",
+    "react-router": "^8.3.1",
     "@fontsource-variable/inter-tight": "^5.2.7",
-    "@lcax/ui": "^0.0.1",
+    "@lcax/ui": "*",
     "@mantine/charts": "^9.1.1",
     "react-helmet": "^6.1.0",
     "react-player": "^3.4.0",
     "recharts": "^3.8.0",
-    "uuid": "^13.0.0"
+    "uuid": "^14.0.2"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",
