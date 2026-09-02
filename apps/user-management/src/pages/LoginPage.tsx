@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import {
   Alert,
   Anchor,
@@ -16,6 +16,13 @@ import {
 import { IconInfoCircle } from '@tabler/icons-react'
 import { authClient } from '@/lib'
 
+const getSafeRedirectPath = (redirect: string | null) => {
+  if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) {
+    return redirect
+  }
+  return '/profile'
+}
+
 export const LoginPage = () => {
   const [type, setType] = useState<'login' | 'signup'>('login')
   const [email, setEmail] = useState('')
@@ -24,6 +31,8 @@ export const LoginPage = () => {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectTo = getSafeRedirectPath(searchParams.get('redirect'))
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,7 +49,7 @@ export const LoginPage = () => {
         if (error?.message) {
           setError(error.message)
         } else if (data) {
-          navigate('/profile')
+          navigate(redirectTo)
         } else {
           setError('Login failed. Please check your credentials.')
         }
@@ -57,7 +66,7 @@ export const LoginPage = () => {
             },
             onSuccess: () => {
               setLoading(false)
-              navigate('/profile')
+              navigate(redirectTo)
             },
             onError: (ctx) => {
               setLoading(false)

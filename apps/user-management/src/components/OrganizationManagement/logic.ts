@@ -100,3 +100,15 @@ export const getOrganization = async (organizationId: string) => {
 
   return data
 }
+
+export const getInvitation = async (invitationId: string) => {
+  const { data, error } = await authClient.organization.getInvitation({
+    query: { id: invitationId },
+  })
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  return data
+}

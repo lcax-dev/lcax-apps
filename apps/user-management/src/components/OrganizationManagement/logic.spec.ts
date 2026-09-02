@@ -12,6 +12,7 @@ vi.mock('@/lib', () => ({
       acceptInvitation: vi.fn(),
       rejectInvitation: vi.fn(),
       getFullOrganization: vi.fn(),
+      getInvitation: vi.fn(),
     },
   },
 }))
@@ -195,6 +196,33 @@ describe('OrganizationManagement logic', () => {
 
       const { getOrganization } = await import('./logic')
       await expect(getOrganization('org-1')).rejects.toThrow('Get organization failed')
+    })
+  })
+
+  describe('getInvitation', () => {
+    it('should get invitation details', async () => {
+      vi.mocked(authClient.organization.getInvitation).mockResolvedValue({
+        data: { id: 'invite-1', organizationName: 'Test Org', role: 'member' },
+        error: null,
+      } as any)
+
+      const { getInvitation } = await import('./logic')
+      const result = await getInvitation('invite-1')
+
+      expect(authClient.organization.getInvitation).toHaveBeenCalledWith({
+        query: { id: 'invite-1' },
+      })
+      expect(result).toEqual({ id: 'invite-1', organizationName: 'Test Org', role: 'member' })
+    })
+
+    it('should throw error if get invitation fails', async () => {
+      vi.mocked(authClient.organization.getInvitation).mockResolvedValue({
+        data: null,
+        error: { message: 'Get invitation failed' },
+      } as any)
+
+      const { getInvitation } = await import('./logic')
+      await expect(getInvitation('invite-1')).rejects.toThrow('Get invitation failed')
     })
   })
 })
