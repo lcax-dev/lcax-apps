@@ -12,9 +12,8 @@ import {
   Title,
 } from '@mantine/core'
 import { type RefObject } from 'react'
-import { createEmptyProduct } from './editorState'
+import { createEmptyProduct, DiscardGuard } from '@/components'
 import { ClassificationRows } from './ClassificationRows'
-import { DiscardGuard } from './DiscardGuard'
 import { GwpBlock } from './GwpBlock'
 import { liveAssemblyGwp } from './liveGwp'
 import { ProductSection } from './ProductSection'
@@ -63,28 +62,29 @@ export const AssemblyEditor = ({ state, dirty, allowLeaveRef, onChange }: Assemb
           value={state.unit || null}
           onChange={(value) => onChange({ ...state, unit: value ?? 'pcs' })}
         />
+        <Textarea
+          label='Description'
+          radius='xl'
+          autosize
+          minRows={2}
+          value={state.description}
+          onChange={(event) => onChange({ ...state, description: event.currentTarget.value })}
+        />
+        <Textarea
+          label='Comment'
+          radius='xl'
+          autosize
+          minRows={2}
+          value={state.comment}
+          onChange={(event) => onChange({ ...state, comment: event.currentTarget.value })}
+        />
+        <ClassificationRows
+          idPrefix='assembly'
+          rows={state.classification}
+          onChange={(classification) => onChange({ ...state, classification })}
+        />
       </SimpleGrid>
-      <Textarea
-        label='Description'
-        radius='xl'
-        autosize
-        minRows={2}
-        value={state.description}
-        onChange={(event) => onChange({ ...state, description: event.currentTarget.value })}
-      />
-      <Textarea
-        label='Comment'
-        radius='xl'
-        autosize
-        minRows={2}
-        value={state.comment}
-        onChange={(event) => onChange({ ...state, comment: event.currentTarget.value })}
-      />
-      <ClassificationRows
-        idPrefix='assembly'
-        rows={state.classification}
-        onChange={(classification) => onChange({ ...state, classification })}
-      />
+
       <Divider />
       <Group justify='space-between' align='flex-end'>
         <div>
@@ -116,7 +116,7 @@ export const AssemblyEditor = ({ state, dirty, allowLeaveRef, onChange }: Assemb
                   })
                 }
               />
-              <Divider />
+              {state.products.length !== index + 1 && <Divider />}
             </div>
           ))}
         </Stack>

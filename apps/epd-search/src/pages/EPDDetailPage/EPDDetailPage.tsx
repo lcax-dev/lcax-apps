@@ -14,8 +14,8 @@ import {
   useMatches,
 } from '@mantine/core'
 import { resultsBackTo } from '@/lib/resultsBackTo'
-import { useGetEpdQuery } from '../queries'
-import { InfoBlock } from '../components'
+import { useGetEpdQuery } from '@/queries'
+import { InfoBlock } from '@/components'
 import { IconArrowBack, IconArrowLeft, IconArrowUpRight, IconCopy } from '@tabler/icons-react'
 
 type FromResultsState = {

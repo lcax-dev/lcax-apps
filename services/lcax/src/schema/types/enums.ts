@@ -16,6 +16,7 @@ export const StandardEnum = new GraphQLEnumType({
 
 export const CountryEnum = new GraphQLEnumType({
   name: 'CountryEnum',
+  // @ts-expect-error country is a string
   values: countries().reduce((acc, country) => ({ ...acc, [country.toUpperCase()]: { value: country } }), {}),
 })
 

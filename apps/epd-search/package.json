@@ -31,7 +31,7 @@
     "@tabler/icons-react": "^3.40.0",
     "better-auth": "^1.6.9",
     "graphql": "^16.13.1",
-    "lcax": "3.4.3",
+    "lcax": "3.6.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-dropzone": "^15.0.0",
