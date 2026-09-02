@@ -6,6 +6,7 @@ import {
   calculateProjectResolver,
   deleteEPDsResolver,
   getEPDsResolver,
+  getAssembliesResolver,
   updateEPDsResolver,
   getLCAxStatisticsResolver,
   searchResolver,
@@ -20,6 +21,8 @@ import {
   GraphQLEpd,
   GraphQLProject,
   GraphQLProjectInput,
+  AssembliesFilters,
+  AssembliesOrderBy,
   GraphQLAssembly,
   GraphQLAssemblyInput,
   GraphQLProduct,
@@ -47,6 +50,16 @@ export const graphQLSchema = new GraphQLSchema({
           orderBy: { type: new GraphQLList(EpdsOrderBy) },
         },
         resolve: getEPDsResolver,
+      },
+      assemblies: {
+        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLAssembly))),
+        args: {
+          where: { type: AssembliesFilters },
+          offset: { type: GraphQLInt },
+          limit: { type: GraphQLInt },
+          orderBy: { type: new GraphQLList(AssembliesOrderBy) },
+        },
+        resolve: getAssembliesResolver,
       },
       search: {
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(LCAxSearchResult))),

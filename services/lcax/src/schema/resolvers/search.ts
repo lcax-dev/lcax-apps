@@ -1,9 +1,11 @@
 import { and, asc, sql, type SQL } from 'drizzle-orm'
 import { dbConnection } from '@/config/database'
 import * as models from '@/models'
+import type { GraphQLResolveInfo } from 'graphql'
 import type { GraphQLContext } from '@/schema/context'
 import { whereHelper, type WhereFilter, type WhereInput } from '@/schema/utils'
 import { visibilityFilter } from '@/schema/utils/visibility'
+import { expandAssemblyProducts, selectionIncludesField } from './expandAssemblyProducts'
 
 type LCAxKindValue = 'EPD' | 'ASSEMBLY'
 
@@ -27,9 +29,11 @@ type SearchArgs = {
 }
 
 type SearchHit = {
+  id: string
   name: string
   __typename: 'EPD' | 'Assembly'
   type?: string
+  products?: unknown
 }
 
 const DEFAULT_LIMIT = 50
@@ -119,7 +123,7 @@ const fetchAssemblies = async (args: SearchArgs, context: GraphQLContext, fetchL
   return query.orderBy(asc(models.assemblies.name)).limit(fetchLimit)
 }
 
-export const searchResolver = async (_source, args: SearchArgs, context: GraphQLContext) => {
+export const searchResolver = async (_source, args: SearchArgs, context: GraphQLContext, info?: GraphQLResolveInfo) => {
   const limit = args.limit ?? DEFAULT_LIMIT
   const offset = args.offset ?? 0
   const fetchLimit = limit + offset
@@ -137,5 +141,15 @@ export const searchResolver = async (_source, args: SearchArgs, context: GraphQL
     __typename: 'Assembly' as const,
   }))
 
-  return mergeByName(epdHits, assemblyHits).slice(offset, offset + limit)
+  const page = mergeByName(epdHits, assemblyHits).slice(offset, offset + limit)
+  if (!selectionIncludesField(info, 'products')) {
+    return page
+  }
+
+  const assembliesOnPage = page.filter((hit) => hit.__typename === 'Assembly')
+  const expanded = await expandAssemblyProducts(assembliesOnPage, context)
+  const expandedById = new Map(expanded.map((assembly) => [assembly.id, assembly]))
+  return page.map((hit) =>
+    hit.__typename === 'Assembly' ? { ...expandedById.get(hit.id), __typename: 'Assembly' as const } : hit,
+  )
 }
