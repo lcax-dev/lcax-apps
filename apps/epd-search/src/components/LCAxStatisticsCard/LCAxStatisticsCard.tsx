@@ -1,8 +1,9 @@
-import { Group, Paper, Stack, Text, Title, SegmentedControl, Skeleton, Alert, SimpleGrid } from '@mantine/core'
+import { Button, Divider, Group, Menu, SimpleGrid, Skeleton, Stack, Text, Title } from '@mantine/core'
 import { BarChart } from '@mantine/charts'
 import { useMemo, useState } from 'react'
-import { useGetLcaxStatisticsQuery } from '@/queries'
-import { IconAlertCircle } from '@tabler/icons-react'
+import { useGetLcaxStatisticsQuery } from '../../queries'
+import { IconChevronDown } from '@tabler/icons-react'
+import { InfoBlock } from '../InfoBlock'
 
 export const LCAxStatisticsCard = () => {
   const [interval, setInterval] = useState<'monthly' | 'quarterly' | 'yearly'>('monthly')
@@ -42,102 +43,74 @@ export const LCAxStatisticsCard = () => {
 
   if (error) {
     return (
-      <Alert variant='light' color='red' title='Error loading statistics' icon={<IconAlertCircle size={16} />}>
-        {error.message}
-      </Alert>
+      <Text c='red' py='xl'>
+        Error loading statistics: {error.message}
+      </Text>
     )
   }
 
   return (
-    <Paper withBorder p='xl' radius='md'>
-      <Group justify='space-between' mb='lg'>
-        <Stack gap={0}>
-          <Title order={3}>Database Statistics</Title>
-          <Text size='sm' c='dimmed'>
-            Overview of items in the database
-          </Text>
+    <Stack gap='xl'>
+      <Group justify='space-between' align='flex-end'>
+        <Stack gap='xs'>
+          <Text>Overview</Text>
+          <Title order={2}>Database Statistics</Title>
         </Stack>
-        <SegmentedControl
-          value={interval}
-          onChange={(value) => setInterval(value as any)}
-          data={[
-            { label: 'Monthly', value: 'monthly' },
-            { label: 'Quarterly', value: 'quarterly' },
-            { label: 'Yearly', value: 'yearly' },
-          ]}
-        />
+        <Menu radius={0}>
+          <Menu.Target>
+            <Button variant='default' radius='xl' rightSection={<IconChevronDown size={16} />}>
+              {interval.charAt(0).toUpperCase() + interval.slice(1)}
+            </Button>
+          </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Item onClick={() => setInterval('monthly')}>Monthly</Menu.Item>
+            <Menu.Item onClick={() => setInterval('quarterly')}>Quarterly</Menu.Item>
+            <Menu.Item onClick={() => setInterval('yearly')}>Yearly</Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </Group>
 
-      <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} mb='xl'>
-        <Paper withBorder p='md' radius='md'>
-          <Text size='xs' c='dimmed' fw={700} tt='uppercase'>
-            Total Items
-          </Text>
-          {loading ? (
-            <Skeleton height={30} mt={5} width='40%' />
-          ) : (
-            <Text fw={700} size='xl'>
-              {data?.lcaxStatistics?.totalCount || 0}
-            </Text>
-          )}
-        </Paper>
-        <Paper withBorder p='md' radius='md'>
-          <Text size='xs' c='dimmed' fw={700} tt='uppercase'>
-            EPDs
-          </Text>
-          {loading ? (
-            <Skeleton height={30} mt={5} width='40%' />
-          ) : (
-            <Text fw={700} size='xl' c='blue.6'>
-              {data?.lcaxStatistics?.epdsCount || 0}
-            </Text>
-          )}
-        </Paper>
-        <Paper withBorder p='md' radius='md'>
-          <Text size='xs' c='dimmed' fw={700} tt='uppercase'>
-            Assemblies
-          </Text>
-          {loading ? (
-            <Skeleton height={30} mt={5} width='40%' />
-          ) : (
-            <Text fw={700} size='xl' c='green.6'>
-              {data?.lcaxStatistics?.assembliesCount || 0}
-            </Text>
-          )}
-        </Paper>
-        <Paper withBorder p='md' radius='md'>
-          <Text size='xs' c='dimmed' fw={700} tt='uppercase'>
-            Products
-          </Text>
-          {loading ? (
-            <Skeleton height={30} mt={5} width='40%' />
-          ) : (
-            <Text fw={700} size='xl' c='orange.6'>
-              {data?.lcaxStatistics?.productsCount || 0}
-            </Text>
-          )}
-        </Paper>
+      <Divider />
+
+      <SimpleGrid cols={{ base: 2, sm: 4 }} spacing='xl'>
+        {loading ? (
+          <>
+            <Skeleton height={60} />
+            <Skeleton height={60} />
+            <Skeleton height={60} />
+            <Skeleton height={60} />
+          </>
+        ) : (
+          <>
+            <InfoBlock title='Total Items' info={data?.lcaxStatistics?.totalCount || 0} />
+            <InfoBlock title='EPDs' info={data?.lcaxStatistics?.epdsCount || 0} />
+            <InfoBlock title='Assemblies' info={data?.lcaxStatistics?.assembliesCount || 0} />
+            <InfoBlock title='Products' info={data?.lcaxStatistics?.productsCount || 0} />
+          </>
+        )}
       </SimpleGrid>
 
-      <Text fw={500} mb='md'>
-        Uploads over time
-      </Text>
-      {loading ? (
-        <Skeleton height={300} radius='md' />
-      ) : (
-        <BarChart
-          h={300}
-          data={aggregatedData}
-          dataKey='date'
-          type='stacked'
-          series={[
-            { name: 'epds', color: 'blue.6', label: 'EPDs' },
-            { name: 'assemblies', color: 'green.6', label: 'Assemblies' },
-            { name: 'products', color: 'orange.6', label: 'Products' },
-          ]}
-          tickLine='y'
-        />
-      )}
-    </Paper>
+      <Stack gap='md' mt='lg'>
+        <Title order={3}>Uploads over time</Title>
+        <Divider />
+        {loading ? (
+          <Skeleton height={300} />
+        ) : (
+          <BarChart
+            h={300}
+            data={aggregatedData}
+            dataKey='date'
+            type='stacked'
+            series={[
+              { name: 'epds', color: 'yellow.4', label: 'EPDs' },
+              { name: 'assemblies', color: 'grey.4', label: 'Assemblies' },
+              { name: 'products', color: 'indigo.5', label: 'Products' },
+            ]}
+            tickLine='none'
+            gridAxis='none'
+          />
+        )}
+      </Stack>
+    </Stack>
   )
 }

@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router'
-import { EPDDetailPage, ResultsPage, SearchPage, StatisticsPage } from '@/pages'
+import { EPDDetailPage, ResultsPage, SearchPage, StatisticsPage } from '../../pages'
 import { Loading, NotFoundPage, AppLayout, AdminLayout } from '@lcax/ui'
 import { lazy, Suspense } from 'react'
 const UserManagementApp = lazy(async () => {

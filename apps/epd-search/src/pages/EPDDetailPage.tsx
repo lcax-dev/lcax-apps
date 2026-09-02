@@ -1,19 +1,21 @@
 import { useParams, Link } from 'react-router'
 import {
-  Container,
-  Title,
-  Text,
-  Stack,
-  Group,
-  Badge,
-  Card,
-  SimpleGrid,
-  Table,
-  Loader,
-  Center,
+  ActionIcon,
   Button,
+  Center,
+  Container,
+  Divider,
+  Group,
+  Loader,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+  useMatches,
 } from '@mantine/core'
-import { useGetEpdQuery } from '@/queries'
+import { useGetEpdQuery } from '../queries'
+import { InfoBlock } from '../components'
+import { IconArrowBack, IconArrowLeft, IconArrowUpRight, IconCopy } from '@tabler/icons-react'
 
 export const EPDDetailPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -23,24 +25,29 @@ export const EPDDetailPage = () => {
     skip: !id,
   })
 
+  const containerSize = useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })
+
   if (loading) {
     return (
-      <Center py={100}>
-        <Loader size='xl' />
-      </Center>
+      <Container fluid bg='grey.0' p={0}>
+        <Center py={100}>
+          <Loader size='xl' color='yellow.4' />
+        </Center>
+      </Container>
     )
   }
 
   if (error || !data?.epds?.[0]) {
     return (
-      <Container size='md' py={100}>
-        <Stack align='center'>
-          <Title order={2}>EPD Not Found</Title>
-          <Text c='dimmed'>The EPD you are looking for does not exist or an error occurred.</Text>
-          <Button component={Link} to='/results'>
-            Back to Search
-          </Button>
-        </Stack>
+      <Container fluid bg='grey.0' p={0}>
+        <Container size={containerSize} h='100vh'>
+          <Stack justify='center' align='center' h='100%' gap='lg'>
+            <Title>We can't find the EPD you are looking for!</Title>
+            <ActionIcon variant='transparent' component={Link} to='/results' size='xl'>
+              <IconArrowBack size={64} color='black' />
+            </ActionIcon>
+          </Stack>
+        </Container>
       </Container>
     )
   }
@@ -54,139 +61,108 @@ export const EPDDetailPage = () => {
   }
 
   const impacts = [
-    { name: 'Global Warming Potential (GWP)', key: 'gwp', unit: 'kg CO2e' },
-    { name: 'Ozone Depletion Potential (ODP)', key: 'odp', unit: 'kg CFC11e' },
-    { name: 'Acidification Potential (AP)', key: 'ap', unit: 'mol H+e' },
-    { name: 'Eutrophication Potential (EP)', key: 'ep', unit: 'kg Pe' },
-    { name: 'Photochemical Ozone Creation Potential (POCP)', key: 'pocp', unit: 'kg NMVOCe' },
-    { name: 'Abiotic Depletion Potential for non-fossil resources (ADPE)', key: 'adpe', unit: 'kg Sbe' },
+    { name: 'Global Warming Potential (GWP)', key: 'gwp', unit: 'kg CO₂-eq' },
+    { name: 'Ozone Depletion Potential (ODP)', key: 'odp', unit: 'kg CFC-11-eq' },
+    { name: 'Acidification Potential (AP)', key: 'ap', unit: 'mol H⁺-eq' },
+    { name: 'Eutrophication Potential (EP)', key: 'ep', unit: 'kg P-eq' },
+    { name: 'Photochemical Ozone Creation Potential (POCP)', key: 'pocp', unit: 'kg NMVOC-eq' },
+    { name: 'Abiotic Depletion Potential for non-fossil resources (ADPE)', key: 'adpe', unit: 'kg Sb-eq' },
     { name: 'Abiotic Depletion Potential for fossil resources (ADPF)', key: 'adpf', unit: 'MJ' },
   ]
 
   return (
-    <Container size='lg' py={50}>
-      <Stack gap='xl'>
-        <Group justify='space-between' align='flex-start'>
-          <Stack gap='xs'>
-            <Button variant='subtle' component={Link} to='/results' size='xs' p={0}>
-              ← Back to results
-            </Button>
-            <Title order={1}>{epd.name}</Title>
-            <Group gap='xs'>
-              <Badge color='blue' variant='light'>
-                {epd.subtype}
-              </Badge>
-              <Badge variant='outline' color='gray'>
-                {epd.location}
-              </Badge>
-              <Badge variant='outline' color='gray'>
-                {epd.declaredUnit}
-              </Badge>
-            </Group>
-          </Stack>
-          <Group gap='xs'>
-            {epd.source?.url && (
-              <Button component='a' href={epd.source.url} target='_blank' variant='outline'>
-                View Source EPD
+    <Container fluid bg='grey.0' p={0} pb='xl'>
+      <Container size={containerSize} py='xl'>
+        <Stack gap='xl'>
+          <Group justify='space-between' align='flex-end'>
+            <Stack gap='xs'>
+              <Group gap='xs'>
+                <ActionIcon variant='transparent' component={Link} to='/results' size='sm'>
+                  <IconArrowLeft color='black' size={18} />
+                </ActionIcon>
+                <Text size='sm'>Back to results</Text>
+              </Group>
+              <Title order={1}>{epd.name}</Title>
+            </Stack>
+            <Group gap='md'>
+              {epd.source?.url && (
+                <Button
+                  component='a'
+                  href={epd.source.url}
+                  target='_blank'
+                  variant='filled'
+                  color='yellow.4'
+                  c='black'
+                  size='xl'
+                  radius='xl'
+                  rightSection={<IconArrowUpRight color='black' />}
+                >
+                  View Source EPD
+                </Button>
+              )}
+              <Button
+                onClick={copyEpdUrl}
+                variant='filled'
+                color='yellow.4'
+                c='black'
+                size='xl'
+                radius='xl'
+                rightSection={<IconCopy color='black' />}
+              >
+                Copy EPD URL
               </Button>
-            )}
-            <Button onClick={copyEpdUrl} variant='outline'>
-              Copy EPD URL
-            </Button>
-          </Group>
-        </Group>
-
-        <SimpleGrid cols={{ base: 1, md: 2 }} spacing='xl'>
-          <Card withBorder padding='lg' radius='md'>
-            <Title order={3} mb='md'>
-              General Information
-            </Title>
-            <Table verticalSpacing='sm'>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td fw={500}>Manufacturer</Table.Td>
-                  <Table.Td>{meta.manufacturer || 'Unknown'}</Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td fw={500}>EPD ID</Table.Td>
-                  <Table.Td>{epd.id || 'N/A'}</Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td fw={500}>Published Date</Table.Td>
-                  <Table.Td>{epd.publishedDate || 'N/A'}</Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td fw={500}>Valid Until</Table.Td>
-                  <Table.Td>{epd.validUntil || 'N/A'}</Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td fw={500}>Standard</Table.Td>
-                  <Table.Td>{epd.standard || 'Unknown'}</Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
-            </Table>
-          </Card>
-
-          <Card withBorder padding='lg' radius='md'>
-            <Title order={3} mb='md'>
-              Conversions
-            </Title>
-            <Group>
-              <Text>Declared Unit:</Text>
-              <Text fw={500}>{epd.declaredUnit}</Text>
             </Group>
-            {epd.conversions && epd.conversions.length > 0 ? (
-              <Table verticalSpacing='sm'>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>To Unit</Table.Th>
-                    <Table.Th>Factor</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                  {epd.conversions.map((conv, index) => (
-                    <Table.Tr key={index}>
-                      <Table.Td>{conv?.to}</Table.Td>
-                      <Table.Td>{conv?.value}</Table.Td>
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
-            ) : (
-              <Text c='dimmed'>No conversion data available.</Text>
-            )}
-          </Card>
-        </SimpleGrid>
+          </Group>
 
-        <Card withBorder padding='lg' radius='md'>
-          <Title order={3} mb='md'>
-            Environmental Impacts (A1-A3)
-          </Title>
-          <Table verticalSpacing='sm' horizontalSpacing='md' highlightOnHover>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Impact Category</Table.Th>
-                <Table.Th>Unit</Table.Th>
-                <Table.Th ta='right'>Value (A1-A3)</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+          <Divider />
+
+          <Stack gap='md'>
+            <Title order={2}>General Information</Title>
+            <Divider />
+            <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} spacing='xl'>
+              <InfoBlock title='Manufacturer' info={meta.manufacturer || 'Unknown'} />
+              <InfoBlock title='EPD ID' info={epd.id || 'N/A'} />
+              <InfoBlock title='Published Date' info={epd.publishedDate || 'N/A'} />
+              <InfoBlock title='Valid Until' info={epd.validUntil || 'N/A'} />
+              <InfoBlock title='Standard' info={epd.standard || 'Unknown'} />
+              <InfoBlock title='Subtype' info={epd.subtype} />
+              <InfoBlock title='Location' info={epd.location} />
+              <InfoBlock title='Declared Unit' info={epd.declaredUnit} />
+            </SimpleGrid>
+          </Stack>
+
+          {epd.conversions && epd.conversions.length > 0 && (
+            <Stack gap='md'>
+              <Title order={2}>Conversions</Title>
+              <Divider />
+              <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} spacing='xl'>
+                <InfoBlock title='Declared Unit' info={epd.declaredUnit} />
+                {epd.conversions.map((conv, index) => (
+                  <InfoBlock
+                    key={index}
+                    title={`To ${conv?.to || 'Unit'}`}
+                    info={typeof conv?.value === 'number' ? conv.value.toFixed(2) : conv?.value}
+                  />
+                ))}
+              </SimpleGrid>
+            </Stack>
+          )}
+
+          <Stack gap='md'>
+            <Title order={2}>Environmental Impacts (A1-A3)</Title>
+            <Divider />
+            <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing='xl'>
               {impacts.map((impact) => {
                 const value = (epd.impacts as any)?.[impact.key]?.a1a3
-                return (
-                  <Table.Tr key={impact.key}>
-                    <Table.Td>{impact.name}</Table.Td>
-                    <Table.Td>{impact.unit}</Table.Td>
-                    <Table.Td ta='right' fw={500}>
-                      {value != null ? value.toExponential(4) : 'N/A'}
-                    </Table.Td>
-                  </Table.Tr>
-                )
+                const formattedValue =
+                  typeof value === 'number' ? value.toFixed(2) : value != null ? String(value) : null
+
+                return <InfoBlock key={impact.key} title={impact.name} info={formattedValue} unit={impact.unit} />
               })}
-            </Table.Tbody>
-          </Table>
-        </Card>
-      </Stack>
+            </SimpleGrid>
+          </Stack>
+        </Stack>
+      </Container>
     </Container>
   )
 }
