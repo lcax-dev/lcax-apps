@@ -22,7 +22,7 @@ export const OrganizationAssembliesPage = () => {
   const assemblies = data?.organizationAssemblies ?? []
 
   return (
-    <Container fluid bg='grey.0' p={0} pb='xl'>
+    <Container fluid bg='grey.0' p={0} pb='xl' mih='100vh'>
       <Container size={containerSize} py='xl' mx={{ base: 'md', md: 'auto' }}>
         <Stack gap='xl'>
           <Group justify='space-between' align='flex-end' gap='md'>

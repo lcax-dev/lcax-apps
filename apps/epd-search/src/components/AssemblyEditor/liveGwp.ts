@@ -13,6 +13,18 @@ const calculationOptions = () => ({
   overwriteExistingResults: true,
 })
 
+const withoutTypename = (value: unknown): unknown => {
+  if (Array.isArray(value)) return value.map(withoutTypename)
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .filter(([key]) => key !== '__typename')
+        .map(([key, nested]) => [key, withoutTypename(nested)]),
+    )
+  }
+  return value
+}
+
 const toInlineEpd = (epd: EditorEpd): { type: 'EPD' } & EPD =>
   ({
     type: 'EPD',
@@ -29,7 +41,7 @@ const toInlineEpd = (epd: EditorEpd): { type: 'EPD' } & EPD =>
     location: 'unknown',
     subtype: 'generic',
     conversions: null,
-    impacts: (epd.impacts ?? {}) as Impacts,
+    impacts: withoutTypename(epd.impacts ?? {}) as Impacts,
     metaData: null,
   }) as { type: 'EPD' } & EPD
 
@@ -86,7 +98,8 @@ export const liveProductGwp = (product: EditorProduct): number | null => {
   if (!lcaxProduct) return null
   try {
     return gwpFromImpacts(calculateProduct(lcaxProduct, calculationOptions()))
-  } catch {
+  } catch (error) {
+    console.error('Error calculating GWP for product', product, error.message)
     return null
   }
 }

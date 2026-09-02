@@ -1,21 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Anchor, Button, Container, Divider, Stack, Text, Title, useMatches } from '@mantine/core'
+import { Anchor, Button, Container, Stack, Text, Title, useMatches } from '@mantine/core'
 import { Link, useNavigate, useParams } from 'react-router'
 import { IconArrowRight } from '@tabler/icons-react'
 import { ErrorMessage, Loading } from '@lcax/ui'
 import {
   AssemblyEditor,
-  EditorConfirmModal,
-  EditorSaveBar,
   canCompleteSave,
   canSaveDraft,
   createEmptyEditorState,
+  type EditorAssemblyState,
+  EditorConfirmModal,
+  EditorSaveBar,
   editorStateFromQuery,
   isEditorDirty,
   liveAssemblyResults,
-  runSave,
-  type EditorAssemblyState,
   type OrganizationAssemblyQueryData,
+  runSave,
 } from '@/components/AssemblyEditor'
 import {
   organizationAssembliesQueryDocument,
@@ -76,7 +76,7 @@ export const OrganizationAssemblyEditorPage = () => {
     const next = editorStateFromQuery(assembly)
     setState(next)
     setBaseline(next)
-    setHydratedId(assembly.id)
+    setHydratedId(assembly.id!)
   }, [data?.organizationAssembly, hydratedId, id, isNew])
 
   const dirty = isEditorDirty(state, baseline)
@@ -165,8 +165,6 @@ export const OrganizationAssemblyEditorPage = () => {
             </Anchor>
             <Title>{isNew ? 'New assembly' : (assembly?.name ?? 'Edit assembly')}</Title>
           </div>
-          <Text w={{ base: '100%', xl: '66%' }}>Compose products and attach visible EPDs.</Text>
-          <Divider />
           {showLoading ? (
             <div aria-busy='true' aria-label='Loading assembly'>
               <Loading />

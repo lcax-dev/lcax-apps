@@ -63,4 +63,28 @@ describe('toLcaxProduct', () => {
     expect(product?.impactData).toHaveLength(1)
     expect(product?.impactData[0]).toMatchObject({ type: 'EPD', id: epd.id, version: epd.version })
   })
+
+  it('strips GraphQL __typename from inlined EPD impacts', () => {
+    const product = toLcaxProduct({
+      ...createEmptyProduct(),
+      impactData: [
+        {
+          id: epd.id,
+          version: epd.version,
+          epd: {
+            ...epd,
+            impacts: {
+              __typename: 'Impacts',
+              gwp: { __typename: 'ImpactCategory', a1a3: 818 },
+            } as EditorEpd['impacts'],
+          },
+        },
+      ],
+    })
+
+    expect(product?.impactData[0]).toMatchObject({
+      impacts: { gwp: { a1a3: 818 } },
+    })
+    expect(JSON.stringify(product?.impactData[0])).not.toContain('__typename')
+  })
 })
