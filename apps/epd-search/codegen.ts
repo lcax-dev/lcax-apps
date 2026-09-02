@@ -2,7 +2,12 @@ import type { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
   schema: 'http://localhost:4000/graphql',
-  documents: ['src/queries/epds.ts', 'src/queries/search.ts', 'src/queries/assemblies.ts'],
+  documents: [
+    'src/queries/epds.ts',
+    'src/queries/search.ts',
+    'src/queries/assemblies.ts',
+    'src/queries/organizationAssemblies.ts',
+  ],
   ignoreNoDocuments: true,
   generates: {
     './src/queries/generated/': {

@@ -1,15 +1,25 @@
 import {
+  GraphQLBoolean,
+  GraphQLEnumType,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
   GraphQLFloat,
+  GraphQLInt,
   GraphQLList,
   GraphQLInputObjectType,
 } from 'graphql/type'
 import { UnitEnum } from '@/schema/types/enums'
 import { GraphQLProduct } from '@/schema/types/products'
+import { GraphQLEpd } from '@/schema/types/epds'
 import { GraphQLImpacts, JSONObject } from '@/schema/types/objects'
-import { FloatFilter, GraphQLSortOrder, StringFilter, UnitFilter } from '@/schema/types/inputs'
+import {
+  FloatFilter,
+  GraphQLClassificationInput,
+  GraphQLSortOrder,
+  StringFilter,
+  UnitFilter,
+} from '@/schema/types/inputs'
 
 export const AssembliesFilters: GraphQLInputObjectType = new GraphQLInputObjectType({
   name: 'AssembliesFilters',
@@ -71,4 +81,105 @@ export const GraphQLAssembly = new GraphQLObjectType({
     projectId: { type: GraphQLString },
     modelId: { type: GraphQLString },
   },
+})
+
+export const OrganizationAssemblySaveKind = new GraphQLEnumType({
+  name: 'OrganizationAssemblySaveKind',
+  values: {
+    DRAFT: { value: 'DRAFT' },
+    COMPLETE: { value: 'COMPLETE' },
+  },
+})
+
+export const GraphQLOrganizationAssemblyProductImpactRef = new GraphQLObjectType({
+  name: 'OrganizationAssemblyProductImpactRef',
+  fields: () => ({
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    version: { type: new GraphQLNonNull(GraphQLString) },
+    epd: { type: GraphQLEpd },
+  }),
+})
+
+export const GraphQLOrganizationAssemblyProduct = new GraphQLObjectType({
+  name: 'OrganizationAssemblyProduct',
+  fields: () => ({
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    description: { type: GraphQLString },
+    quantity: { type: new GraphQLNonNull(GraphQLFloat) },
+    unit: { type: new GraphQLNonNull(GraphQLString) },
+    referenceServiceLife: { type: new GraphQLNonNull(GraphQLFloat) },
+    classification: { type: new GraphQLNonNull(new GraphQLList(GraphQLClassification)) },
+    impactData: {
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLOrganizationAssemblyProductImpactRef))),
+    },
+    results: { type: GraphQLImpacts },
+  }),
+})
+
+export const GraphQLOrganizationAssembly = new GraphQLObjectType({
+  name: 'OrganizationAssembly',
+  fields: () => ({
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    description: { type: GraphQLString },
+    comment: { type: GraphQLString },
+    quantity: { type: new GraphQLNonNull(GraphQLFloat) },
+    unit: { type: new GraphQLNonNull(GraphQLString) },
+    classification: { type: new GraphQLNonNull(new GraphQLList(GraphQLClassification)) },
+    visibility: { type: new GraphQLNonNull(GraphQLString) },
+    incomplete: { type: new GraphQLNonNull(GraphQLBoolean) },
+    productCount: { type: new GraphQLNonNull(GraphQLInt) },
+    products: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLOrganizationAssemblyProduct))) },
+    results: { type: GraphQLImpacts },
+    organizationId: { type: GraphQLString },
+  }),
+})
+
+export const OrganizationAssemblyProductImpactRefInput = new GraphQLInputObjectType({
+  name: 'OrganizationAssemblyProductImpactRefInput',
+  fields: {
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    version: { type: new GraphQLNonNull(GraphQLString) },
+  },
+})
+
+export const OrganizationAssemblyProductWriteInput = new GraphQLInputObjectType({
+  name: 'OrganizationAssemblyProductWriteInput',
+  fields: () => ({
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    description: { type: GraphQLString },
+    quantity: { type: GraphQLFloat },
+    unit: { type: GraphQLString },
+    referenceServiceLife: { type: GraphQLFloat },
+    classification: { type: new GraphQLList(GraphQLClassificationInput) },
+    impactData: { type: new GraphQLList(new GraphQLNonNull(OrganizationAssemblyProductImpactRefInput)) },
+  }),
+})
+
+export const OrganizationAssemblyWriteInput = new GraphQLInputObjectType({
+  name: 'OrganizationAssemblyWriteInput',
+  fields: () => ({
+    name: { type: GraphQLString },
+    description: { type: GraphQLString },
+    comment: { type: GraphQLString },
+    quantity: { type: GraphQLFloat },
+    unit: { type: GraphQLString },
+    classification: { type: new GraphQLList(GraphQLClassificationInput) },
+    products: { type: new GraphQLList(new GraphQLNonNull(OrganizationAssemblyProductWriteInput)) },
+  }),
+})
+
+export const SaveOrganizationAssemblyInput = new GraphQLInputObjectType({
+  name: 'SaveOrganizationAssemblyInput',
+  fields: () => ({
+    id: { type: GraphQLString },
+    kind: { type: new GraphQLNonNull(OrganizationAssemblySaveKind) },
+    visibility: { type: GraphQLString },
+    confirmForcePublish: { type: GraphQLBoolean },
+    confirmPrivatize: { type: GraphQLBoolean },
+    results: { type: JSONObject },
+    assembly: { type: new GraphQLNonNull(OrganizationAssemblyWriteInput) },
+  }),
 })

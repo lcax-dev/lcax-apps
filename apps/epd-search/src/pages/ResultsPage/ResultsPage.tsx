@@ -1,13 +1,14 @@
-import { Center, Container, Grid, Loader, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { ActionIcon, Center, Container, Divider, Grid, Loader, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { useDebouncedValue } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router'
-import { FilterSidebar, SearchResultCard, toSearchResultCard, EPDCard } from '@/components'
+import { Link, useSearchParams } from 'react-router'
+import { FilterSidebar, SearchResultCard, toSearchResultCard } from '@/components'
 import { LCAxKindParam, parseKinds, parseUnit, setKindsParam, setUnitParam } from '@/lib/searchParams.ts'
 import { buildSearchVariables } from '@/lib/searchVariables.ts'
 import { useSearchQuery } from '@/queries/search.ts'
 import { IconArrowBack } from '@tabler/icons-react'
-import { useSearchEpdsQuery, CountryEnum, StandardEnum, SubTypeEnum, UnitEnum } from '@/queries'
+import { useMatches } from '@lcax/ui'
+
 const kindLabel = (kind: LCAxKindParam) => (kind === 'ASSEMBLY' ? 'Assembly' : 'EPD')
 
 export const ResultsPage = () => {
@@ -163,7 +164,7 @@ export const ResultsPage = () => {
           </div>
           <Divider />
 
-          <Grid gutter='xl'>
+          <Grid gap='xl'>
             <Grid.Col span={{ base: 12, md: 3 }}>
               <FilterSidebar
                 name={searchInput}

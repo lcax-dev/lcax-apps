@@ -1,4 +1,4 @@
-import type { Project as LCAxProject, ImpactCategory } from 'lcax'
+import type { Project as LCAxProject, Country } from 'lcax'
 
 export const projectData: LCAxProject = {
   id: '2f95c41e-0cc4-4b6e-90ac-ffa796aecd6d',
@@ -6,7 +6,7 @@ export const projectData: LCAxProject = {
   description: '',
   comment: null,
   location: {
-    country: 'dnk',
+    country: 'dnk' as unknown as Country,
     city: '',
     address: 'Testvej 1, 1111 Testbyen',
   },

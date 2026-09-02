@@ -89,4 +89,36 @@ describe('mutate LCAx data', async () => {
     expect(assemblyCount.length).toBe(1)
     expect(productCount.length).toBe(1)
   })
+
+  test('add LCAx EPD JSON that includes formatVersion', async ({ expect }) => {
+    const values = [
+      {
+        ...epdData[0],
+        formatVersion: '3.1.0',
+      },
+    ]
+
+    const response = await server.executeOperation(
+      {
+        query: gql`
+          mutation addLCAxData($values: [LCAxInput!]!) {
+            addLCAxData(values: $values)
+          }
+        `,
+        variables: { values },
+      },
+      {
+        contextValue: adminContext,
+      },
+    )
+
+    const result = response.body as unknown as ResponseBody<{ addLCAxData: any[] }>
+
+    expect(result.kind).toBe('single')
+    expect(result.singleResult.errors).toBeUndefined()
+    expect(result.singleResult.data.addLCAxData.length).toBe(1)
+
+    const epdCount = await dbConnection.select().from(epds)
+    expect(epdCount.length).toBe(1)
+  })
 })
