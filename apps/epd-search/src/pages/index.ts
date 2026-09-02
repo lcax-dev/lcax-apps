@@ -1,4 +1,5 @@
 export * from './SearchPage'
 export * from './ResultsPage'
 export * from './EPDDetailPage'
+export * from './AssemblyDetailPage'
 export * from './StatisticsPage'

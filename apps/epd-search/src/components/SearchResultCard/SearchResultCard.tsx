@@ -1,5 +1,5 @@
 import { Badge, Card, Group, Stack, Text, Title, UnstyledButton } from '@mantine/core'
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import { SearchResultCardModel } from './toSearchResultCard'
 
 interface SearchResultCardProps {
@@ -7,8 +7,14 @@ interface SearchResultCardProps {
 }
 
 export const SearchResultCard = ({ result }: SearchResultCardProps) => {
+  const location = useLocation()
   return (
-    <UnstyledButton component={Link} to={result.href} style={{ display: 'block' }}>
+    <UnstyledButton
+      component={Link}
+      to={result.href}
+      state={{ fromResults: `${location.pathname}${location.search}` }}
+      style={{ display: 'block' }}
+    >
       <Card shadow='sm' padding='lg' radius='md' withBorder>
         <Stack gap='xs'>
           <Group justify='space-between' align='flex-start'>

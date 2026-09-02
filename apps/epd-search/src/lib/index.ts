@@ -1,4 +1,5 @@
 export * from './auth-client'
 export * from './hooks'
+export * from './resultsBackTo'
 export * from './searchParams'
 export * from './searchVariables'

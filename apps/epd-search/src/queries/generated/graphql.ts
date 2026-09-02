@@ -1015,6 +1015,46 @@ export type UnitFilter = {
   isNull?: InputMaybe<Scalars['Boolean']['input']>
 }
 
+export type GetAssemblyQueryVariables = Exact<{
+  id: Scalars['String']['input']
+}>
+
+export type GetAssemblyQuery = {
+  __typename?: 'Query'
+  assemblies: Array<{
+    __typename?: 'Assembly'
+    id: string
+    name: string
+    description?: string | null
+    quantity: number
+    unit: UnitEnum
+    classification: Array<{
+      __typename?: 'Classification'
+      name?: string | null
+      system?: string | null
+      code?: string | null
+    } | null>
+    products: Array<{
+      __typename?: 'Product'
+      id?: string | null
+      name?: string | null
+      quantity?: number | null
+      unit?: string | null
+      impactData?: Array<{ __typename?: 'EPD'; id?: string | null; name?: string | null } | null> | null
+    } | null>
+    results?: {
+      __typename?: 'Impacts'
+      gwp?: { __typename?: 'ImpactCategory'; a1a3?: number | null } | null
+      odp?: { __typename?: 'ImpactCategory'; a1a3?: number | null } | null
+      ap?: { __typename?: 'ImpactCategory'; a1a3?: number | null } | null
+      ep?: { __typename?: 'ImpactCategory'; a1a3?: number | null } | null
+      pocp?: { __typename?: 'ImpactCategory'; a1a3?: number | null } | null
+      adpe?: { __typename?: 'ImpactCategory'; a1a3?: number | null } | null
+      adpf?: { __typename?: 'ImpactCategory'; a1a3?: number | null } | null
+    } | null
+  }>
+}
+
 export type AddEpdsMutationVariables = Exact<{
   values: Array<EpdsInsertInput> | EpdsInsertInput
 }>
@@ -1224,6 +1264,169 @@ export type SearchQuery = {
   >
 }
 
+export const GetAssemblyDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'getAssembly' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'assemblies' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'id' },
+                      value: {
+                        kind: 'ObjectValue',
+                        fields: [
+                          {
+                            kind: 'ObjectField',
+                            name: { kind: 'Name', value: 'eq' },
+                            value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+              { kind: 'Argument', name: { kind: 'Name', value: 'limit' }, value: { kind: 'IntValue', value: '1' } },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'unit' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'classification' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'system' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'code' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'products' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'unit' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'impactData' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                            { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'results' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'gwp' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [{ kind: 'Field', name: { kind: 'Name', value: 'a1a3' } }],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'odp' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [{ kind: 'Field', name: { kind: 'Name', value: 'a1a3' } }],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'ap' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [{ kind: 'Field', name: { kind: 'Name', value: 'a1a3' } }],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'ep' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [{ kind: 'Field', name: { kind: 'Name', value: 'a1a3' } }],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'pocp' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [{ kind: 'Field', name: { kind: 'Name', value: 'a1a3' } }],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'adpe' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [{ kind: 'Field', name: { kind: 'Name', value: 'a1a3' } }],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'adpf' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [{ kind: 'Field', name: { kind: 'Name', value: 'a1a3' } }],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAssemblyQuery, GetAssemblyQueryVariables>
 export const AddEpdsDocument = {
   kind: 'Document',
   definitions: [

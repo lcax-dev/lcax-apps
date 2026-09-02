@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router'
+import { useParams, Link, useLocation } from 'react-router'
 import {
   Container,
   Title,
@@ -13,10 +13,17 @@ import {
   Center,
   Button,
 } from '@mantine/core'
+import { resultsBackTo } from '@/lib/resultsBackTo'
 import { useGetEpdQuery } from '@/queries'
+
+type FromResultsState = {
+  fromResults?: string
+}
 
 export const EPDDetailPage = () => {
   const { id } = useParams<{ id: string }>()
+  const location = useLocation()
+  const backTo = resultsBackTo((location.state as FromResultsState | null)?.fromResults)
 
   const { data, loading, error } = useGetEpdQuery({
     variables: { id: id || '' },
@@ -37,7 +44,7 @@ export const EPDDetailPage = () => {
         <Stack align='center'>
           <Title order={2}>EPD Not Found</Title>
           <Text c='dimmed'>The EPD you are looking for does not exist or an error occurred.</Text>
-          <Button component={Link} to='/results'>
+          <Button component={Link} to={backTo}>
             Back to Search
           </Button>
         </Stack>
@@ -68,7 +75,7 @@ export const EPDDetailPage = () => {
       <Stack gap='xl'>
         <Group justify='space-between' align='flex-start'>
           <Stack gap='xs'>
-            <Button variant='subtle' component={Link} to='/results' size='xs' p={0}>
+            <Button variant='subtle' component={Link} to={backTo} size='xs' p={0}>
               ← Back to results
             </Button>
             <Title order={1}>{epd.name}</Title>
