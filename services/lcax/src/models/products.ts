@@ -1,5 +1,5 @@
 import { doublePrecision, json, pgTable, text, uuid } from 'drizzle-orm/pg-core'
-import type { ImpactData, Impacts, MetaData, Transport } from 'lcax'
+import type { Classification, ImpactData, Impacts, MetaData, Transport } from 'lcax'
 import { v4 as uuid4 } from 'uuid'
 import { Unit, Visibility } from './enums'
 import { organization } from './auth'
@@ -13,6 +13,7 @@ export const products = pgTable('products', {
   description: text('description'),
   referenceServiceLife: doublePrecision('referenceServiceLife').notNull(),
   impactData: json('impactData').$type<ImpactData[]>().notNull().default([]),
+  classification: json('classification').$type<Classification[]>().notNull().default([]),
   quantity: doublePrecision('quantity').notNull(),
   unit: Unit().notNull(),
   transport: json('transport').$type<Transport[]>().default([]),

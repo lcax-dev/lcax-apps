@@ -5,13 +5,25 @@ import {
   calculateProductResolver,
   calculateProjectResolver,
   deleteEPDsResolver,
+  deleteOrganizationAssemblyResolver,
   getEPDsResolver,
   getAssembliesResolver,
+  getOrganizationAssembliesResolver,
+  getOrganizationAssemblyResolver,
+  saveOrganizationAssemblyResolver,
   updateEPDsResolver,
   getLCAxStatisticsResolver,
   searchResolver,
 } from '@/schema/resolvers'
-import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
+import {
+  GraphQLBoolean,
+  GraphQLInt,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLString,
+} from 'graphql'
 import {
   EpdsFilters,
   GraphQLEpdsInsertInput,
@@ -25,6 +37,7 @@ import {
   AssembliesOrderBy,
   GraphQLAssembly,
   GraphQLAssemblyInput,
+  GraphQLOrganizationAssembly,
   GraphQLProduct,
   GraphQLProductInput,
   GraphQLCalculationOptionsInput,
@@ -34,6 +47,7 @@ import {
   JSONObject,
   LCAxKind,
   LCAxSearchResult,
+  SaveOrganizationAssemblyInput,
   SearchFilters,
 } from '@/schema/types'
 
@@ -75,6 +89,17 @@ export const graphQLSchema = new GraphQLSchema({
       lcaxStatistics: {
         type: new GraphQLNonNull(GraphQLLCAxStatistics),
         resolve: getLCAxStatisticsResolver,
+      },
+      organizationAssemblies: {
+        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLOrganizationAssembly))),
+        resolve: getOrganizationAssembliesResolver,
+      },
+      organizationAssembly: {
+        type: GraphQLOrganizationAssembly,
+        args: {
+          id: { type: new GraphQLNonNull(GraphQLString) },
+        },
+        resolve: getOrganizationAssemblyResolver,
       },
     },
   }),
@@ -134,6 +159,20 @@ export const graphQLSchema = new GraphQLSchema({
           where: { type: EpdsFilters },
         },
         resolve: updateEPDsResolver,
+      },
+      saveOrganizationAssembly: {
+        type: new GraphQLNonNull(GraphQLOrganizationAssembly),
+        args: {
+          input: { type: new GraphQLNonNull(SaveOrganizationAssemblyInput) },
+        },
+        resolve: saveOrganizationAssemblyResolver,
+      },
+      deleteOrganizationAssembly: {
+        type: new GraphQLNonNull(GraphQLBoolean),
+        args: {
+          id: { type: new GraphQLNonNull(GraphQLString) },
+        },
+        resolve: deleteOrganizationAssemblyResolver,
       },
     },
   }),

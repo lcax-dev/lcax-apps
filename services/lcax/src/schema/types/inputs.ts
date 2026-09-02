@@ -310,6 +310,7 @@ export const GraphQLLCAxInput = new GraphQLInputObjectType({
     standard: { type: GraphQLString },
     location: { type: GraphQLString },
     subtype: { type: GraphQLString },
+    formatVersion: { type: GraphQLString },
     source: { type: GraphQLEPDSourceInput },
     conversions: { type: GraphQLEPDConversionInput },
     impacts: { type: GraphQLEPDImpactInput },

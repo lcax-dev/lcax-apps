@@ -1,0 +1,1 @@
+ALTER TABLE "products" ADD COLUMN "classification" json DEFAULT '[]'::json NOT NULL;
