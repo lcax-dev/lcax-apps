@@ -45,10 +45,11 @@ export const SearchPage = () => {
             <Text>EPD Search</Text>
             <Title>LCAx Search</Title>
           </div>
-          <Text w={{ base: '100%', xl: '66%' }}>Search for Environmental Product Declarations (EPDs) in seconds.</Text>
+          <Text w={{ base: '100%', xl: '66%' }}>Search for LCAx Data (EPDs and Assemblies) in seconds.</Text>
 
           <TextInput
-            placeholder='Search EPDs by name...'
+            placeholder='Search LCAx Data by name...'
+            aria-label='Search LCAx Data'
             size='xl'
             radius='xl'
             w={{ base: '100%', xl: '66%' }}

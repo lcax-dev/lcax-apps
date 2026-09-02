@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router'
-import { EPDDetailPage, ResultsPage, SearchPage, StatisticsPage } from '../../pages'
+import { AssemblyDetailPage, EPDDetailPage, ResultsPage, SearchPage, StatisticsPage } from '@/pages'
 import { Loading, NotFoundPage, AppLayout, AdminLayout } from '@lcax/ui'
 import { lazy, Suspense } from 'react'
 const UserManagementApp = lazy(async () => {
@@ -15,6 +15,7 @@ export const AppRouter = () => {
         <Route index element={<SearchPage />} />
         <Route path='/results' element={<ResultsPage />} />
         <Route path='/epds/:id' element={<EPDDetailPage />} />
+        <Route path='/assemblies/:id' element={<AssemblyDetailPage />} />
         <Route
           path='/login'
           element={

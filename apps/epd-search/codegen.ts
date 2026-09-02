@@ -1,15 +1,16 @@
 import type { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
-    schema: 'http://localhost:4000/graphql',
-    generates: {
-        './src/queries/generated/': {
-            preset: 'client',
-            plugins: ['typescript-operations'],
-            config: {
-                enumType: 'string',
-            }
-        },
-    }
+  schema: 'http://localhost:4000/graphql',
+  documents: ['src/queries/epds.ts', 'src/queries/search.ts', 'src/queries/assemblies.ts'],
+  ignoreNoDocuments: true,
+  generates: {
+    './src/queries/generated/': {
+      preset: 'client',
+      config: {
+        enumType: 'string',
+      },
+    },
+  },
 }
 export default config

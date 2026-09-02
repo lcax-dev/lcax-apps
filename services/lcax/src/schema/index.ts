@@ -6,8 +6,10 @@ import {
   calculateProjectResolver,
   deleteEPDsResolver,
   getEPDsResolver,
+  getAssembliesResolver,
   updateEPDsResolver,
   getLCAxStatisticsResolver,
+  searchResolver,
 } from '@/schema/resolvers'
 import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
 import {
@@ -19,6 +21,8 @@ import {
   GraphQLEpd,
   GraphQLProject,
   GraphQLProjectInput,
+  AssembliesFilters,
+  AssembliesOrderBy,
   GraphQLAssembly,
   GraphQLAssemblyInput,
   GraphQLProduct,
@@ -28,6 +32,9 @@ import {
   GraphQLUser,
   GraphQLLCAxStatistics,
   JSONObject,
+  LCAxKind,
+  LCAxSearchResult,
+  SearchFilters,
 } from '@/schema/types'
 
 export const graphQLSchema = new GraphQLSchema({
@@ -43,6 +50,27 @@ export const graphQLSchema = new GraphQLSchema({
           orderBy: { type: new GraphQLList(EpdsOrderBy) },
         },
         resolve: getEPDsResolver,
+      },
+      assemblies: {
+        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLAssembly))),
+        args: {
+          where: { type: AssembliesFilters },
+          offset: { type: GraphQLInt },
+          limit: { type: GraphQLInt },
+          orderBy: { type: new GraphQLList(AssembliesOrderBy) },
+        },
+        resolve: getAssembliesResolver,
+      },
+      search: {
+        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(LCAxSearchResult))),
+        args: {
+          q: { type: GraphQLString },
+          kinds: { type: new GraphQLList(new GraphQLNonNull(LCAxKind)) },
+          where: { type: SearchFilters },
+          offset: { type: GraphQLInt },
+          limit: { type: GraphQLInt },
+        },
+        resolve: searchResolver,
       },
       lcaxStatistics: {
         type: new GraphQLNonNull(GraphQLLCAxStatistics),

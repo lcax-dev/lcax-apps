@@ -4,13 +4,14 @@ import * as models from '@/models'
 import { orderByHelper, whereHelper } from '../utils'
 import { visibilityFilter } from '../utils/visibility'
 import type { GraphQLContext } from '@/schema/context'
+import { expandAssemblyProducts, selectionIncludesField } from './expandAssemblyProducts'
 
-export const getEPDsResolver = async (source, args, context: GraphQLContext, info) => {
+export const getAssembliesResolver = async (source, args, context: GraphQLContext, info) => {
   const { where, offset, limit, orderBy } = args
-  const filters = whereHelper(where, models.epds)
-  const visibilitySql = visibilityFilter(models.epds, context)
+  const filters = whereHelper(where, models.assemblies)
+  const visibilitySql = visibilityFilter(models.assemblies, context)
 
-  let query = dbConnection.select().from(models.epds).$dynamic()
+  let query = dbConnection.select().from(models.assemblies).$dynamic()
 
   if (filters && visibilitySql) {
     query = query.where(and(filters, visibilitySql))
@@ -21,7 +22,7 @@ export const getEPDsResolver = async (source, args, context: GraphQLContext, inf
   }
 
   if (orderBy) {
-    const order = orderByHelper(orderBy, models.epds)
+    const order = orderByHelper(orderBy, models.assemblies)
     if (order.length > 0) {
       query = query.orderBy(...order)
     }
@@ -35,5 +36,16 @@ export const getEPDsResolver = async (source, args, context: GraphQLContext, inf
     query = query.offset(offset)
   }
 
-  return await query
+  const rows = await query
+  const assemblies = rows.map((row) => ({
+    ...row,
+    type: 'assembly',
+    classification: row.classification ?? [],
+  }))
+
+  if (!selectionIncludesField(info, 'products')) {
+    return assemblies
+  }
+
+  return expandAssemblyProducts(assemblies, context)
 }

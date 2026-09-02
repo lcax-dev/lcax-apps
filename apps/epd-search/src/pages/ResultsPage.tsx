@@ -1,31 +1,25 @@
-import {
-  ActionIcon,
-  Center,
-  Container,
-  Divider,
-  Grid,
-  Loader,
-  SimpleGrid,
-  Stack,
-  Text,
-  Title,
-  useMatches,
-} from '@mantine/core'
-import { Link, useSearchParams } from 'react-router'
+import { Center, Container, Grid, Loader, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { useDebouncedValue } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
-import { useSearchEpdsQuery, CountryEnum, StandardEnum, SubTypeEnum, UnitEnum } from '../queries'
-import { EPDCard, FilterSidebar } from '../components'
+import { useSearchParams } from 'react-router'
+import { FilterSidebar, SearchResultCard, toSearchResultCard, EPDCard } from '@/components'
+import { LCAxKindParam, parseKinds, parseUnit, setKindsParam, setUnitParam } from '@/lib/searchParams.ts'
+import { buildSearchVariables } from '@/lib/searchVariables.ts'
+import { useSearchQuery } from '@/queries/search.ts'
 import { IconArrowBack } from '@tabler/icons-react'
+import { useSearchEpdsQuery, CountryEnum, StandardEnum, SubTypeEnum, UnitEnum } from '@/queries'
+const kindLabel = (kind: LCAxKindParam) => (kind === 'ASSEMBLY' ? 'Assembly' : 'EPD')
 
 export const ResultsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const query = searchParams.get('q') || ''
-  const unit = searchParams.get('unit') || ''
+  const kinds = parseKinds(searchParams)
+  const unit = parseUnit(searchParams)
   const location = searchParams.get('location') || ''
   const subtype = searchParams.get('subtype') || ''
   const standard = searchParams.get('standard') || ''
   const type = searchParams.get('type') || ''
+  const classification = searchParams.get('classification') || ''
   const publishedDate = searchParams.get('publishedDate') || ''
   const validUntil = searchParams.get('validUntil') || ''
 
@@ -33,6 +27,8 @@ export const ResultsPage = () => {
   const [debouncedQuery] = useDebouncedValue(searchInput, 500)
   const [typeInput, setTypeInput] = useState(type)
   const [debouncedType] = useDebouncedValue(typeInput, 500)
+  const [classificationInput, setClassificationInput] = useState(classification)
+  const [debouncedClassification] = useDebouncedValue(classificationInput, 500)
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams)
@@ -54,68 +50,74 @@ export const ResultsPage = () => {
     setSearchParams(params)
   }, [debouncedType])
 
-  const { data, loading, error } = useSearchEpdsQuery({
-    variables: {
-      where: {
-        name: query ? { contains: query } : undefined,
-        declaredUnit: unit ? { eq: unit as UnitEnum } : undefined,
-        location: location ? { eq: location as CountryEnum } : undefined,
-        subtype: subtype ? { eq: subtype as SubTypeEnum } : undefined,
-        standard: standard ? { eq: standard as StandardEnum } : undefined,
-        type: type ? { contains: type } : undefined,
-        publishedDate: publishedDate ? { gte: publishedDate } : undefined,
-        validUntil: validUntil ? { lte: validUntil } : undefined,
-      },
-      limit: 50,
-    },
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams)
+    if (debouncedClassification) {
+      params.set('classification', debouncedClassification)
+    } else {
+      params.delete('classification')
+    }
+    setSearchParams(params)
+  }, [debouncedClassification])
+
+  const { data, loading, error } = useSearchQuery({
+    variables: buildSearchVariables(searchParams),
   })
+
+  const results = data?.search.map(toSearchResultCard).filter((result) => result !== null) ?? []
 
   const handleNameChange = (name: string) => {
     setSearchInput(name)
   }
 
-  const handleUnitChange = (unitVal: string | null) => {
+  const handleKindsChange = (next: LCAxKindParam[]) => {
     const params = new URLSearchParams(searchParams)
-    if (unitVal) {
-      params.set('unit', unitVal)
-    } else {
-      params.delete('unit')
-    }
+    setKindsParam(params, next)
     setSearchParams(params)
   }
 
-  const handleLocationChange = (locationVal: string | null) => {
+  const handleUnitChange = (nextUnit: string | null) => {
     const params = new URLSearchParams(searchParams)
-    if (locationVal) {
-      params.set('location', locationVal)
+    setUnitParam(params, nextUnit)
+    setSearchParams(params)
+  }
+
+  const handleLocationChange = (nextLocation: string | null) => {
+    const params = new URLSearchParams(searchParams)
+    if (nextLocation) {
+      params.set('location', nextLocation)
     } else {
       params.delete('location')
     }
     setSearchParams(params)
   }
 
-  const handleSubtypeChange = (subtypeVal: string | null) => {
+  const handleSubtypeChange = (nextSubtype: string | null) => {
     const params = new URLSearchParams(searchParams)
-    if (subtypeVal) {
-      params.set('subtype', subtypeVal)
+    if (nextSubtype) {
+      params.set('subtype', nextSubtype)
     } else {
       params.delete('subtype')
     }
     setSearchParams(params)
   }
 
-  const handleStandardChange = (standardVal: string | null) => {
+  const handleStandardChange = (nextStandard: string | null) => {
     const params = new URLSearchParams(searchParams)
-    if (standardVal) {
-      params.set('standard', standardVal)
+    if (nextStandard) {
+      params.set('standard', nextStandard)
     } else {
       params.delete('standard')
     }
     setSearchParams(params)
   }
 
-  const handleTypeChange = (typeVal: string) => {
-    setTypeInput(typeVal)
+  const handleTypeChange = (nextType: string) => {
+    setTypeInput(nextType)
+  }
+
+  const handleClassificationChange = (nextClassification: string) => {
+    setClassificationInput(nextClassification)
   }
 
   const handlePublishedDateChange = (date: string) => {
@@ -139,7 +141,17 @@ export const ResultsPage = () => {
   }
 
   const containerSize = useMatches({ md: 'md', xl: 'xl', xxl: 'xxl' })
-  const hasFilters = Boolean(query || unit || location || subtype || standard || type || publishedDate || validUntil)
+  const hasFilters =
+    query ||
+    kinds.length > 0 ||
+    unit ||
+    location ||
+    subtype ||
+    standard ||
+    type ||
+    classification ||
+    publishedDate ||
+    validUntil
 
   return (
     <Container fluid bg='grey.0' p={0} pb='xl'>
@@ -155,19 +167,23 @@ export const ResultsPage = () => {
             <Grid.Col span={{ base: 12, md: 3 }}>
               <FilterSidebar
                 name={searchInput}
+                kinds={kinds}
                 unit={unit}
                 location={location}
                 subtype={subtype}
                 standard={standard}
                 type={typeInput}
+                classification={classificationInput}
                 publishedDate={publishedDate}
                 validUntil={validUntil}
                 onNameChange={handleNameChange}
+                onKindsChange={handleKindsChange}
                 onUnitChange={handleUnitChange}
                 onLocationChange={handleLocationChange}
                 onSubtypeChange={handleSubtypeChange}
                 onStandardChange={handleStandardChange}
                 onTypeChange={handleTypeChange}
+                onClassificationChange={handleClassificationChange}
                 onPublishedDateChange={handlePublishedDateChange}
                 onValidUntilChange={handleValidUntilChange}
               />
@@ -181,11 +197,13 @@ export const ResultsPage = () => {
                       Active filters:{' '}
                       {[
                         query && `Name: "${query}"`,
+                        kinds && `Type: "${kinds.map(kindLabel).join(', ')}"`,
                         unit && `Unit: ${unit}`,
                         location && `Location: ${location}`,
                         subtype && `Subtype: ${subtype}`,
                         standard && `Standard: ${standard}`,
-                        type && `Type: ${type}`,
+                        type && `EPD Type: ${type}`,
+                        classification && `Classification: ${classification}`,
                         publishedDate && `Published after: ${publishedDate}`,
                         validUntil && `Valid until: ${validUntil}`,
                       ]
@@ -208,17 +226,17 @@ export const ResultsPage = () => {
                   </Text>
                 )}
 
-                {data?.epds && data.epds.length > 0 && (
+                {data?.search && (
                   <SimpleGrid cols={{ base: 1, md: 2 }} spacing='xl'>
-                    {data.epds.map((epd) => (
-                      <EPDCard key={epd.id} epd={epd} />
+                    {results.map((result) => (
+                      <SearchResultCard key={`${result.kind}-${result.id}`} result={result} />
                     ))}
                   </SimpleGrid>
                 )}
 
-                {data?.epds && data.epds.length === 0 && !loading && (
+                {data?.search && results.length === 0 && !loading && (
                   <Stack justify='center' align='center' py={80} gap='lg'>
-                    <Title order={2}>No EPDs found matching your search.</Title>
+                    <Title order={2}>No LCAx Data found matching your search.</Title>
                     <ActionIcon variant='transparent' component={Link} to='/' size='xl'>
                       <IconArrowBack size={64} color='black' />
                     </ActionIcon>

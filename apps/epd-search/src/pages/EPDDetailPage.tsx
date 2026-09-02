@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router'
+import { useParams, Link, useLocation } from 'react-router'
 import {
   ActionIcon,
   Button,
@@ -13,12 +13,19 @@ import {
   Title,
   useMatches,
 } from '@mantine/core'
+import { resultsBackTo } from '@/lib/resultsBackTo'
 import { useGetEpdQuery } from '../queries'
 import { InfoBlock } from '../components'
 import { IconArrowBack, IconArrowLeft, IconArrowUpRight, IconCopy } from '@tabler/icons-react'
 
+type FromResultsState = {
+  fromResults?: string
+}
+
 export const EPDDetailPage = () => {
   const { id } = useParams<{ id: string }>()
+  const location = useLocation()
+  const backTo = resultsBackTo((location.state as FromResultsState | null)?.fromResults)
 
   const { data, loading, error } = useGetEpdQuery({
     variables: { id: id || '' },
@@ -43,7 +50,7 @@ export const EPDDetailPage = () => {
         <Container size={containerSize} h='100vh'>
           <Stack justify='center' align='center' h='100%' gap='lg'>
             <Title>We can't find the EPD you are looking for!</Title>
-            <ActionIcon variant='transparent' component={Link} to='/results' size='xl'>
+            <ActionIcon variant='transparent' component={Link} to={backTo} size='xl'>
               <IconArrowBack size={64} color='black' />
             </ActionIcon>
           </Stack>
@@ -77,12 +84,23 @@ export const EPDDetailPage = () => {
           <Group justify='space-between' align='flex-end'>
             <Stack gap='xs'>
               <Group gap='xs'>
-                <ActionIcon variant='transparent' component={Link} to='/results' size='sm'>
+                <ActionIcon variant='transparent' component={Link} to={backTo} size='sm'>
                   <IconArrowLeft color='black' size={18} />
                 </ActionIcon>
                 <Text size='sm'>Back to results</Text>
               </Group>
               <Title order={1}>{epd.name}</Title>
+              <Group gap='xs'>
+                <Badge color='blue' variant='light'>
+                  {epd.subtype}
+                </Badge>
+                <Badge variant='outline' color='gray'>
+                  {epd.location}
+                </Badge>
+                <Badge variant='outline' color='gray'>
+                  {epd.declaredUnit}
+                </Badge>
+              </Group>
             </Stack>
             <Group gap='md'>
               {epd.source?.url && (
