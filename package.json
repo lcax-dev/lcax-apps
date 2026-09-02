@@ -6,8 +6,8 @@
     "test": "vitest --run",
     "check": "turbo run check",
     "build": "turbo run build",
-    "dev": "dotenv -e .env -- turbo run dev",
-    "dev:search": "dotenv -e .env -- turbo run dev:search",
+    "dev": "dotenvx run -f .env.dev -- turbo run dev",
+    "dev:search": "dotenvx run -f .env.dev -- turbo run dev:search",
     "format": "turbo run format:fix"
   },
   "author": "Christian Kongsgaard",
