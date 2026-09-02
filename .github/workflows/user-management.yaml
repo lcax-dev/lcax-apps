@@ -6,25 +6,40 @@ on:
       - main
       - stage
     paths:
-      - apps/epd-search/**
+      - apps/user-management/**
       - packages/**
-      - .github/workflows/search.yaml
+      - .github/workflows/user-management.yaml
       - turbo.json
   pull_request:
     branches:
       - main
       - stage
     paths:
-      - apps/epd-search/**
+      - apps/user-management/**
       - packages/**
-      - .github/workflows/search.yaml
+      - .github/workflows/user-management.yaml
 
   workflow_dispatch:
 
-env:
-  NODE_VERSION: '24.x'
-
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          lfs: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - name: NPM Install
+        run: npm i
+
+      - name: Check
+        run: npm run check
   build:
     runs-on: ubuntu-latest
     steps:
@@ -35,28 +50,24 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: .nvmrc
           cache: 'npm'
 
       - name: NPM Install
         run: npm i
 
-      - name: Check
-        run: npm run check
-
       - name: Build
-        run: npx turbo run @lcax/search#build
+        run: npx turbo run @lcax/user-management#build
         env:
           VITE_UMAMI_ID: ${{ secrets.SEARCH_UMAMI_ID }}
           VITE_BACKEND_URL: "https://api.lcax.tools"
-          MANAGEMENT_URL: "https://users.lcax.tools"
 
       - name: Upload artifact for deployment job
         if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@v7
         with:
           name: app
-          path: ./apps/epd-search/dist
+          path: ./apps/user-management/dist
 
   deploy:
     runs-on: ubuntu-latest
@@ -80,4 +91,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.MINIO_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.MINIO_SECRET_KEY }}
           AWS_REGION: us-east-1
-        run: s5cmd --endpoint-url https://minio.chrk.site cp "./*" "s3://bundles/lcax/${{ github.ref_name }}/search/"
+        run: s5cmd --endpoint-url https://minio.chrk.site cp "./*" "s3://bundles/lcax/${{ github.ref_name }}/user-management/"
