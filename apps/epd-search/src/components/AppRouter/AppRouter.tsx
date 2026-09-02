@@ -31,6 +31,14 @@ export const AppRouter = () => {
             </Suspense>
           }
         />
+        <Route
+          path='/accept-invitation/:token'
+          element={
+            <Suspense fallback={<Loading />}>
+              <UserManagementApp />
+            </Suspense>
+          }
+        />
         <Route path='*' element={<NotFoundPage />} />
       </Route>
       <Route element={<AdminLayout />}>

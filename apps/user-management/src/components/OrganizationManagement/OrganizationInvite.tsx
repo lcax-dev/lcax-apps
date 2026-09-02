@@ -19,7 +19,6 @@ export const OrganizationInvite = ({ onSuccess }: { onSuccess?: () => void }) =>
         email,
         role: role as any,
       })
-
       notifications.success({
         message: 'Invitation sent successfully',
       })
@@ -55,11 +54,9 @@ export const OrganizationInvite = ({ onSuccess }: { onSuccess?: () => void }) =>
           value={role}
           onChange={(value) => setRole(value || 'member')}
         />
-        <RolePermitter requiredRole='owner'>
-          <Button type='submit' loading={loading}>
-            Send Invitation
-          </Button>
-        </RolePermitter>
+        <Button type='submit' loading={loading}>
+          Send Invitation
+        </Button>
       </Stack>
     </form>
   )

@@ -10,7 +10,12 @@
       "BETTER_AUTH_SECRET",
       "VITE_BACKEND_URL",
       "VITE_DEV",
-      "VITE_UMAMI_ID"
+      "VITE_UMAMI_ID",
+      "SMTP_HOST",
+      "SMTP_PORT",
+      "SMTP_USER",
+      "SMTP_PASSWORD",
+      "SMTP_FROM"
     ]
   },
   "tasks": {
@@ -31,6 +36,7 @@
     "format": {
       "dependsOn": ["^format"]
     },
+    "format:fix": { },
     "dev": {
       "persistent": true,
       "cache": false

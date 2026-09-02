@@ -8,6 +8,7 @@ import * as schema from '../models'
 import 'dotenv/config'
 import { createUsers } from '@/config/pglite'
 import { getInitialOrganization } from '@/lib'
+import { sendOrganizationInvitation } from '@/config/emails.ts'
 
 export const auth = betterAuth({
   database: drizzleAdapter(dbConnection, {
@@ -19,7 +20,22 @@ export const auth = betterAuth({
   },
   baseURL: process.env.BASE_URL,
   secret: process.env.BETTER_AUTH_SECRET,
-  plugins: [admin(), organization(), testUtils()],
+  plugins: [
+    admin(),
+    organization({
+      async sendInvitationEmail(data) {
+        const inviteLink = `${process.env.FRONTEND_URL}/accept-invitation/${data.id}`
+        await sendOrganizationInvitation({
+          email: data.email,
+          invitedByUsername: data.inviter.user.name,
+          invitedByEmail: data.inviter.user.email,
+          teamName: data.organization.name,
+          inviteLink,
+        })
+      },
+    }),
+    testUtils(),
+  ],
   trustedOrigins: [process.env.FRONTEND_URL],
   databaseHooks: {
     session: {
