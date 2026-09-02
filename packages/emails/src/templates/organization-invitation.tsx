@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Heading, Text } from "react-email";
+import { Button, Heading, Hr, Section, Text } from "react-email";
 
 import { EmailLayout } from "../components/email-layout.tsx";
 
@@ -16,16 +16,24 @@ export const OrganizationInvitation = ({
 }: OrganizationInvitationProps) => {
   return (
     <EmailLayout preview={`Invitation to join ${organizationName} on LCAx Search`}>
-      <Heading as="h1">You're Invited!</Heading>
-      <Text>Hello {name},</Text>
-      <Text>You have been invited to join {organizationName} on LCAx Search</Text>
-      <Button
-        href={invitationUrl}
-        className="rounded bg-[#007bff] px-5 py-2.5 text-white no-underline"
-      >
-        Accept Invitation
-      </Button>
-      <Text>
+      <Heading as="h1" className="my-0 text-2xl font-medium text-black">
+        You're Invited!
+      </Heading>
+      <Hr className="my-6 border-t border-black" />
+      <Text className="my-4 text-base font-normal leading-relaxed text-black">Hello {name},</Text>
+      <Text className="my-4 text-base font-normal leading-relaxed text-black">
+        You have been invited to join <strong>{organizationName}</strong> on LCAx Search.
+      </Text>
+      <Section className="my-6">
+        <Button
+          href={invitationUrl}
+          className="inline-block rounded-full bg-yellow-4 px-6 py-3 text-base font-medium text-black no-underline"
+        >
+          Accept Invitation
+        </Button>
+      </Section>
+      <Hr className="my-6 border-t border-black" />
+      <Text className="my-4 text-base font-normal leading-relaxed text-black">
         Best regards,
         <br />
         LCAx Team

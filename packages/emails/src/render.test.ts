@@ -17,6 +17,8 @@ describe("renderEmail", () => {
     expect(result.subject).toBe("Verify Your Email Address");
     expect(result.html).toContain("Jane Doe");
     expect(result.html).toContain("https://example.com/verify?token=abc123");
+    expect(result.html).toContain("rgb(232,197,71)");
+    expect(result.html).toContain("Inter Tight");
     expect(result.text).toContain("Jane Doe");
     expect(result.text).toContain("https://example.com/verify?token=abc123");
   });
@@ -32,16 +34,13 @@ describe("renderEmail", () => {
     expect(result.html).toContain("Alex Rivera");
     expect(result.html).toContain("Acme Corp");
     expect(result.html).toContain("https://example.com/invite?token=xyz");
+    expect(result.html).toContain("rgb(232,197,71)");
+    expect(result.html).toContain("Inter Tight");
     expect(result.text).toContain("Acme Corp");
   });
 
   it("identifies known template names", () => {
-    expect(emailTemplateNames).toEqual([
-      "verify-email",
-      "organization-invitation",
-      "test-template",
-      "node-alert",
-    ]);
+    expect(emailTemplateNames).toEqual(["verify-email", "organization-invitation"]);
     expect(isEmailTemplateName("verify-email")).toBe(true);
     expect(isEmailTemplateName("missing-template")).toBe(false);
   });
