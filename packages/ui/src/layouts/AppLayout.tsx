@@ -1,7 +1,8 @@
 import { AppShell, Button, Group, rem } from '@mantine/core'
 import { Link, Outlet } from 'react-router'
 import { useHeadroom } from '@mantine/hooks'
-import { ErrorBoundary, RolePermitter, useMatches, authClient, Logo } from '@lcax/ui'
+import { ErrorBoundary, RolePermitter, useMatches, Logo } from '../components'
+import { authClient } from '../lib'
 
 export const AppLayout = () => {
   const pinned = useHeadroom({ fixedAt: 120 })

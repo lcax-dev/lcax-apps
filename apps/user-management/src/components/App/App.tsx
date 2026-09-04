@@ -1,5 +1,6 @@
 import { MantineProvider } from '@mantine/core'
-import { AppRouter, theme } from '@/components'
+import { AppRouter } from '../AppRouter'
+import { theme } from '../Theme'
 import { resolver } from '@lcax/ui'
 import { BrowserRouter } from 'react-router'
 import '@mantine/core/styles.css'

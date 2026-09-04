@@ -1,6 +1,6 @@
 import { useParams, Link, useLocation } from 'react-router'
 import {
-  ActionIcon,
+  ActionIcon, Badge,
   Button,
   Center,
   Container,

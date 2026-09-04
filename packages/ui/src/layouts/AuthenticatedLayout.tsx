@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router'
 import { useEffect } from 'react'
-import { authClient, AppLayout } from '@lcax/ui'
+import { authClient } from '../lib'
+import { AppLayout } from './AppLayout'
 
 export const AuthenticatedLayout = () => {
   const { data, isPending } = authClient.useSession()
