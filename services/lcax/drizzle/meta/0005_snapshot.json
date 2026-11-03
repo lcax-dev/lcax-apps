@@ -397,7 +397,7 @@
           "name": "issuer",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "account_id": {
           "name": "account_id",
