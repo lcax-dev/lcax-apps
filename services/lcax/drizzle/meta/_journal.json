@@ -43,6 +43,13 @@
       "when": 1788361659474,
       "tag": "0005_yielding_red_ghost",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793699019145,
+      "tag": "0006_relax_account_issuer",
+      "breakpoints": true
     }
   ]
 }
