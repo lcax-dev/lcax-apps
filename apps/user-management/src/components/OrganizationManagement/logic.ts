@@ -37,7 +37,7 @@ export const inviteMember = async (params: {
 export const removeMember = async (params: { organizationId: string; memberId: string }) => {
   const { data, error } = await authClient.organization.removeMember({
     organizationId: params.organizationId,
-    memberId: params.memberId,
+    memberIdOrEmail: params.memberId,
   })
 
   if (error) {
@@ -91,7 +91,7 @@ export const rejectInvitation = async (invitationId: string) => {
 
 export const getOrganization = async (organizationId: string) => {
   const { data, error } = await authClient.organization.getFullOrganization({
-    organizationId,
+    query: { organizationId },
   })
 
   if (error) {

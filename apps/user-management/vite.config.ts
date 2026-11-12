@@ -2,14 +2,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import wasm from 'vite-plugin-wasm'
-import { federation } from "@module-federation/vite";
-import { dependencies } from "./package.json";
+import { federation } from "@module-federation/vite"
+import packageJson from "./package.json" with { type: 'json' }
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), wasm(),
     federation({
-      dts: true,
+      dts: {
+        tsConfigPath: './tsconfig.app.json',
+      },
       dev: { disableDynamicRemoteTypeHints: true, remoteHmr: true },
       filename: "remoteEntry.js",
       name: "user-management",
@@ -22,12 +24,12 @@ export default defineConfig({
           singleton: true,
         },
         react: {
-          requiredVersion: dependencies.react,
+          requiredVersion: packageJson.dependencies.react,
           singleton: true,
         },
         "react/": {},
         "react-dom": {
-          requiredVersion: dependencies["react-dom"],
+          requiredVersion: packageJson.dependencies["react-dom"],
           singleton: true,
         },
       },
@@ -43,6 +45,8 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    environment: 'jsdom',
     passWithNoTests: true,
+    setupFiles: ['./src/test/setup.ts'],
   },
 })

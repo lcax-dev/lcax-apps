@@ -16,7 +16,7 @@ export const OrganizationsPage = () => {
       organizationId: orgId,
     })
     if (error) {
-      notifications.error({ message: error.message })
+      notifications.error({ message: error.message ?? 'Failed to select organization' })
     } else {
       navigate('/profile')
     }
@@ -43,7 +43,7 @@ export const OrganizationsPage = () => {
                 <Stack gap='md'>
                   {organizations.map((org) => (
                     <Stack gap='sm' key={org.id}>
-                      <SimpleGrid cols={{ base: 1, sm: 3 }} spacing='md' align='center'>
+                      <SimpleGrid cols={{ base: 1, sm: 3 }} spacing='md' style={{ alignItems: 'center' }}>
                         <InfoBlock title='Organization Name' info={org.name} />
                         <InfoBlock title='Slug' info={org.slug} />
                         <InfoBlock title='Created At' info={new Date(org.createdAt).toLocaleDateString()} />

@@ -1,8 +1,7 @@
 import { Center, Loader } from '@mantine/core'
-import React from 'react'
 
 export const Loading = () => (
-  <Center h='100%'>
+  <Center h='100%' role='status' aria-label='Loading'>
     <Loader />
   </Center>
 )

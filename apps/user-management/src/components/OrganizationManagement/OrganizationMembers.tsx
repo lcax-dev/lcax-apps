@@ -1,4 +1,4 @@
-import { Button, Divider, Group, Select, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { Button, Divider, Flex, Group, Select, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { authClient, useGetActiveMember } from '@/lib'
 import { removeMember, updateMemberRole } from './logic'
 import { IconTrash } from '@tabler/icons-react'
@@ -58,7 +58,7 @@ export const OrganizationMembers = () => {
         <Stack gap='md'>
           {members.map((member) => (
             <Stack gap='sm' key={member.id}>
-              <SimpleGrid cols={{ base: 1, sm: 3 }} spacing='md' align='center'>
+              <SimpleGrid cols={{ base: 1, sm: 3 }} spacing='md' style={{ alignItems: 'center' }}>
                 <Stack gap={2}>
                   <Text fw={500} size='md'>
                     {member.user.name}
@@ -90,7 +90,7 @@ export const OrganizationMembers = () => {
                     </Text>
                   )}
                 </Group>
-                <Group justify={{ base: 'flex-start', sm: 'flex-end' }}>
+                <Flex justify={{ base: 'flex-start', sm: 'flex-end' }} align='center' gap='md' wrap='wrap'>
                   {canManage && member.id !== activeMember?.id && (
                     <RolePermitter requiredRole='owner'>
                       <Button
@@ -105,7 +105,7 @@ export const OrganizationMembers = () => {
                       </Button>
                     </RolePermitter>
                   )}
-                </Group>
+                </Flex>
               </SimpleGrid>
               <Divider />
             </Stack>

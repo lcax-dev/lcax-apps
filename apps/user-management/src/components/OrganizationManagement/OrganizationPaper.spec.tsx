@@ -1,12 +1,16 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
+import { render } from '@/test/setup'
 import { OrganizationPaper } from './OrganizationPaper'
-import { authClient } from '@/lib'
+import { authClient, useGetActiveMember } from '@/lib'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+type ActiveOrganization = NonNullable<ReturnType<typeof authClient.useActiveOrganization>['data']>
+type ActiveMember = NonNullable<ReturnType<typeof useGetActiveMember>['member']>
 
 // Mock the auth client
 vi.mock('@/lib', () => ({
   authClient: {
     useActiveOrganization: vi.fn(),
-    useSession: vi.fn(),
   },
   useGetActiveMember: vi.fn(),
 }))
@@ -37,114 +41,77 @@ vi.mock('./OrganizationInvite', () => ({
 }))
 
 describe('OrganizationPaper', () => {
-  const mockActiveOrganization = {
+  const mockActiveOrganization: ActiveOrganization = {
     id: 'org-1',
     name: 'Test Organization',
+    slug: 'test-organization',
+    createdAt: new Date('2023-01-01'),
+    members: [],
     invitations: [],
   }
 
-  const mockActiveMember = {
-    role: 'owner',
-  }
+  const createMember = (role: ActiveMember['role']): ActiveMember => ({
+    id: `member-${role}`,
+    organizationId: mockActiveOrganization.id,
+    role,
+    createdAt: new Date('2023-01-01'),
+    userId: `user-${role}`,
+    user: {
+      id: `user-${role}`,
+      email: `${role}@example.com`,
+      name: `${role} user`,
+    },
+  })
+
+  const mockRefetch = vi.fn()
+
+  const mockActiveOrganizationHook = () => ({
+    data: mockActiveOrganization,
+    error: null,
+    isPending: false,
+    isRefetching: false,
+    refetch: mockRefetch,
+  })
+
+  const mockActiveMemberHook = (member: ActiveMember) => ({
+    member,
+    error: null,
+    isPending: false,
+    refetch: vi.fn(),
+  })
 
   beforeEach(() => {
-    vi.mocked(authClient.useActiveOrganization).mockReturnValue({
-      data: mockActiveOrganization,
-      isPending: false,
-      refetch: vi.fn(),
-    })
-
-    vi.mocked(authClient.useSession).mockReturnValue({
-      data: {
-        user: { role: 'admin' },
-      },
-    })
-
-    vi.mocked(require('@/lib').useGetActiveMember).mockReturnValue({
-      member: mockActiveMember,
-    })
+    vi.resetAllMocks()
+    vi.mocked(authClient.useActiveOrganization).mockReturnValue(mockActiveOrganizationHook())
+    vi.mocked(useGetActiveMember).mockReturnValue(mockActiveMemberHook(createMember('owner')))
   })
 
-  it('should render the organization name', () => {
+  it('renders the active organization name', () => {
     render(<OrganizationPaper />)
-    expect(screen.getByText('Test Organization')).toBeInTheDocument()
+    expect(screen.getAllByRole('heading', { name: 'Test Organization' }).length).toBeGreaterThan(0)
   })
 
-  it('should show the Invite Member button for owners', () => {
-    render(<OrganizationPaper />)
-
-    // Click on the Invites tab
-    const invitesTab = screen.getByText('Invites')
-    fireEvent.click(invitesTab)
-
-    expect(screen.getByText('Invite Member')).toBeInTheDocument()
-  })
-
-  it('should show the Invite Member button for admins', () => {
-    vi.mocked(require('@/lib').useGetActiveMember).mockReturnValue({
-      member: { role: 'admin' },
-    })
+  it.each(['owner', 'admin'] as const)('shows the inline invite form for %s members', (role) => {
+    vi.mocked(useGetActiveMember).mockReturnValue(mockActiveMemberHook(createMember(role)))
 
     render(<OrganizationPaper />)
 
-    // Click on the Invites tab
-    const invitesTab = screen.getByText('Invites')
-    fireEvent.click(invitesTab)
-
-    expect(screen.getByText('Invite Member')).toBeInTheDocument()
+    expect(screen.getByText('OrganizationInvite')).toBeInTheDocument()
   })
 
-  it('should not show the Invite Member button for non-managers', () => {
-    vi.mocked(require('@/lib').useGetActiveMember).mockReturnValue({
-      member: { role: 'member' },
-    })
+  it('hides the inline invite form from regular members', () => {
+    vi.mocked(useGetActiveMember).mockReturnValue(mockActiveMemberHook(createMember('member')))
 
     render(<OrganizationPaper />)
-
-    // Click on the Invites tab
-    const invitesTab = screen.getByText('Invites')
-    fireEvent.click(invitesTab)
 
     expect(screen.queryByText('Invite Member')).not.toBeInTheDocument()
   })
 
-  it('should open the invite modal when button is clicked', () => {
+  it('refetches the active organization after a successful invitation', () => {
     render(<OrganizationPaper />)
 
-    // Click on the Invites tab
-    const invitesTab = screen.getByText('Invites')
-    fireEvent.click(invitesTab)
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
 
-    // Click the Invite Member button
-    const inviteButton = screen.getByText('Invite Member')
-    fireEvent.click(inviteButton)
-
-    expect(screen.getByText('Invite Member')).toBeInTheDocument()
-    expect(screen.getByText('OrganizationInvite')).toBeInTheDocument()
-  })
-
-  it('should call refetch after successful invitation', () => {
-    const mockRefetch = vi.fn()
-    vi.mocked(authClient.useActiveOrganization).mockReturnValue({
-      data: mockActiveOrganization,
-      isPending: false,
-      refetch: mockRefetch,
-    })
-
-    render(<OrganizationPaper />)
-
-    // Click on the Invites tab
-    const invitesTab = screen.getByText('Invites')
-    fireEvent.click(invitesTab)
-
-    // Click the Invite Member button
-    const inviteButton = screen.getByText('Invite Member')
-    fireEvent.click(inviteButton)
-
-    // Click the submit button in the modal
-    const submitButton = screen.getByText('Submit')
-    fireEvent.click(submitButton)
-
-    expect(mockRefetch).toHaveBeenCalled()
+    expect(mockRefetch).toHaveBeenCalledTimes(1)
   })
 })

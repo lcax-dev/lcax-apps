@@ -1,5 +1,4 @@
 import { Container, Flex } from '@mantine/core'
-import React from 'react'
 import { useViewportSize } from '@mantine/hooks'
 import { Loading } from '../../components'
 

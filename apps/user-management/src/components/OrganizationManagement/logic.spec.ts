@@ -94,7 +94,7 @@ describe('OrganizationManagement logic', () => {
 
       expect(authClient.organization.removeMember).toHaveBeenCalledWith({
         organizationId: 'org-1',
-        memberId: 'member-1',
+        memberIdOrEmail: 'member-1',
       })
     })
   })
@@ -183,7 +183,7 @@ describe('OrganizationManagement logic', () => {
       const result = await getOrganization('org-1')
 
       expect(authClient.organization.getFullOrganization).toHaveBeenCalledWith({
-        organizationId: 'org-1',
+        query: { organizationId: 'org-1' },
       })
       expect(result).toEqual({ id: 'org-1', name: 'Test Org', slug: 'test-org' })
     })
