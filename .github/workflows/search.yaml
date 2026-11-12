@@ -83,15 +83,16 @@ jobs:
         with:
           name: app
 
-      - name: Install s5cmd
+      - name: Install RustFS rc
         run: |
-          curl -L https://github.com/peak/s5cmd/releases/download/v2.3.0/s5cmd_2.3.0_Linux-64bit.tar.gz \
-            | tar xz
-          sudo mv s5cmd /usr/local/bin/
+          curl -fsSL https://github.com/rustfs/cli/releases/download/v0.1.37/rustfs-cli-linux-amd64-v0.1.37.tar.gz \
+            | tar xz -C "$RUNNER_TEMP" rc
+          sudo install "$RUNNER_TEMP/rc" /usr/local/bin/rc
 
       - name: Upload to Bundle
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.MINIO_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.MINIO_SECRET_KEY }}
-          AWS_REGION: us-east-1
-        run: s5cmd --endpoint-url https://minio.chrk.site cp "./*" "s3://bundles/lcax/${{ github.ref_name }}/search/"
+          ACCESS_KEY_ID: ${{ secrets.RUSTFS_ACCESS_KEY }}
+          SECRET_ACCESS_KEY: ${{ secrets.RUSTFS_SECRET_KEY }}
+        run: |
+          rc alias set bundle https://files.chrk.site "$ACCESS_KEY_ID" "$SECRET_ACCESS_KEY"
+          rc cp --recursive ./ "bundle/bundles/lcax/${{ github.ref_name }}/search/"
